@@ -212,6 +212,7 @@ const homeAPI = async (req, res) => {
 };
 
 const HomeScreenAPI = async(req,res)=>{
+  console.log("Processing HomeScreenAPI request...");
 
   try {
     const planTypes = await Banner.findAll({where:{status:1,}});
