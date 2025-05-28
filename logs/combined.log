@@ -387,3 +387,58 @@
 {"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-28T06:58:07.947Z"}
 =======
 >>>>>>> ea1872732fc0ac83d066a318a2048a07c2016ff0
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-28T07:35:16.998Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-28T07:35:17.058Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 1:06:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:36:00.330Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 1:06:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:36:00.450Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 1:07:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:37:00.853Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 1:07:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:37:00.918Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 1:08:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:38:00.382Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 1:08:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:38:00.475Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 1:09:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:39:00.915Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 1:09:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:39:00.981Z"}
+{"level":"info","message":"Banner ID 4f956a62-d8c2-42fc-a72e-f139196a7f1d unpublished banner cleared startTime and endTime at 28/5/2025, 1:09:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:39:00.996Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 1:10:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:40:00.396Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 1:10:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:40:00.476Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 1:11:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:41:00.723Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 1:11:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:41:00.781Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 1:12:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:42:01.132Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 1:12:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:42:01.192Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 1:13:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:43:00.546Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 1:13:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:43:00.620Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 1:14:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:44:00.872Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 1:14:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:44:00.928Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 1:15:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:45:00.548Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 1:15:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:45:00.693Z"}
+{"level":"info","message":"Banner ID 4f956a62-d8c2-42fc-a72e-f139196a7f1d unpublished banner cleared startTime and endTime at 28/5/2025, 1:15:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:45:00.696Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 1:16:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:46:00.953Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 1:16:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:46:01.004Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 1:17:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:47:00.882Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 1:17:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:47:00.951Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 1:18:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:48:00.276Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 1:18:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T07:48:00.349Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 2:12:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:42:01.089Z"}
+{"level":"info","message":"Banner ID 4f956a62-d8c2-42fc-a72e-f139196a7f1d unpublished banner cleared startTime and endTime at 28/5/2025, 2:12:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:42:01.135Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 2:12:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:42:01.141Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 2:13:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:43:00.784Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 2:13:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:43:00.841Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 2:14:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:44:00.276Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 2:14:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:44:00.547Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 2:15:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:45:01.947Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 2:15:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:45:01.997Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 2:16:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:46:00.957Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 2:16:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:46:01.005Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 2:17:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:47:00.412Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 2:17:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:47:00.475Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 2:18:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:48:00.815Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 2:18:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:48:00.873Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 2:19:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:49:00.331Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 2:19:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:49:00.627Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 2:20:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:50:00.856Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 2:20:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:50:00.919Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 2:21:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:51:00.352Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 2:21:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:51:00.419Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 2:22:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:52:00.783Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 2:22:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:52:00.850Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 28/5/2025, 2:23:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:53:00.285Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 28/5/2025, 2:23:00 pm","service":"kine_milk_server","timestamp":"2025-05-28T08:53:00.338Z"}
