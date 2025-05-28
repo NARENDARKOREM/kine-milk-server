@@ -1076,13 +1076,23 @@ const getOrderDetails = async (req, res) => {
                   model: Product,
                   as: "product",
                   attributes: ["id", "title", "img", "description"],
-                  include:[
-                    {model: ProductReview, as: "ProductReviews", attributes: ["id", "rating", "review"], where: {
-                        user_id: uid,
-                        order_id: id,
-                      },
-                      required: false,},
-                  ]
+                },
+              ],
+            },
+            {
+              model: Product,
+              as: "ProductDetails",
+              attributes: ["id", "title", "img", "description"],
+              include: [
+                {
+                  model: ProductReview,
+                  as: "ProductReviews",
+                  attributes: ["id", "rating", "review", "user_id", "order_id"],
+                  where: {
+                    user_id: uid,
+                    order_id: id,
+                  },
+                  required: false,
                 },
               ],
             },
@@ -1132,6 +1142,11 @@ const getOrderDetails = async (req, res) => {
       });
     }
 
+      const orderData = order.toJSON();
+    const hasReviews = orderData.NormalProducts.some(product => 
+      product.ProductDetails?.ProductReviews?.length > 0
+    );
+
     // Format response
     res.status(200).json({
       ResponseCode: "200",
@@ -1160,6 +1175,7 @@ const getOrderDetails = async (req, res) => {
         updatedAt: order.updatedAt,
         products: order.NormalProducts,
         receiver: order.receiver,
+        hasReviews: hasReviews,
       },
     });
   } catch (error) {
@@ -1396,8 +1412,7 @@ const getNearByProducts = async (req, res) => {
 
 // Fetch user orders irrespective of status
 const getMyInstantOrders = async (req, res) => {
-  console.log("Fetching instant orders for user");
-  const uid = req.user?.userId;
+  const uid = req.user.userId;
   if (!uid) {
     return res.status(401).json({
       ResponseCode: "401",
@@ -1408,34 +1423,56 @@ const getMyInstantOrders = async (req, res) => {
 
   try {
     const orders = await NormalOrder.findAll({
-      where: { uid },
+      where: { uid: uid },
       include: [
         {
           model: NormalOrderProduct,
           as: "NormalProducts",
-          attributes: ["id", "oid", "product_id", "weight_id", "pquantity", "price"],
+          attributes: [
+            "id",
+            "oid",
+            "product_id",
+            "weight_id",
+            "pquantity",
+            "price",
+          ],
           include: [
             {
               model: WeightOption,
               as: "productWeight",
-              attributes: ["id", "normal_price", "subscribe_price", "mrp_price", "weight"],
+              attributes: [
+                "id",
+                "normal_price",
+                "subscribe_price",
+                "mrp_price",
+                "weight",
+              ],
+              required: false,
               include: [
                 {
                   model: Product,
                   as: "product",
                   attributes: ["id", "title", "img", "description"],
-                  include: [
-                    {
-                      model: ProductReview,
-                      as: "ProductReviews",
-                      attributes: ["id", "rating", "review", "order_id"],
-                      where: {
-                        user_id: uid,
-                        order_id: Sequelize.col("NormalOrder.id"),
-                      },
-                      required: false,
+                  required: false,
+                },
+              ],
+            },
+            {
+              model: Product,
+              as: "ProductDetails",
+              attributes: ["id", "title", "img", "description"],
+              include: [
+                {
+                  model: ProductReview,
+                  as: "ProductReviews",
+                  attributes: ["id", "rating", "review", "user_id", "order_id"],
+                  where: {
+                    user_id: uid,
+                    order_id: {
+                      [Op.eq]: sequelize.col("NormalOrder.id"),
                     },
-                  ],
+                  },
+                  required: false,
                 },
               ],
             },
@@ -1465,25 +1502,22 @@ const getMyInstantOrders = async (req, res) => {
       });
     }
 
-    // Transform response to filter reviews (fallback if query fails)
-    const formattedOrders = orders.map(order => ({
-      ...order.toJSON(),
-      NormalProducts: order.NormalProducts.map(product => {
-        const productData = product.productWeight?.product;
-        if (productData && productData.ProductReviews) {
-          productData.ProductReviews = productData.ProductReviews.filter(
-            review => review.order_id === order.id
-          );
-        }
-        return product;
-      }),
-    }));
+    const ordersWithReviews = orders.map(order => {
+      const orderData = order.toJSON();
+      const hasReviews = orderData.NormalProducts.some(product => 
+        product.ProductDetails?.ProductReviews?.length > 0
+      );
+      return {
+        ...orderData,
+        hasReviews,
+      };
+    });
 
     return res.status(200).json({
       ResponseCode: "200",
       Result: "true",
       ResponseMsg: "Orders fetched successfully",
-      orders: formattedOrders,
+      orders:ordersWithReviews,
     });
   } catch (error) {
     console.error("Error fetching user orders:", error.stack);
@@ -1491,7 +1525,8 @@ const getMyInstantOrders = async (req, res) => {
       ResponseCode: "500",
       Result: "false",
       ResponseMsg: "Server Error",
-      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+      error: error.message,
+      stack: error.stack,
     });
   }
 };
