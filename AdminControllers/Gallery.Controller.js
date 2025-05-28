@@ -1,0 +1,1 @@
+const Gallery = require('../Models/');
