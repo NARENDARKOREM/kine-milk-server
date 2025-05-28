@@ -161,10 +161,6 @@ const upsertCart = async (req, res) => {
     try {
       const uid  = req.user.userId;
       const {orderType} = req.params;
-
-
-    
-
       if (!uid) {
         return res.status(400).json({
           ResponseCode: "400",
@@ -183,10 +179,18 @@ const upsertCart = async (req, res) => {
           },{
             model:WeightOption,
             as:"cartweight",
-            attributes:["weight","subscribe_price","normal_price","mrp_price"]
+            attributes:["weight","subscribe_price","normal_price","mrp_price"],
+            include:[
+              {
+                model:StoreWeightOption,
+              as:"storeWeightOption",
+              attributes: ["id", "product_id", "weight_id", "quantity", "total"],
+            }
+            ]
           }
       ]
       });
+
   
       return res.status(200).json({
         ResponseCode: "200",

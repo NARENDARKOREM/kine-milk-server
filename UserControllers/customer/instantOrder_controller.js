@@ -475,6 +475,489 @@ const instantOrder = async (req, res) => {
   }
 };
 
+// Order again functionality
+const instantOrderAgain = async(req,res)=>{
+  const uid = req.user.userId;
+  if(!uid){
+    return res.status(401).json({
+      ResponseCode: "401",
+      Result: "false",
+      ResponseMsg: "Unauthorized: User not found!",
+    });
+  }
+  const {orderId}=req.body;
+  if(!orderId){
+     return res.status(400).json({
+      ResponseCode: "400",
+      Result: "false",
+      ResponseMsg: "Order ID is required to reorder!",
+    });
+  }
+  
+  try {
+    const previousOrder = await NormalOrder.findOne({where:{id:orderId,uid:uid},
+      include:[
+         {
+          model: NormalOrderProduct,
+          as: "NormalProducts",
+          attributes: ["product_id", "pquantity", "weight_id"],
+        },
+        {
+          model: PersonRecord,
+          as: "receiver",
+          attributes: ["name", "email", "mobile", "address_id"],
+        },
+        {
+          model: Address,
+          as: "instOrdAddress",
+          attributes: ["id", "uid"],
+        },
+        {
+          model: Time,
+          as: "timeslot",
+          attributes: ["id"],
+        },
+        {
+          model: Coupon,
+          as: "coupon",
+          attributes: ["id", "coupon_val", "min_amt", "status", "end_date", "coupon_title"],
+        },
+      ]
+    })
+    if(!previousOrder){
+       return res.status(400).json({
+      ResponseCode: "400",
+      Result: "false",
+      ResponseMsg: "No previous order found!",
+    });
+    }
+
+   if (previousOrder.uid !== uid) {
+      return res.status(403).json({
+        ResponseCode: "403",
+        Result: "false",
+        ResponseMsg: "You are not authorized to reorder this order!",
+      });
+    }
+
+    const previousProducts = previousOrder.NormalOrderProducts.map(item => ({
+      product_id: item.product_id,
+      quantity: item.pquantity,
+      weight_id: item.weight_id,
+    }))
+
+     const receiver = previousOrder.receiver
+      ? {
+          name: previousOrder.receiver.name,
+          email: previousOrder.receiver.email,
+          mobile: previousOrder.receiver.mobile,
+          address_id: previousOrder.receiver.address_id,
+        }
+      : null;
+
+      const {
+        timeslot_id,
+        o_type,
+        coupon_id,
+        store_id,
+        address_id,
+        a_note,
+        trans_id,
+        d_charge,
+        store_charge,
+        tax,
+        odate,
+      } = previousOrder;
+
+    if (
+      !previousProducts ||
+      !Array.isArray(previousProducts) ||
+      previousProducts.length === 0 ||
+      !o_type ||
+      !store_id ||
+      !odate
+    ) {
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Missing or invalid required fields from previous order!",
+      });
+    }
+
+    for (const item of previousProducts) {
+      if (!item.product_id || !item.weight_id || !item.quantity || item.quantity <= 0) {
+        return res.status(400).json({
+          ResponseCode: "400",
+          Result: "false",
+          ResponseMsg: "Each product must have a valid product_id, weight_id, and quantity > 0!",
+        });
+      }
+    }
+
+    if (receiver && (!receiver.name || !receiver.mobile)) {
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Receiver name and mobile are required if provided!",
+      });
+    }
+
+    let parsedOdate = new Date(odate);
+    const currentDate = new Date();
+    if (isNaN(parsedOdate) || parsedOdate < currentDate) {
+      parsedOdate = currentDate;
+    }
+
+        const result = await retryTransaction(async () => {
+      const transaction = await sequelize.transaction();
+
+      try {
+        // Verify user
+        const user = await User.findByPk(uid, {
+          transaction,
+          lock: transaction.LOCK.UPDATE,
+        });
+        if (!user) {
+          throw new Error("User not found");
+        }
+
+        // Verify store
+        const store = await Store.findByPk(store_id, { transaction });
+        if (!store) {
+          throw new Error("Store not found");
+        }
+
+        // Validate timeslot_id if provided
+        if (timeslot_id) {
+          const timeslot = await Time.findByPk(timeslot_id, { transaction });
+          if (!timeslot) {
+            throw new Error("Invalid timeslot_id!");
+          }
+        }
+
+        // Validate address
+        let orderAddressId = address_id;
+        if (receiver && receiver.address_id) {
+          orderAddressId = receiver.address_id;
+          const receiverAddress = await Address.findByPk(receiver.address_id, { transaction });
+          if (!receiverAddress) {
+            throw new Error("Receiver address does not exist");
+          }
+          if (receiverAddress.uid !== uid) {
+            throw new Error("Receiver address does not belong to you");
+          }
+        } else if (address_id) {
+          const orderAddress = await Address.findByPk(address_id, { transaction });
+          if (!orderAddress) {
+            throw new Error("Order address does not exist");
+          }
+          if (orderAddress.uid !== uid) {
+            throw new Error("Order address does not belong to you");
+          }
+        } else {
+          throw new Error("Order address is required");
+        }
+
+        // Validate products, weights, and stock, and calculate subtotal
+        let subtotal = 0;
+        for (const item of products) {
+          const product = await Product.findByPk(item.product_id, {
+            transaction,
+            lock: transaction.LOCK.UPDATE,
+            include: [
+              {
+                model: WeightOption,
+                as: "weightOptions",
+                where: { id: item.weight_id },
+              },
+            ],
+          });
+          if (!product) {
+            throw new Error(`Product with ID ${item.product_id} does not exist`);
+          }
+          if (!product.weightOptions || !product.weightOptions.length) {
+            throw new Error(`Weight option ${item.weight_id} does not exist for product ${product.title}`);
+          }
+          const weightOption = product.weightOptions[0];
+
+          if (product.out_of_stock === 1) {
+            throw new Error(`Product ${product.title} is out of stock`);
+          }
+          if (product.quantity < item.quantity) {
+            throw new Error(
+              `Not enough stock for ${product.title}: only ${product.quantity} available, ${item.quantity} requested`
+            );
+          }
+
+          const productInventory = await ProductInventory.findOne({
+            where: { store_id, product_id: item.product_id, status: 1 },
+            transaction,
+            lock: transaction.LOCK.UPDATE,
+          });
+          if (!productInventory) {
+            throw new Error(
+              `No inventory found for ${product.title} in store ${store.store_name || store_id}`
+            );
+          }
+
+          const storeWeightOption = await StoreWeightOption.findOne({
+            where: {
+              product_id: item.product_id,
+              weight_id: item.weight_id,
+              product_inventory_id: productInventory.id,
+            },
+            transaction,
+            lock: transaction.LOCK.UPDATE,
+          });
+          if (!storeWeightOption) {
+            throw new Error(
+              `Weight option ${weightOption.weight} not available for ${product.title} in store ${store.store_name || store_id}`
+            );
+          }
+          if (storeWeightOption.quantity < item.quantity) {
+            throw new Error(
+              `Not enough stock for ${product.title} (${weightOption.weight}) in store ${store.store_name || store_id}: only ${storeWeightOption.quantity} available, ${item.quantity} requested`
+            );
+          }
+
+          // Calculate price with current normal_price
+          subtotal += weightOption.normal_price * item.quantity;
+        }
+
+        // Validate coupon
+        let appliedCoupon;
+        let couponAmount = 0;
+        let finalTotal = subtotal + parseFloat(d_charge || 0) + parseFloat(store_charge || 0) + parseFloat(tax || 0);
+
+        if (coupon_id) {
+          const coupon = await Coupon.findByPk(coupon_id, { transaction });
+          if (!coupon) {
+            throw new Error("Coupon does not exist");
+          }
+          const currentDate = new Date();
+          if (coupon.status !== 1 || new Date(coupon.end_date) < currentDate) {
+            throw new Error("Coupon is inactive or expired");
+          }
+          if (subtotal < parseFloat(coupon.min_amt)) {
+            throw new Error(
+              `Subtotal (${subtotal}) is less than the minimum (${coupon.min_amt}) required for this coupon`
+            );
+          }
+          couponAmount = parseFloat(coupon.coupon_val);
+          finalTotal -= couponAmount;
+          if (finalTotal < 0) {
+            throw new Error("Order total cannot be negative after coupon");
+          }
+          appliedCoupon = coupon;
+        }
+
+        const newOrderId = uuidv4();
+        const newOrderNumber = generateOrderId();
+
+        // Create Order
+        const order = await NormalOrder.create(
+          {
+            id: newOrderId,
+            uid,
+            store_id,
+            address_id: orderAddressId,
+            odate: parsedOdate,
+            timeslot_id,
+            o_type,
+            cou_id: appliedCoupon ? appliedCoupon.id : null,
+            cou_amt: couponAmount,
+            subtotal,
+            d_charge: parseFloat(d_charge) || 0,
+            store_charge: parseFloat(store_charge) || 0,
+            tax: parseFloat(tax) || 0,
+            o_total: finalTotal,
+            a_note,
+            order_id: newOrderNumber,
+            trans_id,
+          },
+          { transaction }
+        );
+
+        console.log("Order created:", { id: order.id, order_id: newOrderNumber });
+
+        // Create Receiver
+        let receiverRecord;
+        if (receiver) {
+          receiverRecord = await PersonRecord.create(
+            {
+              id: uuidv4(),
+              name: receiver.name,
+              email: receiver.email || null,
+              mobile: receiver.mobile,
+              address_id: receiver.address_id || null,
+              order_id: order.id,
+            },
+            { transaction }
+          );
+        }
+
+        // Create Order Items and Update Quantities
+        const items = [];
+        for (const item of products) {
+          const product = await Product.findByPk(item.product_id, { transaction });
+          const weight = await WeightOption.findByPk(item.weight_id, { transaction });
+          const itemPrice = weight.normal_price * item.quantity;
+
+          const orderItem = await NormalOrderProduct.create(
+            {
+              id: uuidv4(),
+              oid: order.id,
+              product_id: item.product_id,
+              pquantity: item.quantity,
+              price: itemPrice,
+              weight_id: item.weight_id,
+            },
+            { transaction }
+          );
+          items.push(orderItem);
+
+          await Product.update(
+            { quantity: product.quantity - item.quantity },
+            { where: { id: item.product_id }, transaction }
+          );
+
+          const productInventory = await ProductInventory.findOne({
+            where: { store_id, product_id: item.product_id, status: 1 },
+            transaction,
+          });
+
+          await StoreWeightOption.update(
+            { quantity: sequelize.literal(`quantity - ${item.quantity}`) },
+            {
+              where: {
+                product_id: item.product_id,
+                weight_id: item.weight_id,
+                product_inventory_id: productInventory.id,
+              },
+              transaction,
+            }
+          );
+        }
+
+        // Remove Cart Items
+        const cartItems = previousProducts.map(({ product_id, weight_id }) => ({
+          uid,
+          product_id,
+          weight_id,
+          orderType: "Normal",
+        }));
+        await Cart.destroy({ where: { [Op.or]: cartItems }, transaction });
+
+        // Wallet Payment
+        if (!trans_id) {
+          if (user.wallet < finalTotal) {
+            throw new Error("Insufficient wallet balance");
+          }
+          await User.update(
+            { wallet: user.wallet - finalTotal },
+            { where: { id: uid }, transaction }
+          );
+          await WalletReport.create(
+            {
+              id: uuidv4(),
+              uid,
+              message: `Debited for order ${order.order_id}`,
+              status: 1,
+              amt: Math.round(finalTotal),
+              transaction_no: trans_id || `WALLET-${newOrderId}`,
+              tdate: new Date(),
+              transaction_type: "Debited",
+            },
+            { transaction }
+          );
+        }
+
+        await transaction.commit();
+
+        // Notifications
+        try {
+          await Promise.all([
+            sendPushNotification({
+              appId: process.env.ONESIGNAL_CUSTOMER_APP_ID,
+              apiKey: process.env.ONESIGNAL_CUSTOMER_API_KEY,
+              playerIds: [user.one_subscription],
+              data: { user_id: user.id, type: "instant order placed" },
+              contents: {
+                en: receiver
+                  ? `${user.name}, your order for ${receiver.name} has been confirmed!`
+                  : `${user.name}, your order has been confirmed!`,
+              },
+              headings: { en: "Order Confirmed!" },
+            }),
+            sendPushNotification({
+              appId: process.env.ONESIGNAL_STORE_APP_ID,
+              apiKey: process.env.ONESIGNAL_STORE_API_KEY,
+              playerIds: [store.one_subscription],
+              data: { store_id: store.id, type: "new order received" },
+              contents: {
+                en: `New ${o_type.toLowerCase()} order received! Order ID: ${order.order_id}`,
+              },
+              headings: { en: "New Order" },
+            }),
+            sendInAppNotification({
+              uid,
+              title: "Order Instant Confirmed",
+              description: receiver
+                ? `Your order for ${receiver.name} created. Order ID: ${order.order_id}.`
+                : `Your order created. Order ID: ${order.order_id}.`,
+            }),
+            sendInAppNotification({
+              uid: store.id,
+              title: "New Order Received",
+              description: `A new ${o_type.toLowerCase()} order has been placed. Order ID: ${order.order_id}.`,
+            }),
+          ]);
+        } catch (notificationError) {
+          console.warn("Notification error:", notificationError);
+        }
+
+        return { order, orderItems: items, receiverRecord, appliedCoupon, finalTotal };
+      } catch (error) {
+        await transaction.rollback();
+        throw error;
+      }
+    });
+
+   const { order, orderItems, receiverRecord, appliedCoupon, finalTotal } = result;
+    res.status(200).json({
+      ResponseCode: "200",
+      Result: "true",
+      ResponseMsg: "Instant Order Created Successfully",
+      id: order.id,
+      o_total: finalTotal,
+      coupon_applied: appliedCoupon
+        ? {
+            id: appliedCoupon.id,
+            title: appliedCoupon.coupon_title,
+            amount: parseFloat(appliedCoupon.coupon_val),
+          }
+        : null,
+      items: orderItems,
+      receiver: receiverRecord,
+    });
+  } catch (error) {
+    console.error("Error creating order again:", error.message);
+    if (error.name === "SequelizeEagerLoadingError") {
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Invalid weight option specified for the product",
+      });
+    }
+    return res.status(500).json({
+      ResponseCode: "500",
+      Result: "false",
+      ResponseMsg: `Failed to create order: ${error.message}`,
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+};
+
 const getOrdersByStatus = async (req, res) => {
   try {
     const { uid, status } = req.body;
@@ -594,7 +1077,11 @@ const getOrderDetails = async (req, res) => {
                   as: "product",
                   attributes: ["id", "title", "img", "description"],
                   include:[
-                    {model: ProductReview, as: "ProductReviews", attributes: ["id", "rating", "review"]},
+                    {model: ProductReview, as: "ProductReviews", attributes: ["id", "rating", "review"], where: {
+                        user_id: uid,
+                        order_id: id,
+                      },
+                      required: false,},
                   ]
                 },
               ],
@@ -657,6 +1144,7 @@ const getOrderDetails = async (req, res) => {
         store_id: order.store_id,
         address: order.instOrdAddress,
         odate: order.odate,
+        status:order.status,
         timeslot: order.timeslot,
         o_type: order.o_type,
         cou_id: order.cou_id,
@@ -908,8 +1396,8 @@ const getNearByProducts = async (req, res) => {
 
 // Fetch user orders irrespective of status
 const getMyInstantOrders = async (req, res) => {
-  console.log("hiiiiiiiiiiii");
-  const uid = req.user.userId;
+  console.log("Fetching instant orders for user");
+  const uid = req.user?.userId;
   if (!uid) {
     return res.status(401).json({
       ResponseCode: "401",
@@ -920,30 +1408,17 @@ const getMyInstantOrders = async (req, res) => {
 
   try {
     const orders = await NormalOrder.findAll({
-      where: { uid: uid },
+      where: { uid },
       include: [
         {
           model: NormalOrderProduct,
           as: "NormalProducts",
-          attributes: [
-            "id",
-            "oid",
-            "product_id",
-            "weight_id",
-            "pquantity",
-            "price",
-          ],
+          attributes: ["id", "oid", "product_id", "weight_id", "pquantity", "price"],
           include: [
             {
               model: WeightOption,
               as: "productWeight",
-              attributes: [
-                "id",
-                "normal_price",
-                "subscribe_price",
-                "mrp_price",
-                "weight",
-              ],
+              attributes: ["id", "normal_price", "subscribe_price", "mrp_price", "weight"],
               include: [
                 {
                   model: Product,
@@ -953,7 +1428,12 @@ const getMyInstantOrders = async (req, res) => {
                     {
                       model: ProductReview,
                       as: "ProductReviews",
-                      attributes: ["id", "rating", "review"],
+                      attributes: ["id", "rating", "review", "order_id"],
+                      where: {
+                        user_id: uid,
+                        order_id: Sequelize.col("NormalOrder.id"),
+                      },
+                      required: false,
                     },
                   ],
                 },
@@ -985,11 +1465,25 @@ const getMyInstantOrders = async (req, res) => {
       });
     }
 
+    // Transform response to filter reviews (fallback if query fails)
+    const formattedOrders = orders.map(order => ({
+      ...order.toJSON(),
+      NormalProducts: order.NormalProducts.map(product => {
+        const productData = product.productWeight?.product;
+        if (productData && productData.ProductReviews) {
+          productData.ProductReviews = productData.ProductReviews.filter(
+            review => review.order_id === order.id
+          );
+        }
+        return product;
+      }),
+    }));
+
     return res.status(200).json({
       ResponseCode: "200",
       Result: "true",
       ResponseMsg: "Orders fetched successfully",
-      orders,
+      orders: formattedOrders,
     });
   } catch (error) {
     console.error("Error fetching user orders:", error.stack);
@@ -997,8 +1491,7 @@ const getMyInstantOrders = async (req, res) => {
       ResponseCode: "500",
       Result: "false",
       ResponseMsg: "Server Error",
-      error: error.message,
-      stack: error.stack,
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 };
