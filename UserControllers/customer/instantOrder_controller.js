@@ -35,8 +35,13 @@ const retryTransaction = async (fn, maxRetries = 3, delay = 1000) => {
     try {
       return await fn();
     } catch (error) {
-      if (error.message.includes("Lock wait timeout exceeded") && attempt < maxRetries) {
-        console.warn(`Retry ${attempt}/${maxRetries} due to lock timeout`);
+      if (
+        (error.message.includes("Lock wait timeout exceeded") ||
+         error.message.includes("Deadlock found when trying to get lock") ||
+         error.message.includes("Table definition has changed")) &&
+        attempt < maxRetries
+      ) {
+        console.warn(`Retry ${attempt}/${maxRetries} due to: ${error.message}`);
         await new Promise((resolve) => setTimeout(resolve, delay * attempt));
         continue;
       }
@@ -476,28 +481,59 @@ const instantOrder = async (req, res) => {
 };
 
 // Order again functionality
-const instantOrderAgain = async(req,res)=>{
+const instantOrderAgain = async (req, res) => {
   const uid = req.user.userId;
-  if(!uid){
+  if (!uid) {
     return res.status(401).json({
       ResponseCode: "401",
       Result: "false",
       ResponseMsg: "Unauthorized: User not found!",
     });
   }
-  const {orderId}=req.body;
-  if(!orderId){
-     return res.status(400).json({
+
+  const { orderId, tax, d_charge, store_charge, o_total, odate, subtotal } = req.body;
+  if (!orderId) {
+    return res.status(400).json({
       ResponseCode: "400",
       Result: "false",
       ResponseMsg: "Order ID is required to reorder!",
     });
   }
-  
+
+  // Validate provided financial fields
+  if (
+    subtotal == null || isNaN(parseFloat(subtotal)) || parseFloat(subtotal) < 0 ||
+    o_total == null || isNaN(parseFloat(o_total)) || parseFloat(o_total) < 0 ||
+    d_charge == null || isNaN(parseFloat(d_charge)) || parseFloat(d_charge) < 0 ||
+    store_charge == null || isNaN(parseFloat(store_charge)) || parseFloat(store_charge) < 0 ||
+    tax == null || isNaN(parseFloat(tax)) || parseFloat(tax) < 0
+  ) {
+    return res.status(400).json({
+      ResponseCode: "400",
+      Result: "false",
+      ResponseMsg: "Invalid or missing subtotal, o_total, d_charge, store_charge, or tax values!",
+    });
+  }
+
+  // Parse and validate odate
+  let parsedOdate = odate ? new Date(odate) : new Date();
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0); // Normalize to start of day
+  if (isNaN(parsedOdate) || parsedOdate < currentDate) {
+    return res.status(400).json({
+      ResponseCode: "400",
+      Result: "false",
+      ResponseMsg: "Invalid or past order date!",
+    });
+  }
+
   try {
-    const previousOrder = await NormalOrder.findOne({where:{id:orderId,uid:uid},
-      include:[
-         {
+    // Fetch previous order outside transaction
+    console.log("Fetching previous order:", { orderId, uid });
+    const previousOrder = await NormalOrder.findOne({
+      where: { id: orderId, uid: uid, status: "Completed" },
+      include: [
+        {
           model: NormalOrderProduct,
           as: "NormalProducts",
           attributes: ["product_id", "pquantity", "weight_id"],
@@ -517,22 +553,18 @@ const instantOrderAgain = async(req,res)=>{
           as: "timeslot",
           attributes: ["id"],
         },
-        {
-          model: Coupon,
-          as: "coupon",
-          attributes: ["id", "coupon_val", "min_amt", "status", "end_date", "coupon_title"],
-        },
-      ]
-    })
-    if(!previousOrder){
-       return res.status(400).json({
-      ResponseCode: "400",
-      Result: "false",
-      ResponseMsg: "No previous order found!",
+      ],
     });
+
+    if (!previousOrder) {
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "No previous completed order found!",
+      });
     }
 
-   if (previousOrder.uid !== uid) {
+    if (previousOrder.uid !== uid) {
       return res.status(403).json({
         ResponseCode: "403",
         Result: "false",
@@ -540,13 +572,15 @@ const instantOrderAgain = async(req,res)=>{
       });
     }
 
-    const previousProducts = previousOrder.NormalOrderProducts.map(item => ({
+    // Map previous products for reordering (no changes allowed)
+    const previousProducts = previousOrder.NormalProducts.map(item => ({
       product_id: item.product_id,
       quantity: item.pquantity,
       weight_id: item.weight_id,
-    }))
+    }));
 
-     const receiver = previousOrder.receiver
+    // Prepare receiver data if exists
+    const receiver = previousOrder.receiver
       ? {
           name: previousOrder.receiver.name,
           email: previousOrder.receiver.email,
@@ -555,27 +589,24 @@ const instantOrderAgain = async(req,res)=>{
         }
       : null;
 
-      const {
-        timeslot_id,
-        o_type,
-        coupon_id,
-        store_id,
-        address_id,
-        a_note,
-        trans_id,
-        d_charge,
-        store_charge,
-        tax,
-        odate,
-      } = previousOrder;
+    // Extract order details
+    const {
+      timeslot_id,
+      o_type,
+      coupon_id,
+      store_id,
+      address_id,
+      a_note,
+      trans_id,
+    } = previousOrder;
 
+    // Validate required fields
     if (
       !previousProducts ||
       !Array.isArray(previousProducts) ||
       previousProducts.length === 0 ||
       !o_type ||
-      !store_id ||
-      !odate
+      !store_id
     ) {
       return res.status(400).json({
         ResponseCode: "400",
@@ -584,16 +615,18 @@ const instantOrderAgain = async(req,res)=>{
       });
     }
 
+    // Validate product data (weight_id is optional)
     for (const item of previousProducts) {
-      if (!item.product_id || !item.weight_id || !item.quantity || item.quantity <= 0) {
+      if (!item.product_id || !item.quantity || item.quantity <= 0) {
         return res.status(400).json({
           ResponseCode: "400",
           Result: "false",
-          ResponseMsg: "Each product must have a valid product_id, weight_id, and quantity > 0!",
+          ResponseMsg: "Each product must have a valid product_id and quantity > 0!",
         });
       }
     }
 
+    // Validate receiver data
     if (receiver && (!receiver.name || !receiver.mobile)) {
       return res.status(400).json({
         ResponseCode: "400",
@@ -602,26 +635,22 @@ const instantOrderAgain = async(req,res)=>{
       });
     }
 
-    let parsedOdate = new Date(odate);
-    const currentDate = new Date();
-    if (isNaN(parsedOdate) || parsedOdate < currentDate) {
-      parsedOdate = currentDate;
-    }
-
-        const result = await retryTransaction(async () => {
+    const result = await retryTransaction(async () => {
       const transaction = await sequelize.transaction();
+      let committed = false;
 
       try {
+        console.log("Starting transaction for order:", { orderId, uid });
+
         // Verify user
-        const user = await User.findByPk(uid, {
-          transaction,
-          lock: transaction.LOCK.UPDATE,
-        });
+        console.log("Verifying user:", { uid });
+        const user = await User.findByPk(uid, { transaction });
         if (!user) {
           throw new Error("User not found");
         }
 
         // Verify store
+        console.log("Verifying store:", { store_id });
         const store = await Store.findByPk(store_id, { transaction });
         if (!store) {
           throw new Error("Store not found");
@@ -629,6 +658,7 @@ const instantOrderAgain = async(req,res)=>{
 
         // Validate timeslot_id if provided
         if (timeslot_id) {
+          console.log("Validating timeslot:", { timeslot_id });
           const timeslot = await Time.findByPk(timeslot_id, { transaction });
           if (!timeslot) {
             throw new Error("Invalid timeslot_id!");
@@ -639,6 +669,7 @@ const instantOrderAgain = async(req,res)=>{
         let orderAddressId = address_id;
         if (receiver && receiver.address_id) {
           orderAddressId = receiver.address_id;
+          console.log("Validating receiver address:", { address_id: receiver.address_id });
           const receiverAddress = await Address.findByPk(receiver.address_id, { transaction });
           if (!receiverAddress) {
             throw new Error("Receiver address does not exist");
@@ -647,6 +678,7 @@ const instantOrderAgain = async(req,res)=>{
             throw new Error("Receiver address does not belong to you");
           }
         } else if (address_id) {
+          console.log("Validating order address:", { address_id });
           const orderAddress = await Address.findByPk(address_id, { transaction });
           if (!orderAddress) {
             throw new Error("Order address does not exist");
@@ -659,8 +691,9 @@ const instantOrderAgain = async(req,res)=>{
         }
 
         // Validate products, weights, and stock, and calculate subtotal
-        let subtotal = 0;
-        for (const item of products) {
+        let calculatedSubtotal = 0;
+        for (const item of previousProducts) {
+          console.log("Validating product:", { product_id: item.product_id, weight_id: item.weight_id });
           const product = await Product.findByPk(item.product_id, {
             transaction,
             lock: transaction.LOCK.UPDATE,
@@ -668,68 +701,90 @@ const instantOrderAgain = async(req,res)=>{
               {
                 model: WeightOption,
                 as: "weightOptions",
-                where: { id: item.weight_id },
+                where: item.weight_id ? { id: item.weight_id } : undefined,
+                required: false,
               },
             ],
           });
           if (!product) {
-            throw new Error(`Product with ID ${item.product_id} does not exist`);
+            throw new Error(`Product with ID ${item.product_id} does not exist`, {
+              cause: { product_id: item.product_id, weight_id: item.weight_id }
+            });
           }
-          if (!product.weightOptions || !product.weightOptions.length) {
-            throw new Error(`Weight option ${item.weight_id} does not exist for product ${product.title}`);
-          }
-          const weightOption = product.weightOptions[0];
 
+          const weightOption = product.weightOptions && product.weightOptions.length ? product.weightOptions[0] : null;
+          if (item.weight_id && !weightOption) {
+            throw new Error(`Weight option ${item.weight_id} does not exist for product ${product.title}`, {
+              cause: { product_id: item.product_id, weight_id: item.weight_id }
+            });
+          }
+
+          // Check stock availability
           if (product.out_of_stock === 1) {
-            throw new Error(`Product ${product.title} is out of stock`);
+            throw new Error(`Product ${product.title} is out of stock`, {
+              cause: { product_id: item.product_id, weight_id: item.weight_id }
+            });
           }
           if (product.quantity < item.quantity) {
             throw new Error(
-              `Not enough stock for ${product.title}: only ${product.quantity} available, ${item.quantity} requested`
+              `Not enough stock for ${product.title}: only ${product.quantity} available, ${item.quantity} requested`,
+              { cause: { product_id: item.product_id, weight_id: item.weight_id } }
             );
           }
 
           const productInventory = await ProductInventory.findOne({
             where: { store_id, product_id: item.product_id, status: 1 },
             transaction,
-            lock: transaction.LOCK.UPDATE,
           });
           if (!productInventory) {
             throw new Error(
-              `No inventory found for ${product.title} in store ${store.store_name || store_id}`
+              `No inventory found for ${product.title} in store ${store.store_name || store_id}`,
+              { cause: { product_id: item.product_id, weight_id: item.weight_id } }
             );
           }
 
-          const storeWeightOption = await StoreWeightOption.findOne({
-            where: {
-              product_id: item.product_id,
-              weight_id: item.weight_id,
-              product_inventory_id: productInventory.id,
-            },
-            transaction,
-            lock: transaction.LOCK.UPDATE,
-          });
-          if (!storeWeightOption) {
-            throw new Error(
-              `Weight option ${weightOption.weight} not available for ${product.title} in store ${store.store_name || store_id}`
-            );
-          }
-          if (storeWeightOption.quantity < item.quantity) {
-            throw new Error(
-              `Not enough stock for ${product.title} (${weightOption.weight}) in store ${store.store_name || store_id}: only ${storeWeightOption.quantity} available, ${item.quantity} requested`
-            );
+          if (weightOption) {
+            console.log("Checking store weight option:", { product_id: item.product_id, weight_id: item.weight_id });
+            const storeWeightOption = await StoreWeightOption.findOne({
+              where: {
+                product_id: item.product_id,
+                weight_id: item.weight_id,
+                product_inventory_id: productInventory.id,
+              },
+              transaction,
+              lock: transaction.LOCK.UPDATE,
+            });
+            if (!storeWeightOption) {
+              throw new Error(
+                `Weight option ${weightOption.weight} not available for ${product.title} in store ${store.store_name || store_id}`,
+                { cause: { product_id: item.product_id, weight_id: item.weight_id } }
+              );
+            }
+            if (storeWeightOption.quantity < item.quantity) {
+              throw new Error(
+                `Not enough stock for ${product.title} (${weightOption.weight}) in store ${store.store_name || store_id}: only ${storeWeightOption.quantity} available, ${item.quantity} requested`,
+                { cause: { product_id: item.product_id, weight_id: item.weight_id } }
+              );
+            }
           }
 
-          // Calculate price with current normal_price
-          subtotal += weightOption.normal_price * item.quantity;
+          // Calculate subtotal using current prices
+          calculatedSubtotal += weightOption ? weightOption.normal_price * item.quantity : product.normal_price * item.quantity;
+        }
+
+        // Validate provided subtotal against calculated subtotal
+        const providedSubtotal = parseFloat(subtotal);
+        if (Math.abs(calculatedSubtotal - providedSubtotal) > 0.01) {
+          throw new Error(`Provided subtotal (${providedSubtotal}) does not match calculated subtotal (${calculatedSubtotal})`);
         }
 
         // Validate coupon
         let appliedCoupon;
         let couponAmount = 0;
-        let finalTotal = subtotal + parseFloat(d_charge || 0) + parseFloat(store_charge || 0) + parseFloat(tax || 0);
+        let finalTotal = providedSubtotal + parseFloat(d_charge) + parseFloat(store_charge) + parseFloat(tax);
 
         if (coupon_id) {
+          console.log("Validating coupon:", { coupon_id });
           const coupon = await Coupon.findByPk(coupon_id, { transaction });
           if (!coupon) {
             throw new Error("Coupon does not exist");
@@ -738,9 +793,9 @@ const instantOrderAgain = async(req,res)=>{
           if (coupon.status !== 1 || new Date(coupon.end_date) < currentDate) {
             throw new Error("Coupon is inactive or expired");
           }
-          if (subtotal < parseFloat(coupon.min_amt)) {
+          if (providedSubtotal < parseFloat(coupon.min_amt)) {
             throw new Error(
-              `Subtotal (${subtotal}) is less than the minimum (${coupon.min_amt}) required for this coupon`
+              `Subtotal (${providedSubtotal}) is less than the minimum (${coupon.min_amt}) required for this coupon`
             );
           }
           couponAmount = parseFloat(coupon.coupon_val);
@@ -751,10 +806,17 @@ const instantOrderAgain = async(req,res)=>{
           appliedCoupon = coupon;
         }
 
+        // Validate provided o_total
+        const providedTotal = parseFloat(o_total);
+        if (Math.abs(finalTotal - providedTotal) > 0.01) {
+          throw new Error(`Provided order total (${providedTotal}) does not match calculated total (${finalTotal})`);
+        }
+
         const newOrderId = uuidv4();
         const newOrderNumber = generateOrderId();
 
         // Create Order
+        console.log("Creating order:", { newOrderId, orderNumber: newOrderNumber });
         const order = await NormalOrder.create(
           {
             id: newOrderId,
@@ -766,10 +828,10 @@ const instantOrderAgain = async(req,res)=>{
             o_type,
             cou_id: appliedCoupon ? appliedCoupon.id : null,
             cou_amt: couponAmount,
-            subtotal,
-            d_charge: parseFloat(d_charge) || 0,
-            store_charge: parseFloat(store_charge) || 0,
-            tax: parseFloat(tax) || 0,
+            subtotal: providedSubtotal,
+            d_charge: parseFloat(d_charge),
+            store_charge: parseFloat(store_charge),
+            tax: parseFloat(tax),
             o_total: finalTotal,
             a_note,
             order_id: newOrderNumber,
@@ -778,11 +840,10 @@ const instantOrderAgain = async(req,res)=>{
           { transaction }
         );
 
-        console.log("Order created:", { id: order.id, order_id: newOrderNumber });
-
         // Create Receiver
         let receiverRecord;
         if (receiver) {
+          console.log("Creating receiver record for order:", { orderId: newOrderId });
           receiverRecord = await PersonRecord.create(
             {
               id: uuidv4(),
@@ -798,10 +859,11 @@ const instantOrderAgain = async(req,res)=>{
 
         // Create Order Items and Update Quantities
         const items = [];
-        for (const item of products) {
+        for (const item of previousProducts) {
+          console.log("Creating order item for product:", { product_id: item.product_id });
           const product = await Product.findByPk(item.product_id, { transaction });
-          const weight = await WeightOption.findByPk(item.weight_id, { transaction });
-          const itemPrice = weight.normal_price * item.quantity;
+          const weight = item.weight_id ? await WeightOption.findByPk(item.weight_id, { transaction }) : null;
+          const itemPrice = weight ? weight.normal_price * item.quantity : product.normal_price * item.quantity;
 
           const orderItem = await NormalOrderProduct.create(
             {
@@ -816,30 +878,36 @@ const instantOrderAgain = async(req,res)=>{
           );
           items.push(orderItem);
 
+          // Update product stock
+          console.log("Updating product stock:", { product_id: item.product_id, quantity: item.quantity });
           await Product.update(
-            { quantity: product.quantity - item.quantity },
+            { quantity: sequelize.literal(`quantity - ${item.quantity}`) },
             { where: { id: item.product_id }, transaction }
           );
 
-          const productInventory = await ProductInventory.findOne({
-            where: { store_id, product_id: item.product_id, status: 1 },
-            transaction,
-          });
-
-          await StoreWeightOption.update(
-            { quantity: sequelize.literal(`quantity - ${item.quantity}`) },
-            {
-              where: {
-                product_id: item.product_id,
-                weight_id: item.weight_id,
-                product_inventory_id: productInventory.id,
-              },
+          if (weight) {
+            const productInventory = await ProductInventory.findOne({
+              where: { store_id, product_id: item.product_id, status: 1 },
               transaction,
-            }
-          );
+            });
+
+            console.log("Updating store weight option:", { product_id: item.product_id, weight_id: item.weight_id });
+            await StoreWeightOption.update(
+              { quantity: sequelize.literal(`quantity - ${item.quantity}`) },
+              {
+                where: {
+                  product_id: item.product_id,
+                  weight_id: item.weight_id,
+                  product_inventory_id: productInventory.id,
+                },
+                transaction,
+              }
+            );
+          }
         }
 
         // Remove Cart Items
+        console.log("Removing cart items for user:", { uid });
         const cartItems = previousProducts.map(({ product_id, weight_id }) => ({
           uid,
           product_id,
@@ -850,11 +918,12 @@ const instantOrderAgain = async(req,res)=>{
 
         // Wallet Payment
         if (!trans_id) {
+          console.log("Processing wallet payment for user:", { uid, finalTotal });
           if (user.wallet < finalTotal) {
             throw new Error("Insufficient wallet balance");
           }
           await User.update(
-            { wallet: user.wallet - finalTotal },
+            { wallet: sequelize.literal(`wallet - ${finalTotal}`) },
             { where: { id: uid }, transaction }
           );
           await WalletReport.create(
@@ -873,6 +942,8 @@ const instantOrderAgain = async(req,res)=>{
         }
 
         await transaction.commit();
+        committed = true;
+        console.log("Transaction committed for order:", { orderId: newOrderId });
 
         // Notifications
         try {
@@ -918,12 +989,19 @@ const instantOrderAgain = async(req,res)=>{
 
         return { order, orderItems: items, receiverRecord, appliedCoupon, finalTotal };
       } catch (error) {
-        await transaction.rollback();
+        if (!committed) {
+          try {
+            await transaction.rollback();
+            console.log("Transaction rolled back for order:", { orderId });
+          } catch (rollbackError) {
+            console.error("Rollback error:", rollbackError.message);
+          }
+        }
         throw error;
       }
     });
 
-   const { order, orderItems, receiverRecord, appliedCoupon, finalTotal } = result;
+    const { order, orderItems, receiverRecord, appliedCoupon, finalTotal } = result;
     res.status(200).json({
       ResponseCode: "200",
       Result: "true",
@@ -941,12 +1019,34 @@ const instantOrderAgain = async(req,res)=>{
       receiver: receiverRecord,
     });
   } catch (error) {
-    console.error("Error creating order again:", error.message);
+    console.error("Error creating order again:", {
+      message: error.message,
+      stack: error.stack,
+      cause: error.cause
+    });
     if (error.name === "SequelizeEagerLoadingError") {
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
         ResponseMsg: "Invalid weight option specified for the product",
+        product_id: error.cause?.product_id,
+        weight_id: error.cause?.weight_id
+      });
+    }
+    if (
+      error.message.includes("Not enough stock") ||
+      error.message.includes("out of stock") ||
+      error.message.includes("Weight option") ||
+      error.message.includes("does not exist") ||
+      error.message.includes("subtotal") ||
+      error.message.includes("order total")
+    ) {
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: error.message,
+        product_id: error.cause?.product_id,
+        weight_id: error.cause?.weight_id
       });
     }
     return res.status(500).json({
@@ -1583,5 +1683,6 @@ module.exports = {
   getRecommendedProducts,
   getNearByProducts,
   getMyInstantOrders,
-  couponList
+  couponList,
+  instantOrderAgain
 };
