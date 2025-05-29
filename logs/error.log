@@ -1,3 +1,5 @@
 {"level":"error","message":"Cannot toggle status to Published for ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 with expired end date","service":"kine_milk_server","timestamp":"2025-05-28T06:53:56.467Z"}
 {"level":"error","message":"Cannot toggle status to Published for ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 with expired end date","service":"kine_milk_server","timestamp":"2025-05-28T06:54:00.371Z"}
 {"level":"error","message":"Cannot toggle status to Published for ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 with expired end date","service":"kine_milk_server","timestamp":"2025-05-28T06:54:06.363Z"}
+{"level":"error","message":"Error in ad scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-05-29T04:33:00.646Z"}
+{"level":"error","message":"Error in banner scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-05-29T04:33:00.649Z"}
