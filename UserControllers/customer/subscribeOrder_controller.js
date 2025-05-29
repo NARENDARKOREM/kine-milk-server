@@ -728,6 +728,8 @@ const pauseSubscriptionOrder = async (req, res) => {
       {
         pause: true,
         status: "Paused",
+        start_period:new Date(start_date),
+        paused_period:new Date(end_date),
       },
       { transaction: t }
     );
@@ -855,17 +857,35 @@ const resumeSubscriptionOrder = async (req, res) => {
   try {
     const pausedOrder = await SubscribeOrderProduct.findOne({
       where: { id: subscribeOrderProductId, oid: orderId },
+      include:{
+        model:Product,
+        as:'productDetails',
+        attributes:['title'],
+      },
       transaction: t,
     });
+    console.log({
+  pausedOrder,
+  pause: pausedOrder?.pause,
+  start_period: pausedOrder?.start_period,
+  paused_period: pausedOrder?.paused_period
+});
 
-    if (!pausedOrder || !pausedOrder.pause) {
-      if (!t.finished) await t.rollback();
-      return res.status(404).json({
-        ResponseCode: "404",
-        Result: "false",
-        ResponseMsg: "Paused product not found or not paused",
-      });
-    }
+
+    if (
+  !pausedOrder ||
+  pausedOrder.pause !== true || // or !== 1 if stored as integer
+  !pausedOrder.start_period ||
+  !pausedOrder.paused_period
+) {
+  if (!t.finished) await t.rollback();
+  return res.status(404).json({
+    ResponseCode: "404",
+    Result: "false",
+    ResponseMsg: "Paused product not found or not paused",
+  });
+}
+
 
     const order = await SubscribeOrder.findByPk(orderId, { transaction: t });
     if (!order) {
@@ -897,101 +917,18 @@ const resumeSubscriptionOrder = async (req, res) => {
       });
     }
 
-    const pauseHstry=await pauseHistory.findAll({subscribe_order_product_id:subscribeOrderProductId})
-    const refundDate = new Date(pauseHstry.pause_end_date);
-    refundDate.setDate(refundDate.getDate() + 1);
-    const currentDate = new Date();
-
-    if (currentDate >= refundDate) {
-      const pausedDays = Math.ceil((pauseHstry.pause_end_date - pauseHstry.pause_start_date) / (1000 * 60 * 60 * 24)) + 1;
-
-      const orderProducts = await SubscribeOrderProduct.findAll({
-        where: { oid: orderId ,status:"Paused"},
-        transaction: t,
-      });
-
-      let refundAmount = 0;
-      const orderStart = new Date(pauseHstry.pause_start_date);
-      const orderEnd = pauseHstry.pause_end_date ? new Date(pauseHstry.pause_end_date) : null;
-
-      for (const product of orderProducts) {
-        const totalDeliveryDays = calculateDeliveryDays(
-          orderStart,
-          orderEnd,
-          product.repeat_day || [],
-          product.paused_periods || []
-        );
-        if (totalDeliveryDays === 0) continue;
-
-        const perDayCost = product.price / totalDeliveryDays;
-        refundAmount += parseFloat((perDayCost * pausedDays).toFixed(2));
-      }
-
-      const existingRefund = await WalletReport.findOne({
-        where: {
-          uid,
-          transaction_no: order.order_id,
-          transaction_type: "Credited",
-          message: {
-            [Op.like]: `%Refund for paused subscription order ${order.order_id}%`,
-          },
-        },
-        transaction: t,
-      });
-
-      if (!existingRefund && refundAmount > 0) {
-        await user.update({ wallet: user.wallet + refundAmount }, { transaction: t });
-
-        await WalletReport.create(
-          {
-            uid,
-            amt: refundAmount,
-            message: `Refund for paused subscription order ${order.order_id} for ${pausedDays} days.`,
-            transaction_no: order.order_id,
-            tdate: new Date(),
-            transaction_type: "Credited",
-            status: 1,
-          },
-          { transaction: t }
-        );
-
-        try {
-          await sendPushNotification({
-            appId: process.env.ONESIGNAL_CUSTOMER_APP_ID,
-            apiKey: process.env.ONESIGNAL_CUSTOMER_API_KEY,
-            playerIds: [user.one_subscription],
-            data: { user_id: user.id, type: "Subscription refund credited" },
-            contents: {
-              en: `${user.name}, ₹${refundAmount} has been credited to your wallet for paused order ${order.order_id}!`,
-            },
-            headings: { en: "Refund Credited!" },
-          });
-
-          await sendInAppNotification({
-            uid,
-            title: "Refund Credited",
-            description: `₹${refundAmount} credited for paused order ${order.order_id}.`,
-          });
-        } catch (notificationError) {
-          console.error("Refund notification error:", notificationError.message);
-        }
-      }
-    }
-
     await SubscribeOrderProduct.update(
       {
         pause: false,
         status: "Active",
+        paused_period:null,
+        start_period:null
       },
       {
-        where: { oid: orderId },
+        where: { id: subscribeOrderProductId },
         transaction: t,
       }
     );
-    await pauseHistory.update({
-      pause_start_date:null,
-      pause_end_date:null,
-    })
 
     try {
       await Promise.all([
@@ -1235,8 +1172,117 @@ const resumeSubscriptionOrder = async (req, res) => {
 
 
 
+// const getOrdersByStatus = async (req, res) => {
+//   const uid = req.user.userId;
+//   if (!uid) {
+//     return res.status(401).json({
+//       ResponseCode: "401",
+//       Result: "false",
+//       ResponseMsg: "Unauthorized",
+//     });
+//   }
+
+//   try {
+//     const orders = await SubscribeOrder.findAll({
+//       where: { uid },
+//       attributes: ['id', 'uid', 'status', 'createdAt', 'address_id', 'order_id'],
+//       include: [
+//         {
+//           model: SubscribeOrderProduct,
+//           as: "orderProducts",
+//           attributes: ["id",  "timeslot_id", "weight_id", "product_id", "status"],
+//           include: [
+//             {
+//               model: Time,
+//               as: "timeslotss",
+//               attributes: ["id", "mintime", "maxtime"],
+//             },
+//             {
+//               model: WeightOption,
+//               as: "subscribeProductWeight",
+//               attributes: ["id", "normal_price", "subscribe_price", "mrp_price", "weight"],
+//             },
+//             {
+//               model: Product,
+//               as: "productDetails",
+//               attributes: ["id", "title", "img", "description"],
+//             },
+//           ],
+//         },
+//         {
+//           model: Address,
+//           as: "subOrdAddress",
+//         },
+//         {
+//           model: Review,
+//           as: "suborderdeliveryreview",
+//         },
+//       ],
+//       order: [["createdAt", "DESC"]],
+//     });
+
+//     // Attach product reviews and determine group status
+//     for (let order of orders) {
+//       let productStatuses = order.orderProducts.map(p => p.status);
+//       const allCompleted = productStatuses.every(status => status === "Completed");
+//       const allCancelled = productStatuses.every(status => status === "Cancelled");
+
+//       console.log(productStatuses,"iiiiiiiiiiiiiiiiiiiiiiii");
+
+//       if(productStatuses.includes("Pending")){
+//         order.status = "Pending";
+//         order.setDataValue("group_status", "Completed");
+//       }else if(productStatuses.includes("completed")){
+//         order.status = "Completed";
+//         order.setDataValue("group_status", "Completed");
+//       } else if(productStatuses.includes("cancelled")){
+//         order.status = "Cancelled";
+//         order.setDataValue("group_status", "Cancelled");
+//       }
+
+//       // if (order.status === "Completed" && allCompleted) {
+//       //   order.setDataValue("group_status", "Completed");
+//       // } else if (order.status === "Cancelled" && allCancelled) {
+//       //   order.setDataValue("group_status", "Cancelled");
+//       // } else {
+//       //   order.setDataValue("group_status", "InProgress");
+//       // }
+
+//       // Attach product reviews
+//       for (let orderProduct of order.orderProducts) {
+//         const productReviews = await ProductReview.findAll({
+//           where: {
+//             user_id: uid,
+//             product_id: orderProduct.productDetails?.id,
+//             order_id: order.id,
+//           },
+//         });
+//         orderProduct.productDetails?.setDataValue("ProductReviews", productReviews);
+//       }
+//     }
+
+//     res.status(200).json({
+//       ResponseCode: "200",
+//       Result: "true",
+//       ResponseMsg: "Subscribe Orders fetched successfully!",
+//       orders,
+//     });
+
+//   } catch (error) {
+//     console.error("Error fetching orders:", error.stack);
+//     res.status(500).json({
+//       ResponseCode: "500",
+//       Result: "false",
+//       ResponseMsg: "Server Error",
+//       error: error.message,
+//       stack: error.stack,
+//     });
+//   }
+// };
+
 const getOrdersByStatus = async (req, res) => {
   const uid = req.user.userId;
+
   if (!uid) {
     return res.status(401).json({
       ResponseCode: "401",
@@ -1244,24 +1290,16 @@ const getOrdersByStatus = async (req, res) => {
       ResponseMsg: "Unauthorized",
     });
   }
+
   try {
-    const { status } = req.params;
-
-    const validStatuses = ["Pending", "Processing", "Active", "Completed", "Cancelled"];
-    if (!validStatuses.includes(status)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid order status" });
-    }
-
     const orders = await SubscribeOrder.findAll({
-      where: { uid, status },
-      attributes: ['id', 'uid', 'status', 'createdAt', 'address_id'], // Explicitly list SubscribeOrder fields
+      where: { uid },
+      attributes: ['id', 'uid', 'status', 'createdAt', 'address_id', 'order_id'],
       include: [
         {
           model: SubscribeOrderProduct,
           as: "orderProducts",
-          attributes: ["pquantity", "timeslot_id", "weight_id", "product_id"],
+          attributes: ["id", "timeslot_id", "weight_id", "product_id", "status"],
           include: [
             {
               model: Time,
@@ -1290,40 +1328,61 @@ const getOrdersByStatus = async (req, res) => {
         },
       ],
       order: [["createdAt", "DESC"]],
-      logging: console.log,
     });
 
-    // Manually attach ProductReviews
     for (let order of orders) {
+      const productStatuses = order.orderProducts.map(p => p.status?.toLowerCase());
+
+      const hasPending = productStatuses.includes("pending");
+      const hasCompleted = productStatuses.includes("completed");
+      const allCancelled = productStatuses.every(status => status === "cancelled");
+
+      // Determine and override the order status dynamically
+      if (hasPending) {
+        order.setDataValue("group_status", "Pending");
+        order.status = "Pending";
+      } else if (hasCompleted) {
+        order.setDataValue("group_status", "Completed");
+        order.status = "Completed";
+      } else if (allCancelled) {
+        order.setDataValue("group_status", "Cancelled");
+        order.status = "Cancelled";
+      } else {
+        order.setDataValue("group_status", "InProgress");
+        order.status = "InProgress";
+      }
+
+      // Attach product reviews
       for (let orderProduct of order.orderProducts) {
         const productReviews = await ProductReview.findAll({
           where: {
             user_id: uid,
-            product_id: orderProduct.productDetails?.id, // Add null check
+            product_id: orderProduct.productDetails?.id,
             order_id: order.id,
           },
         });
-        orderProduct.productDetails?.setDataValue("ProductReviews", productReviews); // Add null check
+        orderProduct.productDetails?.setDataValue("ProductReviews", productReviews);
       }
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       ResponseCode: "200",
       Result: "true",
-      ResponseMsg: "Subscribe Order fetched successfully!",
+      ResponseMsg: "Subscribe Orders fetched successfully!",
       orders,
     });
+
   } catch (error) {
     console.error("Error fetching orders:", error.stack);
-    res.status(500).json({
+    return res.status(500).json({
       ResponseCode: "500",
       Result: "false",
       ResponseMsg: "Server Error",
       error: error.message,
-      stack: error.stack, // Include stack trace for debugging
     });
   }
 };
+
 
 const getOrderDetails = async (req, res) => {
   const { id } = req.params;
@@ -1342,9 +1401,13 @@ const getOrderDetails = async (req, res) => {
       attributes: ['id', 'uid', 'status', 'createdAt', 'address_id'], // Explicitly list fields
       include: [
         {
+          model: User,
+          as: 'user',
+        },
+        {
           model: SubscribeOrderProduct,
           as: "orderProducts",
-          attributes: ['timeslot_id', 'weight_id', 'product_id'],
+          attributes: ['timeslot_id', 'weight_id', 'product_id','status'],
           include: [
             {
               model: Product,
@@ -1393,8 +1456,9 @@ const getOrderDetails = async (req, res) => {
   }
 };
 
+// this cancelled for particular order
 const cancelOrder = async (req, res) => {
-  const { subscribeOrderProductId } = req.body;
+  const { subscribeOrderProductId, orderId } = req.body;
   const uid = req.user.userId;
 
   if (!uid) {
@@ -1405,11 +1469,11 @@ const cancelOrder = async (req, res) => {
     });
   }
 
-  if (!subscribeOrderProductId) {
+  if (!subscribeOrderProductId || !orderId) {
     return res.status(400).json({
       ResponseCode: "400",
       Result: "false",
-      ResponseMsg: "subscribeOrderProductId is required!",
+      ResponseMsg: "subscribeOrderProductId and orderId are required!",
     });
   }
 
@@ -1417,11 +1481,11 @@ const cancelOrder = async (req, res) => {
   try {
     const orderProduct = await SubscribeOrderProduct.findOne({
       where: { id: subscribeOrderProductId },
-      include: [{ model: SubscribeOrder,as:"oid", where: { uid } }],
+      include: [{ model: SubscribeOrder, as: "subscriberid", where: { uid } }],
       transaction: t,
     });
 
-    if (!orderProduct || !orderProduct.SubscribeOrder) {
+    if (!orderProduct || !orderProduct.oid) {
       if (!t.finished) await t.rollback();
       return res.status(400).json({
         ResponseCode: "400",
@@ -1429,10 +1493,11 @@ const cancelOrder = async (req, res) => {
         ResponseMsg: "Product not found or not owned by user!",
       });
     }
-
-    const order = orderProduct.SubscribeOrder;
+    console.log(orderProduct,"ooooooooooooooooooo")
+    const order = orderProduct.subscriberid;
     const user = await User.findByPk(uid, { transaction: t });
     const store = await Store.findByPk(order.store_id, { transaction: t });
+
     if (!user || !store) {
       if (!t.finished) await t.rollback();
       return res.status(400).json({
@@ -1479,7 +1544,7 @@ const cancelOrder = async (req, res) => {
       });
     }
 
-    const productPrice = orderProduct.price;
+    const productPrice = parseFloat(orderProduct.price);
     const perDayCost = productPrice / totalDeliveryDays;
     const refundAmount = parseFloat((perDayCost * remainingDeliveryDays).toFixed(2));
 
@@ -1492,15 +1557,16 @@ const cancelOrder = async (req, res) => {
       });
     }
 
-    // Update product status to Cancelled
+    // Cancel this product
     await orderProduct.update({ status: "Cancelled" }, { transaction: t });
 
-    // Check remaining active products
+    // Check if other products in the same order are still active
     const remainingProducts = await SubscribeOrderProduct.findAll({
       where: { oid: order.id, status: { [Op.ne]: "Cancelled" } },
       transaction: t,
     });
 
+    // Adjust order totals
     let updatedSubtotal = parseFloat(order.subtotal) - productPrice;
     let updatedTotal = parseFloat(
       (
@@ -1512,14 +1578,15 @@ const cancelOrder = async (req, res) => {
       ).toFixed(2)
     );
 
-    let newStatus = order.status;
-    if (remainingProducts.length === 0) {
-      newStatus = "Cancelled";
+    // Update order status based on remaining products
+    let newStatus = "Cancelled";
+    if (remainingProducts.length > 0) {
+      newStatus = "Active";
+    } else {
       updatedSubtotal = 0;
       updatedTotal = 0;
     }
 
-    // Update order
     await order.update(
       {
         subtotal: updatedSubtotal,
@@ -1529,9 +1596,9 @@ const cancelOrder = async (req, res) => {
       { transaction: t }
     );
 
-    // Process refund
+    // Refund processing
     if (refundAmount > 0) {
-      const updatedWallet = user.wallet + refundAmount;
+      const updatedWallet = parseFloat(user.wallet) + refundAmount;
       await user.update({ wallet: updatedWallet }, { transaction: t });
 
       await WalletReport.create(
@@ -1548,7 +1615,7 @@ const cancelOrder = async (req, res) => {
       );
     }
 
-    // Send push notifications
+    // Notifications
     try {
       await Promise.all([
         sendPushNotification({
@@ -1613,6 +1680,112 @@ const cancelOrder = async (req, res) => {
   }
 };
 
+// this cancell all the products in the subscription order
+const cancelAllProductsInSubscriptionOrder = async (req, res) => {
+  const { orderId } = req.body;
+  const uid = req.user.userId;
+
+  if (!uid) {
+    return res.status(401).json({
+      ResponseCode: "401",
+      Result: "false",
+      ResponseMsg: "Unauthorized",
+    });
+  }
+
+  if (!orderId) {
+    return res.status(400).json({
+      ResponseCode: "400",
+      Result: "false",
+      ResponseMsg: "Order ID is required!",
+    });
+  }
+
+  const t = await sequelize.transaction();
+  try {
+    const order = await SubscribeOrder.findOne({
+      where: { id: orderId, uid, status: "Pending" },
+      include: [{
+        model: SubscribeOrderProduct,
+        as: "orderProducts",
+        where: { status: "Pending" }
+      }],
+      transaction: t,
+    });
+
+    if (!order || !order.orderProducts || order.orderProducts.length === 0) {
+      if (!t.finished) await t.rollback();
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Order not found or no pending products to cancel.",
+      });
+    }
+
+    const user = await User.findByPk(uid, { transaction: t });
+    const store = await Store.findByPk(order.store_id, { transaction: t });
+    const setting = await Setting.findOne({ transaction: t });
+
+    if (!user || !store || !setting) {
+      if (!t.finished) await t.rollback();
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Required data not found (user, store, or settings).",
+      });
+    }
+
+    const deliveryCharge = parseFloat(setting.delivery_charges) || 0;
+    const storeCharge = parseFloat(setting.store_charges) || 0;
+    const tax = parseFloat(setting.tax) || 0;
+
+    const totalProductPrice = order.orderProducts.reduce((sum, p) => sum + parseFloat(p.price || 0), 0);
+    const totalRefund = totalProductPrice + deliveryCharge + storeCharge + tax;
+
+    // Update all SubscribeOrderProduct to Cancelled
+    for (const product of order.orderProducts) {
+      await product.update({ status: "Cancelled" }, { transaction: t });
+    }
+
+    // Update SubscribeOrder to Cancelled
+    await order.update({ status: "Cancelled", subtotal: 0, o_total: 0 }, { transaction: t });
+
+    // Update user wallet
+    const updatedWallet = parseFloat(user.wallet || 0) + totalRefund;
+    await user.update({ wallet: updatedWallet }, { transaction: t });
+
+    // Create wallet transaction report
+    await WalletReport.create({
+      uid,
+      amt: totalRefund,
+      message: `Full refund for cancelling subscription order ${order.order_id}`,
+      transaction_no: order.order_id,
+      tdate: new Date(),
+      transaction_type: "Credited",
+      status: 1,
+    }, { transaction: t });
+
+    await t.commit();
+
+    return res.status(200).json({
+      ResponseCode: "200",
+      Result: "true",
+      ResponseMsg: "All subscription products cancelled and refund processed successfully.",
+      refund_amount: totalRefund.toFixed(2),
+    });
+
+  } catch (error) {
+    if (!t.finished) await t.rollback();
+    console.error("Error cancelling all subscription products:", error);
+    return res.status(500).json({
+      ResponseCode: "500",
+      Result: "false",
+      ResponseMsg: "Server Error",
+      error: error.message,
+    });
+  }
+};
+
 
 module.exports = {
   subscribeOrder,
@@ -1622,5 +1795,6 @@ module.exports = {
   cancelOrder,
   pauseSubscriptionOrder,
   resumeSubscriptionOrder,
-  // autoResumeSubscriptionOrder
+  // autoResumeSubscriptionOrder,
+  cancelAllProductsInSubscriptionOrder
 };

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 {"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-26T13:15:39.623Z"}
 {"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-26T13:15:56.922Z"}
 {"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-26T13:16:14.865Z"}
@@ -1327,3 +1328,9 @@
 {"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 29/5/2025, 11:49:00 am","service":"kine_milk_server","timestamp":"2025-05-29T06:19:00.911Z"}
 {"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 29/5/2025, 11:50:00 am","service":"kine_milk_server","timestamp":"2025-05-29T06:20:00.508Z"}
 {"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 29/5/2025, 11:50:00 am","service":"kine_milk_server","timestamp":"2025-05-29T06:20:00.578Z"}
+=======
+>>>>>>> 99f640026519d6cbeaa2dc42983e59a52ab57a54
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-29T06:20:30.720Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-29T06:20:30.754Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-29T06:20:30.774Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-29T06:20:30.784Z"}

@@ -39,10 +39,15 @@ const calculateDeliveryDays = (startDate, endDate, days) => {
   if (isNaN(start) || isNaN(end) || end < start) return 0;
 
   let deliveryDays = 0;
-  const validDays = days.map((day) => day.toLowerCase());
+  const validDays = days.map((d) =>
+    typeof d === "number"
+      ? ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"][d]
+      : d.toLowerCase()
+  );
 
-  for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
-    const dayName = date.toLocaleString("en-US", { weekday: "long" }).toLowerCase();
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    const currentDate = new Date(d);
+    const dayName = currentDate.toLocaleString("en-US", { weekday: "long" }).toLowerCase();
     if (validDays.includes(dayName)) {
       deliveryDays++;
     }
