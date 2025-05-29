@@ -1,9 +1,86 @@
 const Coupon = require("../Models/Coupon");
 const { Op } = require("sequelize");
-const asyncHandler = require("../middlewares/errorHandler"); // Fixed typo
+const asyncHandler = require("../middlewares/errorHandler");
 const logger = require("../utils/logger");
 const { DeliverySearchSchema, CouponDeleteSchema, getCouponByIdSchema } = require("../utils/validation");
 const uploadToS3 = require("../config/fileUpload.aws");
+const cron = require("node-cron");
+const { Sequelize } = require("sequelize");
+
+// Verify Coupon model
+if (!Coupon || typeof Coupon.create !== "function") {
+  logger.error("Coupon model is not properly defined or exported");
+  throw new Error("Coupon model is not properly defined or exported");
+}
+
+// Log server timezone
+logger.info(`Server timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`);
+
+// Helper function to convert UTC to IST
+const convertUTCToIST = (date) => {
+  if (!date) return null;
+  const istOffset = 5.5 * 60 * 60 * 1000;
+  return new Date(new Date(date).getTime() + istOffset);
+};
+
+// Schedule coupon activation and status update
+cron.schedule("* * * * *", async () => {
+  try {
+    const nowInIST = new Date();
+    const istOffset = 5.5 * 60 * 60 * 1000;
+    const nowInUTC = new Date(nowInIST.getTime() - istOffset);
+
+    // Activate coupons with start_date
+    const couponsToActivate = await Coupon.findAll({
+      where: {
+        status: 0,
+        start_date: {
+          [Sequelize.Op.and]: [
+            { [Sequelize.Op.ne]: null },
+            { [Sequelize.Op.lte]: nowInUTC },
+          ],
+        },
+      },
+    });
+
+    for (const coupon of couponsToActivate) {
+      await coupon.update({
+        status: 1,
+        // Preserve start_date
+      });
+      logger.info(
+        `Coupon ID ${coupon.id} published at ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}. ` +
+        `start_date preserved: ${coupon.start_date ? convertUTCToIST(coupon.start_date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
+      );
+    }
+
+    // Unpublish coupons that have reached end_date
+    const couponsToUnpublish = await Coupon.findAll({
+      where: {
+        status: 1,
+        end_date: {
+          [Sequelize.Op.and]: [
+            { [Sequelize.Op.ne]: null },
+            { [Sequelize.Op.lte]: nowInUTC },
+          ],
+        },
+      },
+    });
+
+    for (const coupon of couponsToUnpublish) {
+      await coupon.update({
+        status: 0,
+        // Preserve end_date
+      });
+      logger.info(
+        `Coupon ID ${coupon.id} unpublished at ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}. ` +
+        `end_date preserved: ${coupon.end_date ? convertUTCToIST(coupon.end_date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
+      );
+    }
+  } catch (error) {
+    logger.error(`Error in coupon scheduling job: ${error.message}`);
+  }
+});
 
 const upsertCoupon = asyncHandler(async (req, res) => {
   let {
@@ -21,70 +98,14 @@ const upsertCoupon = asyncHandler(async (req, res) => {
 
   try {
     const statusValue = parseInt(status, 10);
-    const currentTime = new Date();
-
-    // Validate start_date and end_date based on status
-    if (statusValue === 2 && !start_date) {
-      logger.error("start_date is required for Scheduled status");
+    const validStatuses = [0, 1];
+    if (!validStatuses.includes(statusValue)) {
+      logger.error("Invalid status value");
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
-        ResponseMsg: "start_date is required when status is Scheduled.",
+        ResponseMsg: "Status must be 0 (Unpublished) or 1 (Published).",
       });
-    }
-    if (statusValue === 2 && !end_date) {
-      logger.error("end_date is required for Scheduled status");
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "end_date is required when status is Scheduled.",
-      });
-    }
-
-    // Scheduling conditions for Scheduled status
-    if (statusValue === 2) {
-      const startDate = new Date(start_date);
-      const endDate = new Date(end_date);
-
-      if (startDate <= currentTime) {
-        logger.error("start_date must be in the future for Scheduled status");
-        return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: "start_date must be in the future for Scheduled status.",
-        });
-      }
-
-      if (endDate <= currentTime) {
-        logger.error("end_date must be in the future for Scheduled status");
-        return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: "end_date must be in the future for Scheduled status.",
-        });
-      }
-
-      if (endDate <= startDate) {
-        logger.error("end_date must be greater than start_date for Scheduled status");
-        return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: "end_date must be greater than start_date for Scheduled status.",
-        });
-      }
-    }
-
-    // Validate end_date for Published status if provided
-    if (statusValue === 1 && end_date) {
-      const endDate = new Date(end_date);
-      if (endDate <= currentTime) {
-        logger.error("end_date must be in the future for Published status");
-        return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: "end_date must be in the future for Published status.",
-        });
-      }
     }
 
     let imageUrl;
@@ -98,6 +119,63 @@ const upsertCoupon = asyncHandler(async (req, res) => {
         Result: "false",
         ResponseMsg: "Image is required for a new coupon.",
       });
+    }
+
+    const parseISTDate = (dateString, fieldName) => {
+      if (dateString === undefined || dateString === "") {
+        logger.warn(`Empty or undefined ${fieldName} received for ${id ? `coupon ${id}` : "new coupon"}; preserving existing value`);
+        return undefined;
+      }
+      const istDate = new Date(dateString);
+      if (isNaN(istDate.getTime())) {
+        throw new Error(`Invalid ${fieldName} format`);
+      }
+      return istDate;
+    };
+
+    const convertISTToUTC = (date) => {
+      if (!date) return null;
+      const istOffset = 5.5 * 60 * 60 * 1000;
+      return new Date(date.getTime() - istOffset);
+    };
+
+    const startDate = parseISTDate(start_date, "start_date");
+    const endDate = parseISTDate(end_date, "end_date");
+
+    const nowInIST = new Date();
+    logger.info(`Current time in IST: ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+    if (startDate) {
+      logger.info(`Parsed start_date (IST): ${startDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+    }
+    if (endDate) {
+      logger.info(`Parsed end_date (IST): ${endDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+    }
+
+    if (endDate && endDate <= nowInIST) {
+      logger.error("End date/time must be in the future");
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "End date/time must be in the future.",
+      });
+    }
+    if (startDate && endDate && startDate >= endDate) {
+      logger.error("End date/time must be after start date/time");
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "End date/time must be after start date/time.",
+      });
+    }
+
+    const adjustedStartDate = startDate ? convertISTToUTC(startDate) : null;
+    const adjustedEndDate = endDate ? convertISTToUTC(endDate) : null;
+
+    let effectiveStatus = statusValue;
+    if (startDate && startDate > nowInIST) {
+      effectiveStatus = 0;
+    } else if (startDate && startDate <= nowInIST) {
+      effectiveStatus = 1;
     }
 
     let coupon;
@@ -115,43 +193,61 @@ const upsertCoupon = asyncHandler(async (req, res) => {
       await coupon.update({
         coupon_title,
         coupon_img: imageUrl || coupon.coupon_img,
-        status: statusValue,
+        status: effectiveStatus,
         coupon_code,
         subtitle,
-        start_date: statusValue === 2 ? start_date : null,
-        end_date: statusValue === 0 ? null : end_date || null, // Allow null end_date for Published
+        start_date: startDate !== undefined ? adjustedStartDate : coupon.start_date,
+        end_date: endDate !== undefined ? adjustedEndDate : coupon.end_date,
         min_amt,
         coupon_val,
         description,
       });
 
-      logger.info(`Coupon with ID ${id} updated successfully`);
+      logger.info(
+        `Coupon ${id} updated successfully. ` +
+        `Status: ${effectiveStatus}, ` +
+        `start_date: ${coupon.start_date ? convertUTCToIST(coupon.start_date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
+        `end_date: ${coupon.end_date ? convertUTCToIST(coupon.end_date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
+      );
       return res.status(200).json({
         ResponseCode: "200",
         Result: "true",
         ResponseMsg: "Coupon updated successfully.",
-        coupon,
+        coupon: {
+          ...coupon.toJSON(),
+          start_date: convertUTCToIST(coupon.start_date),
+          end_date: convertUTCToIST(coupon.end_date),
+        },
       });
     } else {
       coupon = await Coupon.create({
         coupon_img: imageUrl,
         coupon_title,
-        status: statusValue,
+        status: effectiveStatus,
         coupon_code,
         subtitle,
-        start_date: statusValue === 2 ? start_date : null,
-        end_date: statusValue === 0 ? null : end_date || null, // Allow null end_date for Published
+        start_date: adjustedStartDate,
+        end_date: adjustedEndDate,
         min_amt,
         coupon_val,
         description,
       });
 
-      logger.info(`Coupon created with ID ${coupon.id}`);
+      logger.info(
+        `New coupon created with ID ${coupon.id}. ` +
+        `Status: ${effectiveStatus}, ` +
+        `start_date: ${coupon.start_date ? convertUTCToIST(coupon.start_date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
+        `end_date: ${coupon.end_date ? convertUTCToIST(coupon.end_date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
+      );
       return res.status(201).json({
         ResponseCode: "201",
         Result: "true",
         ResponseMsg: "Coupon created successfully.",
-        coupon,
+        coupon: {
+          ...coupon.toJSON(),
+          start_date: convertUTCToIST(coupon.start_date),
+          end_date: convertUTCToIST(coupon.end_date),
+        },
       });
     }
   } catch (error) {
@@ -167,30 +263,13 @@ const upsertCoupon = asyncHandler(async (req, res) => {
 const getAllCoupon = asyncHandler(async (req, res) => {
   try {
     const coupons = await Coupon.findAll();
-    const currentTime = new Date();
-
-    for (let coupon of coupons) {
-      const startDate = coupon.start_date ? new Date(coupon.start_date) : null;
-      const endDate = coupon.end_date ? new Date(coupon.end_date) : null;
-
-      if (coupon.status === 2 && startDate && currentTime >= startDate) {
-        coupon.status = 1;
-        coupon.start_date = null;
-        await coupon.save();
-        logger.info(`Coupon ID ${coupon.id} auto-updated from Scheduled to Published`);
-      }
-
-      // Only update to Unpublished if end_date exists and has passed
-      if (coupon.status === 1 && endDate && currentTime >= endDate) {
-        coupon.status = 0;
-        coupon.end_date = null;
-        await coupon.save();
-        logger.info(`Coupon ID ${coupon.id} auto-updated from Published to Unpublished`);
-      }
-    }
-
     logger.info("Successfully retrieved all coupons");
-    res.status(200).json(coupons);
+    const couponsWithIST = coupons.map(coupon => ({
+      ...coupon.toJSON(),
+      start_date: convertUTCToIST(coupon.start_date),
+      end_date: convertUTCToIST(coupon.end_date),
+    }));
+    res.status(200).json(couponsWithIST);
   } catch (error) {
     logger.error(`Error retrieving coupons: ${error.message}`);
     res.status(500).json({ message: "Failed to retrieve coupons", error });
@@ -200,28 +279,6 @@ const getAllCoupon = asyncHandler(async (req, res) => {
 const getCouponCount = asyncHandler(async (req, res) => {
   try {
     const currentTime = new Date();
-    const coupons = await Coupon.findAll();
-
-    for (let coupon of coupons) {
-      const startDate = coupon.start_date ? new Date(coupon.start_date) : null;
-      const endDate = coupon.end_date ? new Date(coupon.end_date) : null;
-
-      if (coupon.status === 2 && startDate && currentTime >= startDate) {
-        coupon.status = 1;
-        coupon.start_date = null;
-        await coupon.save();
-        logger.info(`Coupon ID ${coupon.id} auto-updated from Scheduled to Published`);
-      }
-
-      if (coupon.status === 1 && endDate && currentTime >= endDate) {
-        coupon.status = 0;
-        coupon.end_date = null;
-        await coupon.save();
-        logger.info(`Coupon ID ${coupon.id} auto-updated from Published to Unpublished`);
-      }
-    }
-
-    // Count Published coupons, including those without an end_date
     const couponCount = await Coupon.count({
       where: {
         status: 1,
@@ -242,8 +299,14 @@ const getCouponCount = asyncHandler(async (req, res) => {
       },
     });
 
+    const couponAllWithIST = couponAll.map(coupon => ({
+      ...coupon.toJSON(),
+      start_date: convertUTCToIST(coupon.start_date),
+      end_date: convertUTCToIST(coupon.end_date),
+    }));
+
     logger.info(`Coupon count: ${couponCount}`);
-    res.status(200).json({ CouponAll: couponAll, CouponCount: couponCount });
+    res.status(200).json({ CouponAll: couponAllWithIST, CouponCount: couponCount });
   } catch (error) {
     logger.error(`Error retrieving coupon count: ${error.message}`);
     res.status(500).json({ message: "Failed to retrieve coupon count", error });
@@ -259,7 +322,11 @@ const getCouponById = asyncHandler(async (req, res) => {
       return res.status(404).json({ error: "Coupon not found" });
     }
     logger.info(`Coupon with ID ${id} found`);
-    res.status(200).json(coupon);
+    res.status(200).json({
+      ...coupon.toJSON(),
+      start_date: convertUTCToIST(coupon.start_date),
+      end_date: convertUTCToIST(coupon.end_date),
+    });
   } catch (error) {
     logger.error(`Error retrieving coupon by ID ${id}: ${error.message}`);
     res.status(500).json({ error: "Internal Server Error" });
@@ -301,7 +368,7 @@ const deleteCoupon = asyncHandler(async (req, res) => {
 });
 
 const toggleCouponStatus = asyncHandler(async (req, res) => {
-  const { id, value } = req.body;
+  const { id, value, start_date, end_date } = req.body;
 
   try {
     const coupon = await Coupon.findByPk(id);
@@ -311,41 +378,65 @@ const toggleCouponStatus = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Coupon not found." });
     }
 
-    if (coupon.status === 2) {
-      logger.error(`Cannot toggle status of a Scheduled coupon (ID: ${id})`);
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "Cannot toggle status of a Scheduled coupon.",
-      });
+    const nowInIST = new Date();
+    const istOffset = 5.5 * 60 * 60 * 1000;
+    const nowInUTC = new Date(nowInIST.getTime() - istOffset);
+    const startDate = coupon.start_date ? new Date(coupon.start_date) : null;
+    const endDate = coupon.end_date ? new Date(coupon.end_date) : null;
+
+    if (start_date !== undefined) {
+      logger.warn(`start_date (${start_date}) included in toggleCouponStatus for coupon ${id}; ignoring to preserve existing value`);
+    }
+    if (end_date !== undefined) {
+      logger.warn(`end_date (${end_date}) included in toggleCouponStatus for coupon ${id}; ignoring to preserve existing value`);
     }
 
-    const currentTime = new Date();
-    const statusValue = parseInt(value, 10);
-
-    // Validate end_date for Published status if provided
-    if (statusValue === 1 && coupon.end_date) {
-      const endDate = new Date(coupon.end_date);
-      if (endDate <= currentTime) {
-        logger.error("end_date must be in the future for Published status");
+    if (value === 1) {
+      if (startDate && startDate > nowInUTC) {
+        logger.error(`Cannot toggle status to Published for coupon ID ${id} with future start_date`);
         return res.status(400).json({
           ResponseCode: "400",
           Result: "false",
-          ResponseMsg: "end_date must be in the future for Published status.",
+          ResponseMsg: "Cannot toggle status before start date.",
+        });
+      }
+      if (endDate && endDate <= nowInUTC) {
+        logger.error(`Cannot toggle status to Published for coupon ID ${id} with expired end_date`);
+        return res.status(400).json({
+          ResponseCode: "400",
+          Result: "false",
+          ResponseMsg: "Cannot toggle status to after Date expired.",
         });
       }
     }
 
-    coupon.status = statusValue;
-    if (statusValue !== 1) {
-      coupon.end_date = null;
+    const statusValue = parseInt(value, 10);
+    const validStatuses = [0, 1];
+    if (!validStatuses.includes(statusValue)) {
+      logger.error(`Invalid status value: ${value}`);
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Status must be 0 (Unpublished) or 1 (Published).",
+      });
     }
+
+    coupon.status = statusValue;
+    // Preserve start_date and end_date
     await coupon.save();
 
-    logger.info(`Coupon status updated for ID ${id} to ${statusValue}`);
+    logger.info(
+      `Coupon status updated for ID ${coupon.id} to ${statusValue}. ` +
+      `start_date preserved: ${coupon.start_date ? convertUTCToIST(coupon.start_date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
+      `end_date preserved: ${coupon.end_date ? convertUTCToIST(coupon.end_date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
+    );
     res.status(200).json({
-      message: "Coupon status updated successfully.",
+      ResponseCode: "200",
+      Result: "true",
+      ResponseMsg: "Coupon status updated successfully.",
       updatedStatus: coupon.status,
+      start_date: convertUTCToIST(coupon.start_date),
+      end_date: convertUTCToIST(coupon.end_date),
     });
   } catch (error) {
     logger.error(`Error updating coupon status for ID ${id}: ${error.message}`);
@@ -361,7 +452,6 @@ const searchCoupon = asyncHandler(async (req, res) => {
   }
 
   const { id, title } = req.body;
-  const currentTime = new Date();
   const whereClause = {};
 
   if (id) {
@@ -373,32 +463,12 @@ const searchCoupon = asyncHandler(async (req, res) => {
 
   const coupons = await Coupon.findAll({ where: whereClause });
 
-  for (let coupon of coupons) {
-    const startDate = coupon.start_date ? new Date(coupon.start_date) : null;
-    const endDate = coupon.end_date ? new Date(coupon.end_date) : null;
-
-    if (coupon.status === 2 && startDate && currentTime >= startDate) {
-      coupon.status = 1;
-      coupon.start_date = null;
-      await coupon.save();
-      logger.info(`Coupon ID ${coupon.id} auto-updated from Scheduled to Published`);
-    }
-
-    if (coupon.status === 1 && endDate && currentTime >= endDate) {
-      coupon.status = 0;
-      coupon.end_date = null;
-      await coupon.save();
-      logger.info(`Coupon ID ${coupon.id} auto-updated from Published to Unpublished`);
-    }
-  }
-
-  if (coupons.length === 0) {
-    logger.error("No matching coupons found");
-    return res.status(404).json({ error: "No matching coupons found" });
-  }
-
   logger.info("Coupons found");
-  res.status(200).json(coupons);
+  res.status(200).json(coupons.map(coupon => ({
+    ...coupon.toJSON(),
+    start_date: convertUTCToIST(coupon.start_date),
+    end_date: convertUTCToIST(coupon.end_date),
+  })));
 });
 
 module.exports = {

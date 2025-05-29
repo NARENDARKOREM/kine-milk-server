@@ -54,7 +54,8 @@ app.use(
       "http://localhost:3002",
       "https://kine-milk-client.vercel.app",
       "https://kine-client-dev.vercel.app",
-      "https://kine-server-dev.vercel.app"
+      "https://kine-server-dev.vercel.app",
+      "https://kine-milk-client-sage.vercel.app"
     ],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"]
