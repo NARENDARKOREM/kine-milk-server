@@ -612,185 +612,47 @@ const homeProductsAPI = async (req, res) => {
 
 const getDiscountedProducts = async (req, res) => {
   try {
-    const { planType, store_id } = req.query;
-
-    // Validate planType
-    if (planType && !["instant", "subscribe"].includes(planType)) {
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "Invalid plan type! Must be 'instant' or 'subscribe'.",
-      });
-    }
-
-    // Fetch ads
-    const ads = await Ads.findAll({
-      where: {
-        couponPercentage: { [Op.gt]: 0 },
-        status: 1,
-        [Op.or]: [
-          { startDateTime: { [Op.is]: null } },
-          { startDateTime: { [Op.lte]: new Date() } },
-        ],
-        [Op.or]: [
-          { endDateTime: { [Op.is]: null } },
-          { endDateTime: { [Op.gte]: new Date() } },
-        ],
-        ...(planType && { planType }),
-      },
-      attributes: ["id", "couponPercentage", "img", "planType"],
-    });
-
-    const productFilter = {
-      [Op.or]: [
-        { discount: { [Op.gt]: 0 } },
-        // Add Ads linkage if needed (e.g., via store_id or category)
-      ],
-      status: 1,
-      out_of_stock: 0,
-    };
-
-    // Fetch discounted products
-    const inventories = await ProductInventory.findAll({
+    const discountedProducts = await Product.findAll({
       where: {
         status: 1,
-        ...(store_id && { store_id }),
-        [Op.or]: [
-          { Coupons: { [Op.ne]: [] } }, // Non-empty Coupons array
-          Sequelize.literal(`EXISTS (
-            SELECT 1 FROM tbl_product 
-            WHERE tbl_product.id = ProductInventory.product_id 
-            AND tbl_product.discount > 0
-          )`),
-        ],
+        discount: { [Op.gt]: 0 }, // Fetch products with discount greater than 0
       },
+      attributes: ["id", "title", "img", "description", "discount"],
       include: [
         {
-          model: Product,
-          where: productFilter,
-          as: "inventoryProduct",
-          attributes: ["id", "cat_id", "title", "img", "description", "discount"],
-          include: [
-            {
-              model: Category,
-              attributes: ["id", "title"],
-              as: "category",
-            },
-            {
-              model: ProductImage,
-              attributes: ["id", "product_id", "img"],
-              as: "extraImages",
-            },
-          ],
+          model: Category,
+          as: "category",
+          attributes: ["id", "title"],
         },
         {
-          model: StoreWeightOption,
-          where: { quantity: { [Op.gt]: 0 } }, // Fix: Compare with 0
-          attributes: [
-            "id",
-            "product_inventory_id",
-            "product_id",
-            "weight_id",
-            "quantity",
-            "subscription_quantity",
-            "total",
-            "createdAt",
-            "updatedAt",
-            "deletedAt",
-          ],
-          include: [
-            {
-              model: WeightOption,
-              attributes: ["id", "weight", "normal_price", "subscribe_price", "mrp_price"],
-              as: "weightOption",
-            },
-          ],
+          model: ProductImage,
+          as: "extraImages",
+          attributes: ["id", "product_id", "img"],
         },
       ],
     });
 
-    if (!inventories || inventories.length === 0) {
-      return res.status(404).json({
+    if (!discountedProducts || discountedProducts.length === 0) {
+      return res.json({
         ResponseCode: "404",
         Result: "false",
         ResponseMsg: "No discounted products found.",
       });
     }
 
-    // Format response
-    const response = inventories.map((inventory) => ({
-      id: inventory.id,
-      product_id: inventory.product_id,
-      inventoryProducts: inventory.inventoryProduct
-        ? {
-            id: inventory.inventoryProduct.id,
-            cat_id: inventory.inventoryProduct.cat_id,
-            title: inventory.inventoryProduct.title,
-            img: inventory.inventoryProduct.img,
-            description: inventory.inventoryProduct.description,
-            discount: inventory.inventoryProduct.discount || 0,
-            extraImages: inventory.inventoryProduct.extraImages || [],
-            category: inventory.inventoryProduct.category || null,
-          }
-        : null,
-      storeWeightOptions: inventory.storeWeightOptions.map((option) => ({
-        id: option.id,
-        product_inventory_id: option.product_inventory_id,
-        product_id: option.product_id,
-        weight_id: option.weight_id,
-        quantity: option.quantity,
-        subscription_quantity: option.subscription_quantity,
-        total: option.total,
-        createdAt: option.createdAt,
-        updatedAt: option.updatedAt,
-        deletedAt: option.deletedAt,
-        weightOption: option.weightOption
-          ? {
-              id: option.weightOption.id,
-              weight: option.weightOption.weight,
-              normal_price: option.weightOption.normal_price,
-              subscribe_price: option.weightOption.subscribe_price,
-              mrp_price: option.weightOption.mrp_price,
-            }
-          : null,
-      })),
-    }));
-
-    return res.status(200).json({
+    return res.json({
       ResponseCode: "200",
       Result: "true",
       ResponseMsg: "Discounted products fetched successfully.",
-      products: response,
-      ads: ads.map((ad) => ({
-        id: ad.id,
-        couponPercentage: ad.couponPercentage,
-        img: ad.img,
-        planType: ad.planType,
-      })),
+      DiscountedProducts: discountedProducts,
     });
   } catch (error) {
     console.error("Error fetching discounted products:", error);
-    if (error.name === "SequelizeDatabaseError" && error.message.includes("Unknown column")) {
-      return res.status(500).json({
-        ResponseCode: "500",
-        Result: "false",
-        ResponseMsg: "Database schema error: Missing column in tbl_productInventory",
-        error: process.env.NODE_ENV === "development" ? error.message : undefined,
-      });
-    }
-    if (error.name === "SequelizeDatabaseError" && error.message.includes("foreign key constraint")) {
-      return res.status(500).json({
-        ResponseCode: "500",
-        Result: "false",
-        ResponseMsg: "Database schema error: Foreign key constraint mismatch",
-        error: process.env.NODE_ENV === "development" ? error.message : undefined,
-      });
-    }
     return res.status(500).json({
       ResponseCode: "500",
       Result: "false",
-      ResponseMsg: "Internal server error",
-      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+      ResponseMsg: "Internal Server Error",
+      error: error.message,
     });
   }
 };
