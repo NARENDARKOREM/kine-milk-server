@@ -610,44 +610,195 @@ const homeProductsAPI = async (req, res) => {
   }
 };
 
-const getDiscountedProducts = async (req, res) => {
+const getDiscountOfferProducts = async (req, res) => {
+  const { pincode } = req.params;
+  const { latitude, longitude } = req.body;
+
+  console.log("Request Params:", { pincode });
+  console.log("Request Body:", { latitude, longitude });
+
+  // Require pincode, latitude, and longitude
+  if (!pincode || !latitude || !longitude) {
+    return res.json({
+      ResponseCode: "400",
+      Result: "false",
+      ResponseMsg: "Pincode, latitude, and longitude are required!",
+    });
+  }
+
   try {
-    const discountedProducts = await Product.findAll({
+    // Fetch active ads with non-null and non-zero couponPercentage
+    const offers = await Ads.findAll({
       where: {
         status: 1,
-        discount: { [Op.gt]: 0 }, // Fetch products with discount greater than 0
+        screenName: "homescreen",
+        couponPercentage: { [Op.ne]: null, [Op.gt]: 0 },
       },
-      attributes: ["id", "title", "img", "description", "discount"],
-      include: [
-        {
-          model: Category,
-          as: "category",
-          attributes: ["id", "title"],
-        },
-        {
-          model: ProductImage,
-          as: "extraImages",
-          attributes: ["id", "product_id", "img"],
-        },
-      ],
+      attributes: ["id", "img", "couponPercentage"],
     });
 
-    if (!discountedProducts || discountedProducts.length === 0) {
+    if (!offers || offers.length === 0) {
+      console.log("No active offers found with valid couponPercentage for homescreen.");
       return res.json({
         ResponseCode: "404",
         Result: "false",
-        ResponseMsg: "No discounted products found.",
+        ResponseMsg: "No valid offers found with a discount percentage.",
       });
     }
 
+    // Extract unique couponPercentage values
+    const couponPercentages = [...new Set(offers.map((offer) => offer.couponPercentage))];
+    console.log("Valid couponPercentage values:", couponPercentages);
+
+    // Step 1: Try fetching stores by pincode
+    let stores = await Store.findAll({
+      where: {
+        status: 1,
+        pincode: pincode,
+      },
+      attributes: ["id", "title", "rimg", "full_address", "lats", "longs"],
+    });
+    console.log(`Stores found for pincode ${pincode}:`, stores.length);
+    let fetchMethod = stores.length > 0 ? "pincode" : "";
+
+    if (stores.length === 0) {
+      // Step 2: Fallback to radius search using latitude/longitude
+      const userLat = parseFloat(latitude);
+      const userLon = parseFloat(longitude);
+      console.log("No stores found for pincode. Falling back to radius search:", { userLat, userLon });
+
+      const allStores = await Store.findAll({
+        where: { status: 1 },
+        attributes: ["id", "title", "rimg", "full_address", "lats", "longs"],
+      });
+      console.log("Total active stores fetched:", allStores.length);
+
+      stores = allStores.filter((store) => {
+        const storeLat = parseFloat(store.lats);
+        const storeLon = parseFloat(store.longs);
+        if (!storeLat || !storeLon) {
+          console.log(`Store ${store.title} skipped: Invalid lat/lon (${store.lats}, ${store.longs})`);
+          return false;
+        }
+        const distance = getDistance(userLat, userLon, storeLat, storeLon);
+        console.log(`Store: ${store.title}, Lat: ${storeLat}, Lon: ${storeLon}, Distance: ${distance}km`);
+        return distance <= 10; // 10km radius
+      });
+
+      fetchMethod = stores.length > 0 ? "latitude/longitude" : "";
+    }
+
+    if (stores.length === 0) {
+      console.log("No stores found by either pincode or latitude/longitude.");
+      return res.json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "No stores found for your pincode or within 10km of your location!",
+      });
+    }
+
+    // Fetch product inventory where discount matches couponPercentage
+    const productInventoryQuery = {
+      where: {
+        status: 1,
+        store_id: { [Op.in]: stores.map((store) => store.id) },
+      },
+      attributes: ["id", "product_id"],
+      include: [
+        {
+          model: Product,
+          as: "inventoryProducts",
+          attributes: ["id", "cat_id", "title", "img", "description", "discount"],
+          where: {
+            discount: { [Op.in]: couponPercentages }, // Match discount to couponPercentage
+          },
+          include: [
+            {
+              model: ProductImage,
+              as: "extraImages",
+              attributes: ["id", "product_id", "img"],
+            },
+            {
+              model: Category,
+              as: "category",
+              attributes: ["id", "title"],
+            },
+          ],
+        },
+        {
+          model: StoreWeightOption,
+          as: "storeWeightOptions",
+          include: [
+            {
+              model: WeightOption,
+              as: "weightOption",
+              required: false,
+              attributes: ["id", "weight", "normal_price", "subscribe_price", "mrp_price"],
+            },
+          ],
+        },
+      ],
+      logging: console.log,
+    };
+
+    const productInventory = await ProductInventory.findAll(productInventoryQuery);
+
+    if (!productInventory || productInventory.length === 0) {
+      console.log("No products with discounts matching offer couponPercentage in the fetched stores.");
+      return res.json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "No products with discounts matching available offers in the stores.",
+      });
+    }
+
+    // Transform productInventory to parse extraImages.img
+    const transformedInventory = productInventory.map((item) => {
+      const inventoryData = item.toJSON();
+      if (
+        inventoryData.inventoryProducts &&
+        inventoryData.inventoryProducts.extraImages &&
+        inventoryData.inventoryProducts.extraImages.length > 0
+      ) {
+        inventoryData.inventoryProducts.extraImages = inventoryData.inventoryProducts.extraImages.map((image) => {
+          try {
+            console.log(`Raw extraImages.img for product ${inventoryData.product_id}:`, image.img);
+            const parsedImg = typeof image.img === "string" ? JSON.parse(image.img) : image.img;
+            return {
+              ...image,
+              img: Array.isArray(parsedImg) ? parsedImg : [parsedImg],
+            };
+          } catch (parseError) {
+            console.error(`Error parsing extraImages.img for product ${inventoryData.product_id}:`, parseError);
+            return { ...image, img: [] };
+          }
+        });
+      }
+      return inventoryData;
+    });
+
+    // Structure products for the response
+    const categoryProducts = [
+      {
+        name: "Discounted Products",
+        items: transformedInventory,
+      },
+    ];
+
+    console.log("Discounted products data prepared successfully.");
     return res.json({
       ResponseCode: "200",
       Result: "true",
-      ResponseMsg: "Discounted products fetched successfully.",
-      DiscountedProducts: discountedProducts,
+      ResponseMsg: "Discounted Products Data Fetched Successfully!",
+      HomeData: {
+        Ads: offers,
+        store: stores[0], // First store
+        CategoryProducts: categoryProducts,
+        currency: "INR",
+      },
     });
   } catch (error) {
-    console.error("Error fetching discounted products:", error);
+    console.error("Error fetching discounted products data:", error);
     return res.status(500).json({
       ResponseCode: "500",
       Result: "false",
@@ -657,4 +808,4 @@ const getDiscountedProducts = async (req, res) => {
   }
 };
 
-module.exports = {homeAPI,HomeScreenAPI,homeCategoriesAPI,homeProductsAPI,getDiscountedProducts};
+module.exports = {homeAPI,HomeScreenAPI,homeCategoriesAPI,homeProductsAPI,getDiscountOfferProducts};
