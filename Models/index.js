@@ -28,6 +28,11 @@ const SubscribeOrderProduct = require("./SubscribeOrderProduct");
 const User = require("./User");
 const StoreWeightOptionHistory = require("./StoreWeightOptionHistory");
 // const ProductImage = require("./productImages");
+const WeightOption = require("./WeightOption");
+const StoreWeightOption = require("./StoreWeightOption");
+const ProductReview = require("./ProductReview");
+const PersonRecord = require("./PersonRecord");
+
 
 // const Store = require("./Store");
 
@@ -205,7 +210,6 @@ SubscribeOrder.hasMany(Review, {
   as: "suborderdeliveryreview",
 });
 
-const WeightOption = require("./WeightOption");
 
 Product.hasMany(WeightOption, {
   foreignKey: "product_id",
@@ -226,9 +230,7 @@ WeightOption.hasMany(Cart, {
   as: "cartweight",
 });
 
-const StoreWeightOption = require("./StoreWeightOption");
-const ProductReview = require("./ProductReview");
-const PersonRecord = require("./PersonRecord");
+
 ProductInventory.hasMany(StoreWeightOption, {
   foreignKey: "product_inventory_id",
   as: "storeWeightOptions",

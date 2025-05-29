@@ -2,7 +2,7 @@ const { Sequelize, Op } = require("sequelize");
 const SubscribeOrder = require("../../Models/SubscribeOrder");
 const Product = require("../../Models/Product");
 const SubscribeOrderProduct = require("../../Models/SubscribeOrderProduct");
-const pauseHistory=require("../../Models/PauseHistory")
+const pauseHistory = require("../../Models/PauseHistory")
 const Notification = require("../../Models/Notification");
 const NormalOrder = require("../../Models/NormalOrder");
 const User = require("../../Models/User");
@@ -728,17 +728,17 @@ const pauseSubscriptionOrder = async (req, res) => {
       {
         pause: true,
         status: "Paused",
-        start_period:new Date(start_date),
-        paused_period:new Date(end_date),
+        start_period: new Date(start_date),
+        paused_period: new Date(end_date),
       },
       { transaction: t }
     );
     await pauseHistory.create({
-      user_id:uid,
+      user_id: uid,
       subscribe_order_product_id: subscribeOrderProductId,
       pause_start_date: new Date(start_date),
       pause_end_date: new Date(end_date),
-    },{transaction:t})
+    }, { transaction: t })
 
     const refundDate = new Date(pauseEnd);
     refundDate.setDate(refundDate.getDate() + 1);
@@ -857,34 +857,34 @@ const resumeSubscriptionOrder = async (req, res) => {
   try {
     const pausedOrder = await SubscribeOrderProduct.findOne({
       where: { id: subscribeOrderProductId, oid: orderId },
-      include:{
-        model:Product,
-        as:'productDetails',
-        attributes:['title'],
+      include: {
+        model: Product,
+        as: 'productDetails',
+        attributes: ['title'],
       },
       transaction: t,
     });
     console.log({
-  pausedOrder,
-  pause: pausedOrder?.pause,
-  start_period: pausedOrder?.start_period,
-  paused_period: pausedOrder?.paused_period
-});
+      pausedOrder,
+      pause: pausedOrder?.pause,
+      start_period: pausedOrder?.start_period,
+      paused_period: pausedOrder?.paused_period
+    });
 
 
     if (
-  !pausedOrder ||
-  pausedOrder.pause !== true || // or !== 1 if stored as integer
-  !pausedOrder.start_period ||
-  !pausedOrder.paused_period
-) {
-  if (!t.finished) await t.rollback();
-  return res.status(404).json({
-    ResponseCode: "404",
-    Result: "false",
-    ResponseMsg: "Paused product not found or not paused",
-  });
-}
+      !pausedOrder ||
+      pausedOrder.pause !== true || // or !== 1 if stored as integer
+      !pausedOrder.start_period ||
+      !pausedOrder.paused_period
+    ) {
+      if (!t.finished) await t.rollback();
+      return res.status(404).json({
+        ResponseCode: "404",
+        Result: "false",
+        ResponseMsg: "Paused product not found or not paused",
+      });
+    }
 
 
     const order = await SubscribeOrder.findByPk(orderId, { transaction: t });
@@ -921,8 +921,8 @@ const resumeSubscriptionOrder = async (req, res) => {
       {
         pause: false,
         status: "Active",
-        paused_period:null,
-        start_period:null
+        paused_period: null,
+        start_period: null
       },
       {
         where: { id: subscribeOrderProductId },
@@ -1294,7 +1294,7 @@ const getOrdersByStatus = async (req, res) => {
   try {
     const orders = await SubscribeOrder.findAll({
       where: { uid },
-      attributes: ['id', 'uid', 'status', 'createdAt', 'address_id', 'order_id'],
+      attributes: ['id', 'uid', 'status', 'createdAt', 'address_id', 'order_id', 'odate','subtotal','o_total'],
       include: [
         {
           model: SubscribeOrderProduct,
@@ -1302,19 +1302,28 @@ const getOrdersByStatus = async (req, res) => {
           attributes: ["id", "timeslot_id", "weight_id", "product_id", "status"],
           include: [
             {
+              model: WeightOption,
+              as: 'subscribeProductWeight',
+              attributes: ['id', 'weight', 'subscribe_price', 'mrp_price', 'normal_price'],
+              include: [
+                {
+                  model: Product,
+                  as: "product",
+                  attributes: ['id', 'title', 'img', 'discount', 'description'],
+                  include: [
+                    {
+                      model: ProductReview,
+                      as: 'ProductReviews', // Ensure model alias matches
+                      attributes: ['id', 'rating', 'review'],
+                    }
+                  ]
+                },
+              ]
+            },
+            {
               model: Time,
               as: "timeslotss",
-              attributes: ["id", "mintime", "maxtime"],
-            },
-            {
-              model: WeightOption,
-              as: "subscribeProductWeight",
-              attributes: ["id", "normal_price", "subscribe_price", "mrp_price", "weight"],
-            },
-            {
-              model: Product,
-              as: "productDetails",
-              attributes: ["id", "title", "img", "description"],
+              attributes: ['id', 'mintime', 'maxtime'],
             },
           ],
         },
@@ -1331,13 +1340,24 @@ const getOrdersByStatus = async (req, res) => {
     });
 
     for (let order of orders) {
-      const productStatuses = order.orderProducts.map(p => p.status?.toLowerCase());
+      // Calculate average rating for the order
+      const averageRating = (() => {
+        const allReviews = order.orderProducts.flatMap(orderProduct => [
+          ...(orderProduct.subscribeProductWeight?.product?.ProductReviews || []),
+          ...(orderProduct.productReviews || [])
+        ]);
+        const totalRating = allReviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+        return allReviews.length > 0 ? totalRating / allReviews.length : 0;
+      })();
+      order.setDataValue('averageRating', averageRating);
+
+      // Determine group status based on product statuses
+      const productStatuses = order.orderProducts.map(p => p.status?.toLowerCase() || '');
 
       const hasPending = productStatuses.includes("pending");
       const hasCompleted = productStatuses.includes("completed");
       const allCancelled = productStatuses.every(status => status === "cancelled");
 
-      // Determine and override the order status dynamically
       if (hasPending) {
         order.setDataValue("group_status", "Pending");
         order.status = "Pending";
@@ -1352,17 +1372,18 @@ const getOrdersByStatus = async (req, res) => {
         order.status = "InProgress";
       }
 
-      // Attach product reviews
-      for (let orderProduct of order.orderProducts) {
-        const productReviews = await ProductReview.findAll({
-          where: {
-            user_id: uid,
-            product_id: orderProduct.productDetails?.id,
-            order_id: order.id,
-          },
-        });
-        orderProduct.productDetails?.setDataValue("ProductReviews", productReviews);
-      }
+      // Attach product reviews for the user
+      // for (let orderProduct of order.orderProducts) {
+      //   const productReviews = await ProductReview.findAll({
+      //     where: {
+      //       user_id: uid,
+      //       product_id: orderProduct.subscribeProductWeight?.product?.id,
+      //       order_id: order.id,
+      //     },
+      //     attributes: ['id', 'rating', 'review'],
+      //   });
+      //   orderProduct.setDataValue("productReviews", productReviews);
+      // }
     }
 
     return res.status(200).json({
@@ -1371,7 +1392,6 @@ const getOrdersByStatus = async (req, res) => {
       ResponseMsg: "Subscribe Orders fetched successfully!",
       orders,
     });
-
   } catch (error) {
     console.error("Error fetching orders:", error.stack);
     return res.status(500).json({
@@ -1388,31 +1408,48 @@ const getOrderDetails = async (req, res) => {
   const { id } = req.params;
 
   try {
-    if (!Number.isInteger(parseInt(id))) {
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "Invalid Order ID",
-      });
-    }
+    // if (!Number.isInteger(parseInt(id))) {
+    //   return res.status(400).json({
+    //     ResponseCode: "400",
+    //     Result: "false",
+    //     ResponseMsg: "Invalid Order ID",
+    //   });
+    // }
 
     const orderDetails = await SubscribeOrder.findOne({
       where: { id },
-      attributes: ['id', 'uid', 'status', 'createdAt', 'address_id'], // Explicitly list fields
+      attributes: ['id', 'uid', 'odate', 'o_type', 'delivered_dates', 'tax', 'd_charge', 'cou_amt', 'o_total', 'subtotal', 'status', 'commission', 'store_charge', 'order_id'],
       include: [
         {
           model: User,
           as: 'user',
+          attributes: ['name', 'email', 'mobile', 'wallet'],
         },
         {
           model: SubscribeOrderProduct,
           as: "orderProducts",
-          attributes: ['timeslot_id', 'weight_id', 'product_id','status'],
+          attributes: ['id', 'start_date', 'end_date', 'start_period', 'paused_period', 'pause', 'status', 'price', 'repeat_day', 'schedule'],
           include: [
             {
-              model: Product,
-              as: "productDetails",
-              attributes: ['id', 'title', 'img', 'description'],
+              model: WeightOption,
+              as: 'subscribeProductWeight',
+              attributes: ['id', 'weight', 'subscribe_price', 'mrp_price', 'normal_price'],
+              include: [
+
+                {
+                  model: Product,
+                  as: "product",
+                  attributes: ['id', 'title', 'img', 'discount', 'description'],
+                  include: [
+                    {
+                      model: ProductReview,
+                      as: 'ProductReviews',
+                      attributes: ['id', 'rating', 'review'],
+                    }
+                  ]
+                },
+
+              ]
             },
             {
               model: Time,
@@ -1429,7 +1466,23 @@ const getOrderDetails = async (req, res) => {
       order: [['createdAt', 'DESC']],
       logging: console.log, // Debug SQL
     });
+    // const averageRating=orderDetails.orderProducts.subscribeProductWeight.product.productReviews.forEach(orderProduct=>{
 
+    // })
+
+    const averageRating = (() => {
+      const allReviews = orderDetails.orderProducts.flatMap(orderProduct => {
+        const reviews = orderProduct.subscribeProductWeight?.product?.ProductReviews || [];
+        // console.log('Reviews for product ID', orderProduct.id, ':', reviews);
+        return reviews;
+      });
+      // console.log('All Reviews:', allReviews);
+      const totalRating = allReviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+      // console.log('Total Rating:', totalRating);
+      const average = allReviews.length > 0 ? totalRating / allReviews.length : 0;
+      // console.log('Average Rating:', average);
+      return average;
+    })();
     if (!orderDetails) {
       return res.status(404).json({
         ResponseCode: "404",
@@ -1441,8 +1494,9 @@ const getOrderDetails = async (req, res) => {
     return res.status(200).json({
       ResponseCode: "200",
       Result: "true",
-      ResponseMsg: "Instant Order fetched successfully!",
+      ResponseMsg: "Subscribe Order fetched successfully!",
       orderDetails,
+      averageRating
     });
   } catch (error) {
     console.error("Error fetching order:", error.stack);
@@ -1493,7 +1547,7 @@ const cancelOrder = async (req, res) => {
         ResponseMsg: "Product not found or not owned by user!",
       });
     }
-    console.log(orderProduct,"ooooooooooooooooooo")
+    console.log(orderProduct, "ooooooooooooooooooo")
     const order = orderProduct.subscriberid;
     const user = await User.findByPk(uid, { transaction: t });
     const store = await Store.findByPk(order.store_id, { transaction: t });
