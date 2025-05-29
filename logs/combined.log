@@ -1321,3 +1321,9 @@
 {"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 29/5/2025, 11:48:00 am","service":"kine_milk_server","timestamp":"2025-05-29T06:18:01.076Z"}
 {"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-29T06:18:40.849Z"}
 {"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-29T06:18:40.887Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-29T06:18:53.707Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-29T06:18:53.742Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 29/5/2025, 11:49:00 am","service":"kine_milk_server","timestamp":"2025-05-29T06:19:00.850Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 29/5/2025, 11:49:00 am","service":"kine_milk_server","timestamp":"2025-05-29T06:19:00.911Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 published at 29/5/2025, 11:50:00 am","service":"kine_milk_server","timestamp":"2025-05-29T06:20:00.508Z"}
+{"level":"info","message":"Ad ID 993ae250-55a3-421b-9c83-ea27c0ebef04 unpublished at 29/5/2025, 11:50:00 am","service":"kine_milk_server","timestamp":"2025-05-29T06:20:00.578Z"}
