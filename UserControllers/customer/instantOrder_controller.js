@@ -24,6 +24,7 @@ const PersonRecord = require("../../Models/PersonRecord");
 const StoreWeightOption = require("../../Models/StoreWeightOption");
 const WalletReport = require("../../Models/WalletReport");
 const ProductInventory = require("../../Models/ProductInventory");
+const Rider = require("../../Models/Rider");
 
 const generateOrderId = () => {
   const randomNum = Math.floor(100000 + Math.random() * 900000);
@@ -1225,6 +1226,15 @@ const getOrderDetails = async (req, res) => {
           attributes: ["id", "mintime", "maxtime"],
         },
         {
+          model: Rider,
+          as: "riders",
+          attributes: ["id", "title", "mobile", "email"],
+          where: {
+            id: sequelize.col("NormalOrder.rid"),
+          },
+          required: false,
+        },
+        {
           model: PersonRecord,
           as: "receiver",
           attributes: ["id", "name", "email", "mobile", "address_id"],
@@ -1278,11 +1288,13 @@ const getOrderDetails = async (req, res) => {
         tax: order.tax,
         o_total: order.o_total,
         a_note: order.a_note,
+        rid:order.rid,
         trans_id: order.trans_id,
         createdAt: order.createdAt,
         updatedAt: order.updatedAt,
         products: order.NormalProducts,
         receiver: order.receiver,
+        rider:order.riders,
         hasReviews: hasReviews,
         averageRating: averageRating,
       },
