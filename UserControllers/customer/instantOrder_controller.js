@@ -1242,10 +1242,18 @@ const getOrderDetails = async (req, res) => {
       });
     }
 
-      const orderData = order.toJSON();
+    const orderData = order.toJSON();
     const hasReviews = orderData.NormalProducts.some(product => 
       product.ProductDetails?.ProductReviews?.length > 0
     );
+
+    // Calculate average rating for all products in the order
+    const allReviews = orderData.NormalProducts.flatMap(product => 
+      product.ProductDetails?.ProductReviews || []
+    );
+    const averageRating = allReviews.length > 0
+      ? Number((allReviews.reduce((sum, review) => sum + review.rating, 0) / allReviews.length).toFixed(2))
+      : null; // or 0 if you prefer a default value
 
     // Format response
     res.status(200).json({
@@ -1259,7 +1267,7 @@ const getOrderDetails = async (req, res) => {
         store_id: order.store_id,
         address: order.instOrdAddress,
         odate: order.odate,
-        status:order.status,
+        status: order.status,
         timeslot: order.timeslot,
         o_type: order.o_type,
         cou_id: order.cou_id,
@@ -1276,6 +1284,7 @@ const getOrderDetails = async (req, res) => {
         products: order.NormalProducts,
         receiver: order.receiver,
         hasReviews: hasReviews,
+        averageRating: averageRating,
       },
     });
   } catch (error) {

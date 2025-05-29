@@ -10,6 +10,7 @@ const asyncHandler = require('../../middlewares/errorHandler');
 const SubscribeOrder = require('../../Models/SubscribeOrder');
 const SubscribeOrderProduct = require('../../Models/SubscribeOrderProduct');
 const ProductReview = require('../../Models/ProductReview');
+const sequelize = require('../../config/db');
 
 // const PostProductReview = asyncHandler(async (req, res) => {
 //     const uid = req.user.userId; 
@@ -723,11 +724,280 @@ const ProductReviews = asyncHandler(async (req, res) => {
     return res.status(500).json({ message: "Internal server error: " + error.message });
   }
 });
+
+const PostOrderReview = asyncHandler(async (req, res) => {
+  const uid = req.user?.userId;
+
+  // Check if user is authenticated
+  if (!uid) {
+    return res.status(401).json({
+      ResponseCode: "401",
+      Result: "false",
+      ResponseMsg: "Unauthorized! User not found.",
+    });
+  }
+
+  const { storeId, orderId, orderType, reviews, reviewText, riderRating } = req.body;
+
+  // Validate input
+  if (!orderId || !storeId || !orderType || !reviews || !Array.isArray(reviews) || reviews.length === 0) {
+    return res.status(400).json({
+      ResponseCode: "400",
+      Result: "false",
+      ResponseMsg: "All fields required! Provide orderId, storeId, orderType, and at least one product rating.",
+    });
+  }
+
+  if (!["normal", "subscribe"].includes(orderType)) {
+    return res.status(400).json({
+      ResponseCode: "400",
+      Result: "false",
+      ResponseMsg: "Invalid orderType! Must be 'normal' or 'subscribe'.",
+    });
+  }
+
+  try {
+    // Select the appropriate order model based on orderType
+    const OrderModel = orderType === "normal" ? NormalOrder : SubscribeOrder;
+    const OrderProductModel = orderType === "normal" ? NormalOrderProduct : SubscribeOrderProduct;
+    const orderProductAlias = orderType === "normal" ? "NormalProducts" : "orderProducts";
+
+    // Fetch order
+    const order = await OrderModel.findOne({
+      where: { id: orderId, uid },
+      attributes: ["id", "status", "is_rate", "store_id", "rid"],
+      include: [
+        {
+          model: OrderProductModel,
+          as: orderProductAlias,
+          attributes: ["product_id"],
+        },
+      ],
+    });
+
+    console.log("Fetched Order:", order?.toJSON());
+
+    // Check if order exists and belongs to the user
+    if (!order) {
+      return res.status(403).json({
+        ResponseCode: "403",
+        Result: "false",
+        ResponseMsg: "Order not found or does not belong to you!",
+      });
+    }
+
+    // Check if order has products
+    if (!order[orderProductAlias] || order[orderProductAlias].length === 0) {
+      return res.status(404).json({
+        ResponseCode: "404",
+        Result: "false",
+        ResponseMsg: "Order has no associated products!",
+      });
+    }
+
+    // Check if order is completed
+    if (order.status !== "Completed") {
+      return res.status(403).json({
+        ResponseCode: "403",
+        Result: "false",
+        ResponseMsg: `You can only review completed orders! Current status: ${order.status}`,
+      });
+    }
+
+    // Check if order has already been reviewed
+    if (order.is_rate === 1) {
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "This order has already been reviewed!",
+      });
+    }
+
+    // Validate storeId
+    if (order.store_id !== storeId) {
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Store ID does not match the order!",
+      });
+    }
+
+    // Validate product IDs and ratings in reviews
+    const orderProductIds = order[orderProductAlias].map((p) => p.product_id);
+    for (const r of reviews) {
+      if (!orderProductIds.includes(r.productId)) {
+        return res.status(400).json({
+          ResponseCode: "400",
+          Result: "false",
+          ResponseMsg: `Product ${r.productId} is not part of this order!`,
+        });
+      }
+      // Check for existing reviews
+      const existingReview = await ProductReview.findOne({
+        where: { user_id: uid, order_id: orderId, product_id: r.productId },
+      });
+      if (existingReview) {
+        return res.status(400).json({
+          ResponseCode: "400",
+          Result: "false",
+          ResponseMsg: `You already reviewed product ${r.productId} for this order!`,
+        });
+      }
+      // Validate rating
+      if (!r.rating || r.rating < 1 || r.rating > 5) {
+        return res.status(400).json({
+          ResponseCode: "400",
+          Result: "false",
+          ResponseMsg: `Invalid rating for product ${r.productId}. Rating must be between 1 and 5.`,
+        });
+      }
+    }
+
+    // Validate rider rating if provided
+    let riderReviewData = null;
+    if (riderRating && riderRating.riderId && riderRating.rating) {
+      const deliveryBoy = await Rider.findByPk(riderRating.riderId);
+      if (!deliveryBoy) {
+        return res.status(404).json({
+          ResponseCode: "404",
+          Result: "false",
+          ResponseMsg: "Delivery Boy Not Found!",
+        });
+      }
+      // Validate rider ID matches order
+      if (order.rid !== riderRating.riderId) {
+        return res.status(400).json({
+          ResponseCode: "400",
+          Result: "false",
+          ResponseMsg: "Rider ID does not match the order's assigned rider!",
+        });
+      }
+      // Validate rider rating
+      if (riderRating.rating < 1 || riderRating.rating > 5) {
+        return res.status(400).json({
+          ResponseCode: "400",
+          Result: "false",
+          ResponseMsg: "Invalid rider rating. Rating must be between 1 and 5.",
+        });
+      }
+    }
+
+    // Calculate average product rating
+    const totalRate = reviews.reduce((sum, r) => sum + r.rating, 0);
+    const avgRating = Number((totalRate / reviews.length).toFixed(2));
+
+    // Start transaction to ensure atomicity
+    const result = await sequelize.transaction(async (t) => {
+      // Create product reviews
+      const createdProductReviews = await Promise.all(
+        reviews.map(async (r) => {
+          const product = await Product.findOne({
+            where: { id: r.productId },
+            attributes: ["id", "title", "img", "description", "discount", "cat_id"],
+            transaction: t,
+          });
+
+          if (!product) {
+            throw new Error(`Product with id ${r.productId} not found`);
+          }
+
+          const newReview = await ProductReview.create(
+            {
+              user_id: uid,
+              product_id: r.productId,
+              store_id: storeId,
+              order_id: orderId,
+              category_id: product.cat_id,
+              rating: r.rating,
+              review: null, // No review text for individual products
+              status: 1,
+            },
+            { transaction: t }
+          );
+
+          // Calculate product's average rating
+          const allReviews = await ProductReview.findAll({
+            where: { product_id: r.productId, status: 1 },
+            attributes: ["rating"],
+            transaction: t,
+          });
+          const totalRatings = allReviews.reduce((sum, rev) => sum + rev.rating, 0);
+          const productAvgRating = allReviews.length ? Number((totalRatings / allReviews.length).toFixed(2)) : 0;
+
+          const productData = product.toJSON();
+          productData.avgRating = productAvgRating;
+
+          return {
+            review: newReview,
+            product: productData,
+          };
+        })
+      );
+
+      // Create rider review if provided
+      if (riderRating && riderRating.riderId && riderRating.rating) {
+        riderReviewData = await Review.create(
+          {
+            user_id: uid,
+            rider_id: riderRating.riderId,
+            rating: riderRating.rating,
+            review: null, // No review text for rider
+            store_id: storeId,
+            order_id: orderId,
+            order_type: orderType,
+            status: 1,
+          },
+          { transaction: t }
+        );
+      }
+
+      // Update order with review details
+      await OrderModel.update(
+        {
+          is_rate: 1,
+          total_rate: avgRating,
+          rate_text: reviewText || null,
+          review_date: new Date(),
+        },
+        { where: { id: orderId }, transaction: t }
+      );
+
+      return { createdProductReviews, riderReviewData };
+    });
+
+    // Fetch customer details
+    const customer = await User.findOne({
+      where: { id: uid },
+      attributes: ["id", "name", "email", "img"],
+    });
+
+    // Format response
+    return res.status(200).json({
+      ResponseCode: "200",
+      Result: "true",
+      ResponseMsg: "Reviews submitted successfully!",
+      reviews: result.createdProductReviews,
+      riderReview: result.riderReviewData,
+      customer,
+      averageRating: avgRating,
+      reviewText: reviewText || null,
+    });
+  } catch (error) {
+    console.error("Error posting review:", error.message);
+    return res.status(500).json({
+      ResponseCode: "500",
+      Result: "false",
+      ResponseMsg: "Error posting review: " + error.message,
+    });
+  }
+});
+
 module.exports = {
   PostProductReviewForInstantOrder,
   PostProductReviewForSubscribeOrder,
   PostDeliveryBoyReview,
   FetchMyReviewsOnProducts,
   FetchMyReviewsOnDeliveryBoys,
-  ProductReviews
+  ProductReviews,
+  PostOrderReview
 };
