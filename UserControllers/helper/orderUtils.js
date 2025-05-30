@@ -1,6 +1,6 @@
 // helpers/orderUtils.js
 
-const  SubscribeOrder  = require("../../Models/SubscribeOrder");
+const SubscribeOrder = require("../../Models/SubscribeOrder");
 const { Op } = require("sequelize");
 
 const generateOrderId = async (transaction) => {
@@ -29,7 +29,7 @@ const generateOrderId = async (transaction) => {
   return orderId;
 };
 
-const calculateDeliveryDays = (startDate, endDate, days) => {
+const calculateDeliveryDays2 = (startDate, endDate, days) => {
   if (!days || days.length === 0) return 0;
 
   const start = new Date(startDate);
@@ -39,10 +39,15 @@ const calculateDeliveryDays = (startDate, endDate, days) => {
   if (isNaN(start) || isNaN(end) || end < start) return 0;
 
   let deliveryDays = 0;
-  const validDays = days.map((day) => day.toLowerCase());
+  const validDays = days.map((d) =>
+    typeof d === "number"
+      ? ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"][d]
+      : d.toLowerCase()
+  );
 
-  for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
-    const dayName = date.toLocaleString("en-US", { weekday: "long" }).toLowerCase();
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    const currentDate = new Date(d);
+    const dayName = currentDate.toLocaleString("en-US", { weekday: "long" }).toLowerCase();
     if (validDays.includes(dayName)) {
       deliveryDays++;
     }
@@ -53,5 +58,5 @@ const calculateDeliveryDays = (startDate, endDate, days) => {
 
 module.exports = {
   generateOrderId,
-  calculateDeliveryDays,
+  calculateDeliveryDays2,
 };
