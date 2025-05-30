@@ -5088,3 +5088,15 @@
 {"level":"info","message":"Coupon ID 5b5cd690-1acd-4c58-a24c-e04a11b8750f published at 30/5/2025, 5:46:00 pm. start_date preserved: 30/5/2025, 11:31:00 am","service":"kine_milk_server","timestamp":"2025-05-30T12:16:00.744Z"}
 {"level":"info","message":"Coupon ID 160370d8-edff-464b-a33b-144cdebe6139 unpublished at 30/5/2025, 5:46:00 pm. end_date preserved: 28/5/2025, 2:25:00 pm","service":"kine_milk_server","timestamp":"2025-05-30T12:16:00.823Z"}
 {"level":"info","message":"Coupon ID 5b5cd690-1acd-4c58-a24c-e04a11b8750f unpublished at 30/5/2025, 5:46:00 pm. end_date preserved: 30/5/2025, 11:32:00 am","service":"kine_milk_server","timestamp":"2025-05-30T12:16:01.107Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-30T12:38:53.055Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-30T12:38:53.085Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-30T12:38:53.103Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-30T12:38:53.114Z"}
+{"level":"info","message":"Illustration ID eb9e902e-2545-4fb9-9330-38766a91d201 published at 30/5/2025, 6:09:00 pm. startTime preserved: 28/5/2025, 1:40:00 pm","service":"kine_milk_server","timestamp":"2025-05-30T12:39:00.262Z"}
+{"level":"info","message":"Ad ID 5b2e50af-8d84-4562-87b8-c0fd7e010cb7 published at 30/5/2025, 6:09:00 pm","service":"kine_milk_server","timestamp":"2025-05-30T12:39:00.301Z"}
+{"level":"info","message":"Coupon ID 160370d8-edff-464b-a33b-144cdebe6139 published at 30/5/2025, 6:09:00 pm. start_date preserved: 28/5/2025, 2:24:00 pm","service":"kine_milk_server","timestamp":"2025-05-30T12:39:00.306Z"}
+{"level":"info","message":"Coupon ID 5b5cd690-1acd-4c58-a24c-e04a11b8750f published at 30/5/2025, 6:09:00 pm. start_date preserved: 30/5/2025, 11:31:00 am","service":"kine_milk_server","timestamp":"2025-05-30T12:39:00.343Z"}
+{"level":"info","message":"Illustration ID eb9e902e-2545-4fb9-9330-38766a91d201 unpublished at 30/5/2025, 6:09:00 pm. endTime preserved: 28/5/2025, 2:09:00 pm","service":"kine_milk_server","timestamp":"2025-05-30T12:39:00.355Z"}
+{"level":"info","message":"Ad ID 5b2e50af-8d84-4562-87b8-c0fd7e010cb7 unpublished at 30/5/2025, 6:09:00 pm","service":"kine_milk_server","timestamp":"2025-05-30T12:39:00.359Z"}
+{"level":"info","message":"Coupon ID 160370d8-edff-464b-a33b-144cdebe6139 unpublished at 30/5/2025, 6:09:00 pm. end_date preserved: 28/5/2025, 2:25:00 pm","service":"kine_milk_server","timestamp":"2025-05-30T12:39:00.402Z"}
+{"level":"info","message":"Coupon ID 5b5cd690-1acd-4c58-a24c-e04a11b8750f unpublished at 30/5/2025, 6:09:00 pm. end_date preserved: 30/5/2025, 11:32:00 am","service":"kine_milk_server","timestamp":"2025-05-30T12:39:00.435Z"}
