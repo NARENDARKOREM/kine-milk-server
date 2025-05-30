@@ -1,11 +1,12 @@
 const ExcelJS = require('exceljs');
 const NormalOrder = require('../Models/NormalOrder');
 const SubscribeOrder = require('../Models/SubscribeOrder');
+const SubscribeOrderProduct = require('../Models/SubscribeOrderProduct');
 const Store = require('../Models/Store');
 const User = require('../Models/User');
 const { Op } = require('sequelize');
 
-// Normal Payments By Store Controller
+// Normal Payments by Store Controller (unchanged)
 const getNormalPaymentsByStore = async (req, res) => {
   try {
     const { store_id, search, fromDate, toDate, page = 1, limit = 10 } = req.query;
@@ -14,7 +15,7 @@ const getNormalPaymentsByStore = async (req, res) => {
       return res.status(400).json({ message: 'Store ID is required' });
     }
 
-    // Validate store_id exists in Store model
+    // Validate store_id exists
     const store = await Store.findByPk(store_id);
     if (!store) {
       return res.status(404).json({ message: 'Store not found' });
@@ -42,17 +43,17 @@ const getNormalPaymentsByStore = async (req, res) => {
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
       ],
-      attributes: [
+    attributes: [
         'order_id', 'odate', 'o_total', 'subtotal', 'tax', 'd_charge',
-        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission',
+        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission'
       ],
       limit: parseInt(limit),
       offset: parseInt(offset),
     });
 
     const formattedPayments = rows.map(payment => ({
-      order_id: payment.order_id,
-      order_date: payment.odate,
+      order_id: payment.order_id || 'N/A',
+      order_date: payment.odate ? new Date(payment.odate).toLocaleDateString() : 'N/A',
       username: payment.user?.name || 'N/A',
       store_name: payment.store?.title || 'N/A',
       total_amount: payment.o_total || 0,
@@ -84,7 +85,6 @@ const downloadNormalPaymentsByStore = async (req, res) => {
       return res.status(400).json({ message: 'Store ID is required' });
     }
 
-    // Validate store_id exists in Store model
     const store = await Store.findByPk(store_id);
     if (!store) {
       return res.status(404).json({ message: 'Store not found' });
@@ -100,15 +100,15 @@ const downloadNormalPaymentsByStore = async (req, res) => {
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
       ],
-      attributes: [
+    attributes: [
         'order_id', 'odate', 'o_total', 'subtotal', 'tax', 'd_charge',
-        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission',
+        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission'
       ],
     });
 
     const formattedPayments = payments.map(payment => ({
-      order_id: payment.order_id,
-      order_date: payment.odate,
+      order_id: payment.order_id || 'N/A',
+      order_date: payment.odate ? new Date(payment.odate).toLocaleDateString() : 'N/A',
       username: payment.user?.name || 'N/A',
       store_name: payment.store?.title || 'N/A',
       total_amount: payment.o_total || 0,
@@ -159,7 +159,6 @@ const downloadSingleNormalPaymentByStore = async (req, res) => {
       return res.status(400).json({ message: 'Store ID is required' });
     }
 
-    // Validate store_id exists in Store model
     const store = await Store.findByPk(store_id);
     if (!store) {
       return res.status(404).json({ message: 'Store not found' });
@@ -171,9 +170,9 @@ const downloadSingleNormalPaymentByStore = async (req, res) => {
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
       ],
-      attributes: [
+    attributes: [
         'order_id', 'odate', 'o_total', 'subtotal', 'tax', 'd_charge',
-        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission',
+        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission'
       ],
     });
 
@@ -182,8 +181,8 @@ const downloadSingleNormalPaymentByStore = async (req, res) => {
     }
 
     const formattedPayment = {
-      order_id: payment.order_id,
-      order_date: payment.odate,
+      order_id: payment.order_id || 'N/A',
+      order_date: payment.odate ? new Date(payment.odate).toLocaleDateString() : 'N/A',
       username: payment.user?.name || 'N/A',
       store_name: payment.store?.title || 'N/A',
       total_amount: payment.o_total || 0,
@@ -225,29 +224,22 @@ const downloadSingleNormalPaymentByStore = async (req, res) => {
   }
 };
 
-// Subscribe Payments By Store Controller
+// Subscribe Payments by Store Controller
 const getSubscribePaymentsByStore = async (req, res) => {
   try {
-    const { store_id, search, fromDate, toDate, page = 1, limit = 10 } = req.query;
+    const { store_id, fromDate, toDate, page = 1, limit = 10 } = req.query;
 
     if (!store_id) {
       return res.status(400).json({ message: 'Store ID is required' });
     }
 
-    // Validate store_id exists in Store model
+    // Validate store_id exists
     const store = await Store.findByPk(store_id);
     if (!store) {
       return res.status(404).json({ message: 'Store not found' });
     }
 
     const where = { store_id };
-    if (search) {
-      where[Op.or] = [
-        { order_id: { [Op.like]: `%${search}%` } },
-        { '$user.name$': { [Op.like]: `%${search}%` } },
-        { '$store.title$': { [Op.like]: `%${search}%` } },
-      ];
-    }
     if (fromDate) {
       where.odate = { [Op.gte]: new Date(fromDate) };
     }
@@ -259,31 +251,42 @@ const getSubscribePaymentsByStore = async (req, res) => {
     const { count, rows } = await SubscribeOrder.findAndCountAll({
       where,
       include: [
+        {
+          model: SubscribeOrderProduct,
+          as: 'orderProducts',
+          attributes: ['start_date', 'end_date'],
+          required: false, // Make inclusion optional to handle missing products
+        },
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
       ],
       attributes: [
         'order_id', 'odate', 'o_total', 'subtotal', 'tax', 'd_charge',
-        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission', 'end_date',
+        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission'
       ],
       limit: parseInt(limit),
       offset: parseInt(offset),
     });
 
-    const formattedPayments = rows.map(payment => ({
-      order_id: payment.order_id,
-      order_date: payment.odate,
-      username: payment.user?.name || 'N/A',
-      store_name: payment.store?.title || 'N/A',
-      total_amount: payment.o_total || 0,
-      subtotal: payment.subtotal || 0,
-      tax: payment.tax || 0,
-      delivery_charge: payment.d_charge || 0,
-      coupon_amount: payment.cou_amt || 0,
-      wallet_amount: payment.wall_amt || 0,
-      transaction_id: payment.trans_id || 'N/A',
-      end_date: payment.end_date,
-    }));
+    const formattedPayments = rows.map(order => {
+      const product = Array.isArray(order.subscribeOrderProducts) && order.subscribeOrderProducts.length > 0 
+        ? order.subscribeOrderProducts[0] 
+        : {};
+      return {
+        order_id: order.order_id || 'N/A',
+        order_date: order.odate ? new Date(order.odate).toLocaleDateString() : 'N/A',
+        username: order.user?.name || 'N/A',
+        store_name: order.store?.title || 'N/A',
+        total_amount: order.o_total || 0,
+        subtotal: order.subtotal || 0,
+        tax: order.tax || 0,
+        delivery_charge: order.d_charge || 0,
+        coupon_amount: order.cou_amt || 0,
+        wallet_amount: order.wall_amt || 0,
+        transaction_id: order.trans_id || 'N/A',
+        end_date: product.end_date ? new Date(product.end_date).toLocaleDateString() : 'N/A',
+      };
+    });
 
     res.json({
       payments: formattedPayments,
@@ -305,7 +308,6 @@ const downloadSubscribePaymentsByStore = async (req, res) => {
       return res.status(400).json({ message: 'Store ID is required' });
     }
 
-    // Validate store_id exists in Store model
     const store = await Store.findByPk(store_id);
     if (!store) {
       return res.status(404).json({ message: 'Store not found' });
@@ -315,32 +317,43 @@ const downloadSubscribePaymentsByStore = async (req, res) => {
     if (fromDate) where.odate = { [Op.gte]: new Date(fromDate) };
     if (toDate) where.odate = { ...where.odate, [Op.lte]: new Date(toDate) };
 
-    const payments = await SubscribeOrder.findAll({
+    const orders = await SubscribeOrder.findAll({
       where,
       include: [
+        {
+          model: SubscribeOrderProduct,
+          as: 'orderProducts',
+          attributes: ['start_date', 'end_date'],
+          required: false, // Make inclusion optional
+        },
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
       ],
-      attributes: [
+     attributes: [
         'order_id', 'odate', 'o_total', 'subtotal', 'tax', 'd_charge',
-        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission', 'end_date',
+        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission'
       ],
     });
 
-    const formattedPayments = payments.map(payment => ({
-      order_id: payment.order_id,
-      order_date: payment.odate,
-      username: payment.user?.name || 'N/A',
-      store_name: payment.store?.title || 'N/A',
-      total_amount: payment.o_total || 0,
-      subtotal: payment.subtotal || 0,
-      tax: payment.tax || 0,
-      delivery_charge: payment.d_charge || 0,
-      coupon_amount: payment.cou_amt || 0,
-      wallet_amount: payment.wall_amt || 0,
-      transaction_id: payment.trans_id || 'N/A',
-      end_date: payment.end_date,
-    }));
+    const formattedPayments = orders.map(order => {
+      const product = Array.isArray(order.subscribeOrderProducts) && order.subscribeOrderProducts.length > 0 
+        ? order.subscribeOrderProducts[0] 
+        : {};
+      return {
+        order_id: order.order_id || 'N/A',
+        order_date: order.odate ? new Date(order.odate).toLocaleDateString() : 'N/A',
+        username: order.user?.name || 'N/A',
+        store_name: order.store?.title || 'N/A',
+        total_amount: order.o_total || 0,
+        subtotal: order.subtotal || 0,
+        tax: order.tax || 0,
+        delivery_charge: order.d_charge || 0,
+        coupon_amount: order.cou_amt || 0,
+        wallet_amount: order.wall_amt || 0,
+        transaction_id: order.trans_id || 'N/A',
+        end_date: product.end_date ? new Date(product.end_date).toLocaleDateString() : 'N/A',
+      };
+    });
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Subscribe Payments By Store');
@@ -382,41 +395,49 @@ const downloadSingleSubscribePaymentByStore = async (req, res) => {
       return res.status(400).json({ message: 'Store ID is required' });
     }
 
-    // Validate store_id exists in Store model
     const store = await Store.findByPk(store_id);
     if (!store) {
       return res.status(404).json({ message: 'Store not found' });
     }
 
-    const payment = await SubscribeOrder.findOne({
+    const order = await SubscribeOrder.findOne({
       where: { order_id: orderId, store_id },
       include: [
+        {
+          model: SubscribeOrderProduct,
+          as: 'orderProducts',
+          attributes: ['start_date', 'end_date'],
+          required: false, // Make inclusion optional
+        },
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
       ],
-      attributes: [
+     attributes: [
         'order_id', 'odate', 'o_total', 'subtotal', 'tax', 'd_charge',
-        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission', 'end_date',
+        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission'
       ],
     });
 
-    if (!payment) {
+    if (!order) {
       return res.status(404).json({ message: 'Payment not found or does not belong to this store' });
     }
 
+    const product = Array.isArray(order.subscribeOrderProducts) && order.subscribeOrderProducts.length > 0 
+      ? order.subscribeOrderProducts[0] 
+      : {};
     const formattedPayment = {
-      order_id: payment.order_id,
-      order_date: payment.odate,
-      username: payment.user?.name || 'N/A',
-      store_name: payment.store?.title || 'N/A',
-      total_amount: payment.o_total || 0,
-      subtotal: payment.subtotal || 0,
-      tax: payment.tax || 0,
-      delivery_charge: payment.d_charge || 0,
-      coupon_amount: payment.cou_amt || 0,
-      wallet_amount: payment.wall_amt || 0,
-      transaction_id: payment.trans_id || 'N/A',
-      end_date: payment.end_date,
+      order_id: order.order_id || 'N/A',
+      order_date: order.odate ? new Date(order.odate).toLocaleDateString() : 'N/A',
+      username: order.user?.name || 'N/A',
+      store_name: order.store?.title || 'N/A',
+      total_amount: order.o_total || 0,
+      subtotal: order.subtotal || 0,
+      tax: order.tax || 0,
+      delivery_charge: order.d_charge || 0,
+      coupon_amount: order.cou_amt || 0,
+      wallet_amount: order.wall_amt || 0,
+      transaction_id: order.trans_id || 'N/A',
+      end_date: product.end_date ? new Date(product.end_date).toLocaleDateString() : 'N/A',
     };
 
     const workbook = new ExcelJS.Workbook();
@@ -446,14 +467,14 @@ const downloadSingleSubscribePaymentByStore = async (req, res) => {
     res.end();
   } catch (error) {
     console.error('Error downloading single subscribe payment by store:', error);
-    res.status(500).json({ message: 'Error downloading single subscribe payment by store' });
+    res.status(500).json({ message: 'Error downloading single payment by store' });
   }
 };
 
 module.exports = {
   getNormalPaymentsByStore,
   downloadNormalPaymentsByStore,
-downloadSingleNormalPaymentByStore,
+  downloadSingleNormalPaymentByStore,
   getSubscribePaymentsByStore,
   downloadSubscribePaymentsByStore,
   downloadSingleSubscribePaymentByStore,
