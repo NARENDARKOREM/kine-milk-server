@@ -48,6 +48,7 @@
     "react-hook-form": "^7.56.4",
     "react-notifications": "^1.7.4",
     "react-select": "^5.10.1",
+    "retry-as-promised": "^7.1.1",
     "sequelize": "^6.37.7",
     "session": "^0.1.0",
     "set-cookie-parser": "^2.7.1",

@@ -29,7 +29,7 @@ const generateOrderId = async (transaction) => {
   return orderId;
 };
 
-const calculateDeliveryDays = (startDate, endDate, days) => {
+const calculateDeliveryDays2 = (startDate, endDate, days) => {
   if (!days || days.length === 0) return 0;
 
   const start = new Date(startDate);
@@ -58,5 +58,5 @@ const calculateDeliveryDays = (startDate, endDate, days) => {
 
 module.exports = {
   generateOrderId,
-  calculateDeliveryDays,
+  calculateDeliveryDays2,
 };
