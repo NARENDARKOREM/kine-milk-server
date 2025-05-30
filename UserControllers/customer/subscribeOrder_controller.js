@@ -40,6 +40,7 @@ const subscribeOrder = async (req, res) => {
     // store_charge,
     subtotal,
     o_total,
+    is_paper_bag,
   } = req.body;
 
   const uid = req.user.userId;
@@ -204,6 +205,7 @@ const subscribeOrder = async (req, res) => {
           a_note,
           order_id: orderId,
           status: "Pending",
+          is_paper_bag
         },
         { transaction: t }
       );
