@@ -89,6 +89,11 @@ const Setting = sequelize.define(
       type: DataTypes.JSON,
       allowNull: true,
     },
+    delivery_charge_status:{
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue:0 // 0 = disabled, 1 = enabled
+    }
   },
   {
     tableName: "tbl_setting",
