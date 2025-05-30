@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 {"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-29T06:26:37.660Z"}
 {"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-29T06:26:37.685Z"}
 {"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-05-29T06:26:37.705Z"}
@@ -5490,3 +5491,5 @@
 {"level":"info","message":"Ad ID 5b2e50af-8d84-4562-87b8-c0fd7e010cb7 unpublished at 30/5/2025, 12:16:00 pm","service":"kine_milk_server","timestamp":"2025-05-30T06:46:00.826Z"}
 {"level":"info","message":"Coupon ID 160370d8-edff-464b-a33b-144cdebe6139 unpublished at 30/5/2025, 12:16:00 pm. end_date preserved: 28/5/2025, 2:25:00 pm","service":"kine_milk_server","timestamp":"2025-05-30T06:46:00.850Z"}
 {"level":"info","message":"Coupon ID 5b5cd690-1acd-4c58-a24c-e04a11b8750f unpublished at 30/5/2025, 12:16:00 pm. end_date preserved: 30/5/2025, 11:32:00 am","service":"kine_milk_server","timestamp":"2025-05-30T06:46:00.888Z"}
+=======
+>>>>>>> a35be4b20a3a16a48a18c83bad5a3740444d7020
