@@ -12,25 +12,7 @@ const Product = require('../Models/Product');
 
 const getInstantRiderReports = async (req, res) => {
   try {
-    const { search } = req.query;
-    const searchConditions = search
-      ? {
-          [Op.or]: [
-            { title: { [Op.like]: `%${search}%` } },
-            { email: { [Op.like]: `%${search}%` } },
-            { mobile: { [Op.like]: `%${search}%` } },
-            { '$orders.order_id$': { [Op.like]: `%${search}%` } },
-            { '$orders.status$': { [Op.like]: `%${search}%` } },
-            { '$orders.instOrdAddress.address$': { [Op.like]: `%${search}%` } },
-            { '$orders.instOrdAddress.landmark$': { [Op.like]: `%${search}%` } },
-            { '$orders.NormalProducts.ProductDetails.title$': { [Op.like]: `%${search}%` } },
-            { '$orders.NormalProducts.price$': { [Op.eq]: parseFloat(search) || 0 } },
-          ],
-        }
-      : {};
-
     const riders = await Rider.findAll({
-      where: searchConditions,
       include: [
         {
           model: NormalOrder,
@@ -95,25 +77,7 @@ const getInstantRiderReports = async (req, res) => {
 
 const getSubscriptionRiderReports = async (req, res) => {
   try {
-    const { search } = req.query;
-    const searchConditions = search
-      ? {
-          [Op.or]: [
-            { title: { [Op.like]: `%${search}%` } },
-            { email: { [Op.like]: `%${search}%` } },
-            { mobile: { [Op.like]: `%${search}%` } },
-            { '$suborders.order_id$': { [Op.like]: `%${search}%` } },
-            { '$suborders.status$': { [Op.like]: `%${search}%` } },
-            { '$suborders.subOrdAddress.address$': { [Op.like]: `%${search}%` } },
-            { '$suborders.subOrdAddress.landmark$': { [Op.like]: `%${search}%` } },
-            { '$suborders.orderProducts.productDetails.title$': { [Op.like]: `%${search}%` } },
-            { '$suborders.orderProducts.price$': { [Op.eq]: parseFloat(search) || 0 } },
-          ],
-        }
-      : {};
-
     const riders = await Rider.findAll({
-      where: searchConditions,
       include: [
         {
           model: SubscribeOrder,
@@ -178,31 +142,7 @@ const getSubscriptionRiderReports = async (req, res) => {
 
 const getCombinedRiderReports = async (req, res) => {
   try {
-    const { search } = req.query;
-    const searchConditions = search
-      ? {
-          [Op.or]: [
-            { title: { [Op.like]: `%${search}%` } },
-            { email: { [Op.like]: `%${search}%` } },
-            { mobile: { [Op.like]: `%${search}%` } },
-            { '$orders.order_id$': { [Op.like]: `%${search}%` } },
-            { '$orders.status$': { [Op.like]: `%${search}%` } },
-            { '$orders.instOrdAddress.address$': { [Op.like]: `%${search}%` } },
-            { '$orders.instOrdAddress.landmark$': { [Op.like]: `%${search}%` } },
-            { '$orders.NormalProducts.ProductDetails.title$': { [Op.like]: `%${search}%` } },
-            { '$orders.NormalProducts.price$': { [Op.eq]: parseFloat(search) || 0 } },
-            { '$suborders.order_id$': { [Op.like]: `%${search}%` } },
-            { '$suborders.status$': { [Op.like]: `%${search}%` } },
-            { '$suborders.subOrdAddress.address$': { [Op.like]: `%${search}%` } },
-            { '$suborders.subOrdAddress.landmark$': { [Op.like]: `%${search}%` } },
-            { '$suborders.orderProducts.productDetails.title$': { [Op.like]: `%${search}%` } },
-            { '$suborders.orderProducts.price$': { [Op.eq]: parseFloat(search) || 0 } },
-          ],
-        }
-      : {};
-
     const riders = await Rider.findAll({
-      where: searchConditions,
       include: [
         {
           model: NormalOrder,
@@ -304,7 +244,6 @@ const getCombinedRiderReports = async (req, res) => {
       ],
     }));
 
-    console.log('Formatted riders:', JSON.stringify(formattedRiders, null, 2)); // Debug log
     res.json({ riders: formattedRiders });
   } catch (error) {
     console.error('Error fetching combined rider reports:', error);
@@ -312,27 +251,7 @@ const getCombinedRiderReports = async (req, res) => {
   }
 };
 
-const generateExcel = (riders, reportType) => {
-  const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet(`${reportType} Rider Reports`);
-
-  worksheet.columns = [
-    { header: 'Rider Name', key: 'riderName', width: 20 },
-    { header: 'Total Orders', key: 'totalOrders', width: 15 },
-  ];
-
-  const rows = riders.map((rider) => ({
-    riderName: rider.title || 'N/A',
-    totalOrders: rider.orders.length,
-  }));
-
-  console.log('Excel rows:', JSON.stringify(rows, null, 2)); // Debug log
-  rows.forEach((row) => worksheet.addRow(row));
-
-  return workbook;
-};
-
-const generateDetailedExcel = (riders, reportType) => {
+const generateExcelReport = (riders, reportType) => {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet(`${reportType} Rider Report`);
 
@@ -346,27 +265,61 @@ const generateDetailedExcel = (riders, reportType) => {
     { header: 'Quantity', key: 'quantity', width: 10 },
     { header: 'Price', key: 'price', width: 10 },
     { header: 'Address', key: 'address', width: 30 },
+    { header: 'Product Image', key: 'productImage', width: 30 },
   ];
 
   riders.forEach((rider) => {
     const orders = rider.orders.filter((order) => reportType === 'Combined' || order.orderType === reportType);
-    orders.forEach((order) => {
-      order.products.forEach((product) => {
-        worksheet.addRow({
-          riderName: rider.title || 'N/A',
-          orderId: order.order_id || 'N/A',
-          orderType: order.orderType || 'N/A',
-          status: order.status || 'N/A',
-          date: order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A',
-          productTitle: product.title || 'N/A',
-          quantity: product.quantity || 0,
-          price: product.price || 0,
-          address: order.address
-            ? `${order.address.address}${order.address.landmark ? ', ' + order.address.landmark : ''}`
-            : 'N/A',
-        });
+    if (orders.length === 0) {
+      worksheet.addRow({
+        riderName: rider.title || 'N/A',
+        orderId: 'N/A',
+        orderType: 'N/A',
+        status: 'N/A',
+        date: 'N/A',
+        productTitle: 'No Products',
+        quantity: 0,
+        price: 0,
+        address: 'N/A',
+        productImage: 'N/A',
       });
-    });
+    } else {
+      orders.forEach((order) => {
+        if (order.products.length === 0) {
+          worksheet.addRow({
+            riderName: rider.title || 'N/A',
+            orderId: order.order_id || 'N/A',
+            orderType: order.orderType || 'N/A',
+            status: order.status || 'N/A',
+            date: order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A',
+            productTitle: 'No Products',
+            quantity: 0,
+            price: 0,
+            address: order.address
+              ? `${order.address.address}${order.address.landmark ? ', ' + order.address.landmark : ''}`
+              : 'N/A',
+            productImage: 'N/A',
+          });
+        } else {
+          order.products.forEach((product) => {
+            worksheet.addRow({
+              riderName: rider.title || 'N/A',
+              orderId: order.order_id || 'N/A',
+              orderType: order.orderType || 'N/A',
+              status: order.status || 'N/A',
+              date: order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A',
+              productTitle: product.title || 'N/A',
+              quantity: product.quantity || 0,
+              price: product.price || 0,
+              address: order.address
+                ? `${order.address.address}${order.address.landmark ? ', ' + order.address.landmark : ''}`
+                : 'N/A',
+              productImage: product.img || 'N/A',
+            });
+          });
+        }
+      });
+    }
   });
 
   return workbook;
@@ -427,7 +380,7 @@ const downloadInstantRiderReports = async (req, res) => {
       })),
     }));
 
-    const workbook = generateExcel(formattedRiders, 'Instant');
+    const workbook = generateExcelReport(formattedRiders, 'Instant');
     res.setHeader(
       'Content-Type',
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -496,7 +449,7 @@ const downloadSubscriptionRiderReports = async (req, res) => {
       })),
     }));
 
-    const workbook = generateExcel(formattedRiders, 'Subscription');
+    const workbook = generateExcelReport(formattedRiders, 'Subscription');
     res.setHeader(
       'Content-Type',
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -621,7 +574,7 @@ const downloadSingleRiderReport = async (req, res) => {
       .replace(/_+/g, '_')
       .trim();
 
-    const workbook = generateDetailedExcel([formattedRider], 'Combined');
+    const workbook = generateExcelReport([formattedRider], 'Combined');
     res.setHeader(
       'Content-Type',
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -738,7 +691,7 @@ const downloadCombinedRiderReports = async (req, res) => {
       ],
     }));
 
-    const workbook = generateDetailedExcel(formattedRiders, 'Combined');
+    const workbook = generateExcelReport(formattedRiders, 'Combined');
     res.setHeader(
       'Content-Type',
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -752,12 +705,133 @@ const downloadCombinedRiderReports = async (req, res) => {
   }
 };
 
-// Routes
+const downloadSelectedRiderReports = async (req, res) => {
+  try {
+    const { riderIds } = req.body;
+    if (!riderIds || !Array.isArray(riderIds) || riderIds.length === 0) {
+      return res.status(400).json({ error: 'No rider IDs provided' });
+    }
+
+    const riders = await Rider.findAll({
+      where: { id: { [Op.in]: riderIds } },
+      include: [
+        {
+          model: NormalOrder,
+          as: 'orders',
+          attributes: ['id', 'order_id', 'status', 'createdAt'],
+          include: [
+            {
+              model: Address,
+              as: 'instOrdAddress',
+              attributes: ['address', 'landmark'],
+            },
+            {
+              model: NormalOrderProduct,
+              as: 'NormalProducts',
+              include: [
+                {
+                  model: Product,
+                  as: 'ProductDetails',
+                  attributes: ['id', 'title', 'img'],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          model: SubscribeOrder,
+          as: 'suborders',
+          attributes: ['id', 'order_id', 'status', 'createdAt'],
+          include: [
+            {
+              model: Address,
+              as: 'subOrdAddress',
+              attributes: ['address', 'landmark'],
+            },
+            {
+              model: SubscribeOrderProduct,
+              as: 'orderProducts',
+              include: [
+                {
+                  model: Product,
+                  as: 'productDetails',
+                  attributes: ['id', 'title', 'img'],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    const formattedRiders = riders.map((rider) => ({
+      id: rider.id,
+      title: rider.title,
+      orders: [
+        ...rider.orders.map((order) => ({
+          id: order.id,
+          order_id: order.order_id,
+          status: order.status || 'N/A',
+          createdAt: order.createdAt,
+          orderType: 'Instant',
+          address: order.instOrdAddress
+            ? {
+                address: order.instOrdAddress.address,
+                landmark: order.instOrdAddress.landmark,
+              }
+            : null,
+          products: order.NormalProducts.filter((op) => op.ProductDetails).map((op) => ({
+            id: op.ProductDetails.id,
+            title: op.ProductDetails.title,
+            img: op.ProductDetails.img,
+            quantity: op.pquantity,
+            price: op.price,
+          })),
+        })),
+        ...rider.suborders.map((order) => ({
+          id: order.id,
+          order_id: order.order_id,
+          status: order.status || 'N/A',
+          createdAt: order.createdAt,
+          orderType: 'Subscribe',
+          address: order.subOrdAddress
+            ? {
+                address: order.subOrdAddress.address,
+                landmark: order.subOrdAddress.landmark,
+              }
+            : null,
+          products: order.orderProducts.filter((op) => op.productDetails).map((op) => ({
+            id: op.productDetails.id,
+            title: op.productDetails.title,
+            img: op.productDetails.img,
+            quantity: op.pquantity,
+            price: op.price,
+          })),
+        })),
+      ],
+    }));
+
+    const workbook = generateExcelReport(formattedRiders, 'Combined');
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    );
+    res.setHeader('Content-Disposition', 'attachment; filename="selected_rider_reports.xlsx"');
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (error) {
+    console.error('Error downloading selected rider reports:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
   getInstantRiderReports,
   getSubscriptionRiderReports,
   getCombinedRiderReports,
   downloadInstantRiderReports,
   downloadSubscriptionRiderReports,
-  downloadCombinedRiderReports ,
-  downloadSingleRiderReport}
+  downloadCombinedRiderReports,
+  downloadSingleRiderReport,
+  downloadSelectedRiderReports,
+};

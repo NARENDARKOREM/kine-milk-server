@@ -10,7 +10,7 @@ const SubscribeOrderProduct = require('../Models/SubscribeOrderProduct');
 // Normal Orders Controller
 const getNormalOrders = async (req, res) => {
   try {
-    const { search, fromDate, toDate, storeId, page = 1, limit = 10 } = req.query;
+    const { fromDate, toDate, storeId, page = 1, limit = 10 } = req.query;
 
     console.log('getNormalOrders query:', req.query);
 
@@ -27,13 +27,6 @@ const getNormalOrders = async (req, res) => {
     const where = {};
     if (storeId && storeId !== 'undefined' && storeId !== '') {
       where.store_id = storeId;
-    }
-    if (search) {
-      where[Op.or] = [
-        { order_id: { [Op.like]: `%${search}%` } },
-        { '$user.name$': { [Op.like]: `%${search}%` } },
-        { '$store.title$': { [Op.like]: `%${search}%` } },
-      ];
     }
     if (fromDate) {
       where.odate = { [Op.gte]: new Date(fromDate) };
@@ -54,7 +47,7 @@ const getNormalOrders = async (req, res) => {
       ],
     });
 
-    // Fetch paginated rows with raw query logging
+    // Fetch paginated rows
     const offset = (page - 1) * limit;
     const rows = await NormalOrder.findAll({
       where,
@@ -226,83 +219,78 @@ const downloadSingleNormalOrder = async (req, res) => {
 // Subscribe Orders Controller
 const getSubscribeOrders = async (req, res) => {
   try {
-    const { search, fromDate, toDate, storeId, page = 1, limit = 10 } = req.query;
+    const { fromDate, toDate, storeId, page = 1, limit = 10 } = req.query;
 
-    const where = {};
-    const include = [
-      {
-        model: SubscribeOrderProduct,
-        as: "orderProducts",
-        attributes: ["timeslot_id"],
-        include: [
-          {
-            model: Time,
-            as: "timeslotss",
-            attributes: ["mintime", "maxtime"]
-          }
-        ]
-      },
-      {
-        model: Store,
-        as: "store",
-        attributes: ["title"],
-        required: false,
-        where: search ? { title: { [Op.like]: `%${search}%` } } : undefined
-      },
-      {
-        model: User,
-        as: "user",
-        attributes: ["name", "mobile"],
-        required: false,
-        where: search ? { name: { [Op.like]: `%${search}%` } } : undefined
-      }
-    ];
-
+    // Validate storeId
     if (storeId && storeId !== 'undefined' && storeId !== '') {
       const storeExists = await Store.findByPk(storeId);
       if (!storeExists) {
         return res.status(400).json({ message: `Store with ID ${storeId} not found` });
       }
+    }
+
+    const where = {};
+    if (storeId && storeId !== 'undefined' && storeId !== '') {
       where.store_id = storeId;
     }
-
-    if (search) {
-      where[Op.or] = [
-        { order_id: { [Op.like]: `%${search}%` } }
-      ];
-    }
-
     if (fromDate) {
       where.odate = { [Op.gte]: new Date(fromDate) };
     }
-
     if (toDate) {
       where.odate = { ...where.odate, [Op.lte]: new Date(toDate) };
     }
+
+    const include = [
+      {
+        model: SubscribeOrderProduct,
+        as: 'orderProducts',
+        attributes: ['timeslot_id', 'weight_id', 'product_id'],
+        include: [
+          {
+            model: Time,
+            as: 'timeslotss',
+            attributes: ['id', 'mintime', 'maxtime'],
+          },
+        ],
+      },
+      {
+        model: Store,
+        as: 'store',
+        attributes: ['title'],
+        required: false,
+      },
+      {
+        model: User,
+        as: 'user',
+        attributes: ['name', 'mobile'],
+        required: false,
+      },
+    ];
 
     const offset = (page - 1) * limit;
 
     const { count, rows } = await SubscribeOrder.findAndCountAll({
       where,
       include,
-      attributes: ["order_id", "odate", "status"],
+      attributes: ['order_id', 'odate', 'status'],
       limit: parseInt(limit),
       offset: parseInt(offset),
-      logging: (sql) => console.log("SQL Query:", sql)
+      logging: (sql) => console.log('SQL Query:', sql),
     });
 
-    const formattedOrders = rows.map(order => ({
+    const formattedOrders = rows.map((order) => ({
       order_id: order.order_id,
       order_date: order.odate,
       username: order.user?.name || 'N/A',
       store_name: order.store?.title || 'N/A',
       order_status: order.status || 'N/A',
       user_mobile_no: order.user?.mobile || 'N/A',
-      timeslots:
-        order.orderProducts?.[0]?.timeslotss
-          ? `${order.orderProducts[0].timeslotss.mintime} - ${order.orderProducts[0].timeslotss.maxtime}`
-          : 'N/A'
+      timeslot: order.orderProducts?.[0]?.timeslotss
+        ? `${order.orderProducts[0].timeslotss.mintime} - ${order.orderProducts[0].timeslotss.maxtime}`
+        : 'N/A',
     }));
+
+    console.log('Formatted Orders:', formattedOrders);
 
     res.json({
       orders: formattedOrders,
@@ -315,7 +303,6 @@ const getSubscribeOrders = async (req, res) => {
     res.status(500).json({ message: 'Error fetching subscribe orders' });
   }
 };
-
 
 const downloadSubscribeOrders = async (req, res) => {
   try {
@@ -347,9 +334,20 @@ const downloadSubscribeOrders = async (req, res) => {
     const orders = await SubscribeOrder.findAll({
       where,
       include: [
-        { model: Store, as: 'store', attributes: ['title'] },
-        { model: User, as: 'user', attributes: ['name', 'mobile'] },
-        { model: Time, as: 'timeslots', attributes: ['mintime', 'maxtime'] },
+        {
+          model: SubscribeOrderProduct,
+          as: 'orderProducts',
+          attributes: ['timeslot_id', 'weight_id', 'product_id'],
+          include: [
+            {
+              model: Time,
+              as: 'timeslotss',
+              attributes: ['mintime', 'maxtime'],
+            },
+          ],
+        },
+        { model: Store, as: 'store', attributes: ['title'], required: false },
+        { model: User, as: 'user', attributes: ['name', 'mobile'], required: false },
       ],
       attributes: ['order_id', 'odate', 'status'],
       logging: (sql) => console.log('SQL Query:', sql),
@@ -362,7 +360,9 @@ const downloadSubscribeOrders = async (req, res) => {
       store_name: order.store?.title || 'N/A',
       order_status: order.status || 'N/A',
       user_mobile_no: order.user?.mobile || 'N/A',
-      timeslot: order.timeslots ? `${order.timeslots.mintime} - ${order.timeslots.maxtime}` : 'N/A',
+      timeslot: order.orderProducts?.[0]?.timeslotss
+        ? `${order.orderProducts[0].timeslotss.mintime} - ${order.orderProducts[0].timeslotss.maxtime}`
+        : 'N/A',
     }));
 
     const workbook = new ExcelJS.Workbook();

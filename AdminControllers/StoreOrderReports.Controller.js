@@ -1,36 +1,27 @@
 const ExcelJS = require('exceljs');
 const NormalOrder = require('../Models/NormalOrder');
 const SubscribeOrder = require('../Models/SubscribeOrder');
+const SubscribeOrderProduct = require('../Models/SubscribeOrderProduct');
 const Store = require('../Models/Store');
 const User = require('../Models/User');
 const Time = require('../Models/Time');
 const { Op } = require('sequelize');
 
-// Normal Orders By Store Controller
 const getNormalOrdersByStore = async (req, res) => {
   try {
-    const { store_id, search, fromDate, toDate, page = 1, limit = 10 } = req.query;
+    const { store_id, fromDate, toDate, page = 1, limit = 10 } = req.query;
 
     if (!store_id) {
       return res.status(400).json({ message: 'Store ID is required' });
     }
 
-    // Build the where clause
-    const where = { store_id }; // Filter by store_id
-    if (search) {
-      where[Op.or] = [
-        { order_id: { [Op.like]: `%${search}%` } },
-        { '$user.name$': { [Op.like]: `%${search}%` } },
-      ];
-    }
-    if (fromDate) {
-      where.odate = { [Op.gte]: new Date(fromDate) };
-    }
-    if (toDate) {
-      where.odate = { ...where.odate, [Op.lte]: new Date(toDate) };
+    const where = { store_id };
+    if (fromDate || toDate) {
+      where.odate = {};
+      if (fromDate) where.odate[Op.gte] = new Date(fromDate);
+      if (toDate) where.odate[Op.lte] = new Date(toDate);
     }
 
-    // Get total count
     const totalCount = await NormalOrder.count({
       where,
       include: [
@@ -39,7 +30,6 @@ const getNormalOrdersByStore = async (req, res) => {
       ],
     });
 
-    // Fetch paginated rows
     const offset = (page - 1) * limit;
     const rows = await NormalOrder.findAll({
       where,
@@ -52,8 +42,7 @@ const getNormalOrdersByStore = async (req, res) => {
       offset: parseInt(offset),
     });
 
-    // Format orders (no timeslot)
-    const formattedOrders = rows.map(order => ({
+    const formattedOrders = rows.map((order) => ({
       order_id: order.order_id,
       order_date: order.odate,
       username: order.user?.name || 'N/A',
@@ -82,9 +71,12 @@ const downloadNormalOrdersByStore = async (req, res) => {
       return res.status(400).json({ message: 'Store ID is required' });
     }
 
-    const where = { store_id }; // Filter by store_id
-    if (fromDate) where.odate = { [Op.gte]: new Date(fromDate) };
-    if (toDate) where.odate = { ...where.odate, [Op.lte]: new Date(toDate) };
+    const where = { store_id };
+    if (fromDate || toDate) {
+      where.odate = {};
+      if (fromDate) where.odate[Op.gte] = new Date(fromDate);
+      if (toDate) where.odate[Op.lte] = new Date(toDate);
+    }
 
     const orders = await NormalOrder.findAll({
       where,
@@ -95,7 +87,7 @@ const downloadNormalOrdersByStore = async (req, res) => {
       attributes: ['order_id', 'odate', 'status'],
     });
 
-    const formattedOrders = orders.map(order => ({
+    const formattedOrders = orders.map((order) => ({
       order_id: order.order_id,
       order_date: order.odate,
       username: order.user?.name || 'N/A',
@@ -139,7 +131,7 @@ const downloadSingleNormalOrderByStore = async (req, res) => {
     }
 
     const order = await NormalOrder.findOne({
-      where: { order_id: orderId, store_id }, // Filter by store_id
+      where: { order_id: orderId, store_id },
       include: [
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
@@ -175,7 +167,7 @@ const downloadSingleNormalOrderByStore = async (req, res) => {
     worksheet.addRow(formattedOrder);
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', `attachment; filename=normal_order_${formattedOrder.username}_by_store.xlsx`);
+    res.setHeader('Content-Disposition', `attachment; filename=normal_order_${orderId}_by_store.xlsx`);
 
     await workbook.xlsx.write(res);
     res.end();
@@ -185,53 +177,58 @@ const downloadSingleNormalOrderByStore = async (req, res) => {
   }
 };
 
-// Subscribe Orders By Store Controller
 const getSubscribeOrdersByStore = async (req, res) => {
   try {
-    const { store_id, search, fromDate, toDate, page = 1, limit = 10 } = req.query;
+    const { store_id, fromDate, toDate, page = 1, limit = 10 } = req.query;
 
     if (!store_id) {
       return res.status(400).json({ message: 'Store ID is required' });
     }
 
-    // Build the where clause
-    const where = { store_id }; // Filter by store_id
-    if (search) {
-      where[Op.or] = [
-        { order_id: { [Op.like]: `%${search}%` } },
-        { '$user.name$': { [Op.like]: `%${search}%` } },
-      ];
-    }
-    if (fromDate) {
-      where.odate = { [Op.gte]: new Date(fromDate) };
-    }
-    if (toDate) {
-      where.odate = { ...where.odate, [Op.lte]: new Date(toDate) };
+    const where = { store_id };
+    if (fromDate || toDate) {
+      where.odate = {};
+      if (fromDate) where.odate[Op.gte] = new Date(fromDate);
+      if (toDate) where.odate[Op.lte] = new Date(toDate);
     }
 
-    // Get total count
     const { count, rows } = await SubscribeOrder.findAndCountAll({
       where,
       include: [
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
-        { model: Time, as: 'timeslots', attributes: ['mintime', 'maxtime'] },
+        {
+          model: SubscribeOrderProduct,
+          as: 'orderProducts',
+          include: [
+            {
+              model: Time,
+              as: 'timeslotss',
+              attributes: ['mintime', 'maxtime'],
+            },
+          ],
+        },
       ],
       attributes: ['order_id', 'odate', 'status'],
       limit: parseInt(limit),
       offset: (page - 1) * limit,
     });
 
-    // Format orders
-    const formattedOrders = rows.map(order => ({
-      order_id: order.order_id,
-      order_date: order.odate,
-      username: order.user?.name || 'N/A',
-      store_name: order.store?.title || 'N/A',
-      order_status: order.status || 'N/A',
-      user_mobile_no: order.user?.mobile || 'N/A',
-      timeslots: `${order.timeslots?.mintime || 'N/A'} - ${order.timeslots?.maxtime || 'N/A'}`,
-    }));
+    const formattedOrders = rows.map((order) => {
+      const timeslots = order.orderProducts
+        .filter((op) => op.timeslot)
+        .map((op) => `${op.timeslot.mintime || 'N/A'} - ${op.timeslot.maxtime || 'N/A'}`)
+        .join('; ');
+      return {
+        order_id: order.order_id,
+        order_date: order.odate,
+        username: order.user?.name || 'N/A',
+        store_name: order.store?.title || 'N/A',
+        order_status: order.status || 'N/A',
+        user_mobile_no: order.user?.mobile || 'N/A',
+        timeslots: timeslots || 'N/A',
+      };
+    });
 
     res.json({
       orders: formattedOrders,
@@ -253,29 +250,48 @@ const downloadSubscribeOrdersByStore = async (req, res) => {
       return res.status(400).json({ message: 'Store ID is required' });
     }
 
-    const where = { store_id }; // Filter by store_id
-    if (fromDate) where.odate = { [Op.gte]: new Date(fromDate) };
-    if (toDate) where.odate = { ...where.odate, [Op.lte]: new Date(toDate) };
+    const where = { store_id };
+    if (fromDate || toDate) {
+      where.odate = {};
+      if (fromDate) where.odate[Op.gte] = new Date(fromDate);
+      if (toDate) where.odate[Op.lte] = new Date(toDate);
+    }
 
     const orders = await SubscribeOrder.findAll({
       where,
       include: [
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
-        { model: Time, as: 'timeslots', attributes: ['mintime', 'maxtime'] },
+        {
+          model: SubscribeOrderProduct,
+          as: 'orderProducts',
+          include: [
+            {
+              model: Time,
+              as: 'timeslotss',
+              attributes: ['mintime', 'maxtime'],
+            },
+          ],
+        },
       ],
       attributes: ['order_id', 'odate', 'status'],
     });
 
-    const formattedOrders = orders.map(order => ({
-      order_id: order.order_id,
-      order_date: order.odate,
-      username: order.user?.name || 'N/A',
-      store_name: order.store?.title || 'N/A',
-      order_status: order.status || 'N/A',
-      user_mobile_no: order.user?.mobile || 'N/A',
-      timeslots: `${order.timeslots?.mintime || 'N/A'} - ${order.timeslots?.maxtime || 'N/A'}`,
-    }));
+    const formattedOrders = orders.map((order) => {
+      const timeslots = order.orderProducts
+        .filter((op) => op.timeslot)
+        .map((op) => `${op.timeslot.mintime || 'N/A'} - ${op.timeslot.maxtime || 'N/A'}`)
+        .join('; ');
+      return {
+        order_id: order.order_id,
+        order_date: order.odate,
+        username: order.user?.name || 'N/A',
+        store_name: order.store?.title || 'N/A',
+        order_status: order.status || 'N/A',
+        user_mobile_no: order.user?.mobile || 'N/A',
+        timeslots: timeslots || 'N/A',
+      };
+    });
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Subscribe Orders By Store');
@@ -287,7 +303,7 @@ const downloadSubscribeOrdersByStore = async (req, res) => {
       { header: 'Store Name', key: 'store_name', width: 25 },
       { header: 'Order Status', key: 'order_status', width: 15 },
       { header: 'Mobile No', key: 'user_mobile_no', width: 15 },
-      { header: 'Timeslot', key: 'timeslots', width: 15 },
+      { header: 'Timeslot', key: 'timeslots', width: 20 },
     ];
 
     worksheet.addRows(formattedOrders);
@@ -313,11 +329,21 @@ const downloadSingleSubscribeOrderByStore = async (req, res) => {
     }
 
     const order = await SubscribeOrder.findOne({
-      where: { order_id: orderId, store_id }, // Filter by store_id
+      where: { order_id: orderId, store_id },
       include: [
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
-        { model: Time, as: 'timeslots', attributes: ['mintime', 'maxtime'] },
+        {
+          model: SubscribeOrderProduct,
+          as: 'orderProducts',
+          include: [
+            {
+              model: Time,
+              as: 'timeslotss',
+              attributes: ['mintime', 'maxtime'],
+            },
+          ],
+        },
       ],
       attributes: ['order_id', 'odate', 'status'],
     });
@@ -326,6 +352,10 @@ const downloadSingleSubscribeOrderByStore = async (req, res) => {
       return res.status(404).json({ message: 'Order not found or does not belong to this store' });
     }
 
+    const timeslots = order.orderProducts
+      .filter((op) => op.timeslot)
+      .map((op) => `${op.timeslot.mintime || 'N/A'} - ${op.timeslot.maxtime || 'N/A'}`)
+      .join('; ');
     const formattedOrder = {
       order_id: order.order_id,
       order_date: order.odate,
@@ -333,7 +363,7 @@ const downloadSingleSubscribeOrderByStore = async (req, res) => {
       store_name: order.store?.title || 'N/A',
       order_status: order.status || 'N/A',
       user_mobile_no: order.user?.mobile || 'N/A',
-      timeslots: `${order.timeslots?.mintime || 'N/A'} - ${order.timeslots?.maxtime || 'N/A'}`,
+      timeslots: timeslots || 'N/A',
     };
 
     const workbook = new ExcelJS.Workbook();
@@ -346,7 +376,7 @@ const downloadSingleSubscribeOrderByStore = async (req, res) => {
       { header: 'Store Name', key: 'store_name', width: 25 },
       { header: 'Order Status', key: 'order_status', width: 15 },
       { header: 'Mobile No', key: 'user_mobile_no', width: 15 },
-      { header: 'Timeslot', key: 'timeslots', width: 15 },
+      { header: 'Timeslot', key: 'timeslots', width: 20 },
     ];
 
     worksheet.addRow(formattedOrder);
@@ -369,11 +399,4 @@ module.exports = {
   getSubscribeOrdersByStore,
   downloadSubscribeOrdersByStore,
   downloadSingleSubscribeOrderByStore,
-  // Include existing controllers if needed
-//   getNormalOrders,
-//   downloadNormalOrders,
-//   downloadSingleNormalOrder,
-//   getSubscribeOrders,
-//   downloadSubscribeOrders,
-//   downloadSingleSubscribeOrder,
 };
