@@ -145,6 +145,10 @@ const SubscribeOrder = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    is_paper_bag:{
+      type:DataTypes.BOOLEAN,
+      defaultValue:false
+    }
   },
   { tableName: "tbl_subscribe_order", timestamps: true, paranoid: true }
 );
