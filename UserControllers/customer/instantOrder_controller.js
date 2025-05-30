@@ -24,6 +24,7 @@ const PersonRecord = require("../../Models/PersonRecord");
 const StoreWeightOption = require("../../Models/StoreWeightOption");
 const WalletReport = require("../../Models/WalletReport");
 const ProductInventory = require("../../Models/ProductInventory");
+const Rider = require("../../Models/Rider");
 
 const generateOrderId = () => {
   const randomNum = Math.floor(100000 + Math.random() * 900000);
@@ -1225,6 +1226,15 @@ const getOrderDetails = async (req, res) => {
           attributes: ["id", "mintime", "maxtime"],
         },
         {
+          model: Rider,
+          as: "riders",
+          attributes: ["id", "title", "mobile", "email"],
+          where: {
+            id: sequelize.col("NormalOrder.rid"),
+          },
+          required: false,
+        },
+        {
           model: PersonRecord,
           as: "receiver",
           attributes: ["id", "name", "email", "mobile", "address_id"],
@@ -1242,10 +1252,18 @@ const getOrderDetails = async (req, res) => {
       });
     }
 
-      const orderData = order.toJSON();
+    const orderData = order.toJSON();
     const hasReviews = orderData.NormalProducts.some(product => 
       product.ProductDetails?.ProductReviews?.length > 0
     );
+
+    // Calculate average rating for all products in the order
+    const allReviews = orderData.NormalProducts.flatMap(product => 
+      product.ProductDetails?.ProductReviews || []
+    );
+    const averageRating = allReviews.length > 0
+      ? Number((allReviews.reduce((sum, review) => sum + review.rating, 0) / allReviews.length).toFixed(2))
+      : null; // or 0 if you prefer a default value
 
     // Format response
     res.status(200).json({
@@ -1259,7 +1277,7 @@ const getOrderDetails = async (req, res) => {
         store_id: order.store_id,
         address: order.instOrdAddress,
         odate: order.odate,
-        status:order.status,
+        status: order.status,
         timeslot: order.timeslot,
         o_type: order.o_type,
         cou_id: order.cou_id,
@@ -1270,12 +1288,15 @@ const getOrderDetails = async (req, res) => {
         tax: order.tax,
         o_total: order.o_total,
         a_note: order.a_note,
+        rid:order.rid,
         trans_id: order.trans_id,
         createdAt: order.createdAt,
         updatedAt: order.updatedAt,
         products: order.NormalProducts,
         receiver: order.receiver,
+        rider:order.riders,
         hasReviews: hasReviews,
+        averageRating: averageRating,
       },
     });
   } catch (error) {
@@ -1675,6 +1696,123 @@ const couponList = async(req,res)=>{
   }
 }
 
+// we can pass the previous orderId, so that ordered products will be added to cart if the the same products with weight options are available in cart then its quantity will be updated 
+const addPreviousOrderToCart = async(req,res)=>{
+  const uid = req.user.userId;
+  if (!uid) {
+    return res.status(401).json({
+      ResponseCode: "401",
+      Result: "false",
+      ResponseMsg: "Unauthorized: User not found!",
+    });
+  }
+  const {previousOrderId}=req.body;
+  if (!previousOrderId) {
+    return res.status(400).json({
+      ResponseCode: "400",
+      Result: "false",
+      ResponseMsg: "Previous order ID is required",
+    });
+  }
+  try {
+    const previousOrder = await NormalOrder.findOne({
+      where:{id:previousOrderId,uid:uid},
+      include:[
+        {
+          model:NormalOrderProduct,
+          as:"NormalProducts",
+          attributes:["id","product_id","weight_id","pquantity"],
+          include:[
+            {
+              model:WeightOption,
+              as:"productWeight",
+              attributes:["id","weight"],
+            },
+            {
+              model:Product,
+              as:"ProductDetails",
+              attributes:["id","title","img"],
+            }
+          ]
+        }
+      ]
+    })
+    if (!previousOrder) {
+      return res.status(404).json({
+        ResponseCode: "404",
+        Result: "false",
+        ResponseMsg: "Previous order not found",
+      });
+    }
+    const previousProducts = previousOrder.NormalProducts.map(item => ({
+      product_id: item.product_id,
+      weight_id: item.weight_id,
+      quantity: item.pquantity,
+      orderType: "Normal"
+    }));
+    if (previousProducts.length === 0) {
+      return res.status(404).json({
+        ResponseCode: "404",
+        Result: "false",
+        ResponseMsg: "No products found in the previous order",
+      });
+    }
+    // Check if products already exist in the cart
+    const existingCartItems = await Cart.findAll({
+      where: {
+        uid: uid,
+        [Op.or]: previousProducts.map(item => ({
+          product_id: item.product_id,
+          weight_id: item.weight_id,
+          orderType: "Normal"
+        }))
+      }
+    });
+    const existingCartMap = new Map();
+    existingCartItems.forEach(item => {
+      const key = `${item.product_id}-${item.weight_id}`;
+      existingCartMap.set(key, item);
+    });
+    const cartItemsToAdd = [];
+    for (const item of previousProducts) {
+      const key = `${item.product_id}-${item.weight_id}`;
+      if (existingCartMap.has(key)) {
+        // If item exists, update quantity
+        const existingItem = existingCartMap.get(key);
+        existingItem.quantity += item.quantity;
+        await existingItem.save();
+      } else {
+        // If item does not exist, add to cart
+        cartItemsToAdd.push({
+          uid: uid,
+          product_id: item.product_id,
+          weight_id: item.weight_id,
+          quantity: item.quantity,
+          orderType: "Normal"
+        });
+      }
+    }
+    if (cartItemsToAdd.length > 0) {
+      await Cart.bulkCreate(cartItemsToAdd);
+    }
+    res.status(200).json({
+      ResponseCode: "200",
+      Result: "true",
+      ResponseMsg: "Previous order items added to cart successfully",
+      cartItems: [...existingCartItems, ...cartItemsToAdd],
+    });
+  } catch (error) {
+    console.error("Error adding previous order to cart:", error);
+    res.status(500).json({
+      ResponseCode: "500",
+      Result: "false",
+      ResponseMsg: "Server Error",
+      error: error.message,
+    });
+  }
+}
+
+
 module.exports = {
   instantOrder,
   getOrdersByStatus,
@@ -1684,5 +1822,6 @@ module.exports = {
   getNearByProducts,
   getMyInstantOrders,
   couponList,
-  instantOrderAgain
+  instantOrderAgain,
+  addPreviousOrderToCart
 };

@@ -9,6 +9,7 @@ router.post("/post-review-subscribe",authMiddleware.isAuthenticated,ProductRevie
 router.post("/post-delivery-review",authMiddleware.isAuthenticated,ProductReviewController.PostDeliveryBoyReview);
 router.get("/fetch-all-reviews",authMiddleware.isAuthenticated,ProductReviewController.FetchMyReviewsOnProducts)
 router.get("/fetch-all-delivery-reviews",authMiddleware.isAuthenticated,ProductReviewController.FetchMyReviewsOnDeliveryBoys)
-router.get("/productreviews", ProductReviewController.ProductReviews)
+router.get("/productreviews", ProductReviewController.ProductReviews);
+router.post("/post-order-review",authMiddleware.isAuthenticated,ProductReviewController.PostOrderReview)
 
 module.exports = router;
