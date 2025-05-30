@@ -1,6 +1,6 @@
 // helpers/orderUtils.js
 
-const  SubscribeOrder  = require("../../Models/SubscribeOrder");
+const SubscribeOrder = require("../../Models/SubscribeOrder");
 const { Op } = require("sequelize");
 
 const generateOrderId = async (transaction) => {

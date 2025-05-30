@@ -22,7 +22,7 @@ const sequelize = require("../../config/db");
 const cron = require("node-cron");
 const { sendPushNotification } = require("../../notifications/alert.service");
 const { sendInAppNotification } = require("../../notifications/notification.service");
-const {calculateDeliveryDays2,  generateOrderId } = require("../helper/orderUtils");
+const { calculateDeliveryDays2, generateOrderId } = require("../helper/orderUtils");
 
 
 const MAX_RETRIES = 3;
@@ -31,23 +31,22 @@ const subscribeOrder = async (req, res) => {
   const {
     coupon_id,
     products,
-    start_date,
-    end_date,
     o_type,
     store_id,
     address_id,
     a_note,
     tax,
-    delivery_fee,
-    store_charge,
+    // delivery_fee,
+    // store_charge,
     subtotal,
     o_total,
+    is_paper_bag,
   } = req.body;
 
   const uid = req.user.userId;
 
   // Basic validations
-  if (!uid || !Array.isArray(products) || products.length === 0 || !start_date || !o_type || !store_id || !subtotal || !o_total) {
+  if (!uid || !Array.isArray(products) || products.length === 0 || !o_type || !store_id || !subtotal || !o_total) {
     return res.status(400).json({
       ResponseCode: "400",
       Result: "false",
@@ -63,8 +62,11 @@ const subscribeOrder = async (req, res) => {
     });
   }
 
-  // Validate product structure and quantities
+  // Validate product structure and dates
   const validDays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+  let referenceStartDate = null;
+  let referenceEndDate = null;
+
   for (const item of products) {
     if (
       !item.product_id ||
@@ -72,6 +74,8 @@ const subscribeOrder = async (req, res) => {
       !item.quantities ||
       typeof item.quantities !== "object" ||
       !item.timeslot_id ||
+      !item.start_date ||
+      !item.end_date ||
       Object.keys(item.quantities).length === 0 ||
       !Object.keys(item.quantities).every(day => validDays.includes(day.toLowerCase())) ||
       !Object.values(item.quantities).every(qty => typeof qty === "number" && qty >= 0)
@@ -79,12 +83,36 @@ const subscribeOrder = async (req, res) => {
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
-        ResponseMsg: "Invalid product structure or values in quantities.",
+        ResponseMsg: "Invalid product structure, quantities, or missing start_date/end_date.",
+      });
+    }
+
+    // Validate dates
+    const startDate = new Date(item.start_date);
+    const endDate = new Date(item.end_date);
+
+    if (isNaN(startDate) || isNaN(endDate)) {
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Invalid start_date or end_date format in products!",
+      });
+    }
+
+    // Ensure all products have the same start_date and end_date
+    if (!referenceStartDate) {
+      referenceStartDate = startDate;
+      referenceEndDate = endDate;
+    } else if (startDate.getTime() !== referenceStartDate.getTime() || endDate.getTime() !== referenceEndDate.getTime()) {
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "All products must have the same start_date and end_date!",
       });
     }
   }
 
-  // Fetch settings
+  // Fetch settings for minimum subscription days
   const setting = await Setting.findOne();
   if (!setting) {
     return res.status(500).json({
@@ -95,33 +123,14 @@ const subscribeOrder = async (req, res) => {
   }
 
   const minimumSubscriptionDays = parseInt(setting.minimum_subscription_days, 10) || 30;
-  const deliveryCharge = parseFloat(setting.delivery_charges) || 0;
-  const storeCharge = parseFloat(setting.store_charges) || 0;
-  const settingTax = parseFloat(setting.tax) || 0;
+  // const deliveryCharge = parseFloat(delivery_fee) || 0;
+  // const storeCharge = parseFloat(store_charge) || 0;
+  const settingTax = parseFloat(tax) || 0;
 
-  // Validate tax and delivery fee
-  if (tax !== settingTax || (o_type === "Delivery" && delivery_fee !== deliveryCharge)) {
-    return res.status(400).json({
-      ResponseCode: "400",
-      Result: "false",
-      ResponseMsg: "Tax or delivery fee mismatch with settings!",
-    });
-  }
-
-  // Validate dates
-  const startDate = new Date(start_date);
-  if (isNaN(startDate)) {
-    return res.status(400).json({ ResponseCode: "400", Result: "false", ResponseMsg: "Invalid start_date format!" });
-  }
-
-  const endDate = end_date ? new Date(end_date) : new Date(startDate.getTime() + 365 * 24 * 60 * 60 * 1000); // Default to 1 year if not provided
-  if (isNaN(endDate)) {
-    return res.status(400).json({ ResponseCode: "400", Result: "false", ResponseMsg: "Invalid end_date format!" });
-  }
-
-  const minEndDate = new Date(startDate);
-  minEndDate.setDate(startDate.getDate() + minimumSubscriptionDays - 1);
-  if (endDate < minEndDate) {
+  // Validate subscription duration
+  const minEndDate = new Date(referenceStartDate);
+  minEndDate.setDate(referenceStartDate.getDate() + minimumSubscriptionDays - 1);
+  if (referenceEndDate < minEndDate) {
     return res.status(400).json({
       ResponseCode: "400",
       Result: "false",
@@ -142,7 +151,7 @@ const subscribeOrder = async (req, res) => {
       console.log(`Attempt ${attempt} of ${MAX_RETRIES}`);
 
       // Validate user and store
-      const user = await User.findOne({ where: { id: uid }, transaction: t, lock: t.LOCK.UPDATE });
+      const user = await User.findOne({ where: { id: uid }, transaction: t });
       if (!user) throw new Error("User not found");
 
       const store = await Store.findOne({ where: { id: store_id }, transaction: t });
@@ -151,50 +160,6 @@ const subscribeOrder = async (req, res) => {
       if (o_type === "Delivery") {
         const address = await Address.findOne({ where: { id: address_id }, transaction: t });
         if (!address) throw new Error("Address not found");
-      }
-
-      // Validate products and calculate subtotal
-      const calculatedSubtotalDetails = await Promise.all(
-        products.map(async item => {
-          const product = await Product.findOne({
-            where: { id: item.product_id },
-            transaction: t,
-            lock: t.LOCK.UPDATE,
-          });
-          const weight = await WeightOption.findByPk(item.weight_id, { transaction: t });
-          const timeslot = await Time.findByPk(item.timeslot_id, { transaction: t });
-
-          if (!product) throw new Error(`Product not found: ${item.product_id}`);
-          if (!weight) throw new Error(`Weight option not found: ${item.weight_id}`);
-          if (!timeslot) throw new Error(`Timeslot not found: ${item.timeslot_id}`);
-          if (product.quantity <= 0) throw new Error(`Product out of stock: ${item.product_id}`);
-          if (product.subscription_required !== 1) throw new Error(`Subscription not allowed for product: ${item.product_id}`);
-
-          const days = Object.keys(item.quantities).filter(day => validDays.includes(day.toLowerCase()) && item.quantities[day] > 0);
-          const deliveryDays = calculateDeliveryDays2(startDate, endDate, days);
-          const totalUnits = Object.values(item.quantities).reduce((sum, qty) => sum + qty * deliveryDays, 0);
-
-          if (product.quantity < totalUnits) {
-            throw new Error(`Insufficient stock for product: ${item.product_id}. Available: ${product.quantity}, Requested: ${totalUnits}`);
-          }
-
-          const itemPrice = weight.subscribe_price * totalUnits;
-
-          await product.update(
-            {
-              quantity: product.quantity - totalUnits,
-              out_of_stock: product.quantity - totalUnits <= 0 ? 1 : 0,
-            },
-            { transaction: t }
-          );
-
-          return { item, price: itemPrice, subscribe_price: weight.subscribe_price, deliveryDays, days };
-        })
-      );
-
-      const calculatedSubtotal = calculatedSubtotalDetails.reduce((sum, d) => sum + d.price, 0);
-      if (Math.abs(calculatedSubtotal - parseFloat(subtotal)) > 0.01) {
-        throw new Error("Provided subtotal does not match calculated subtotal");
       }
 
       // Coupon validation
@@ -228,11 +193,11 @@ const subscribeOrder = async (req, res) => {
           address_id: o_type === "Delivery" ? address_id : null,
           odate: new Date(),
           o_type,
-          start_date,
-          end_date: end_date || null,
-          tax,
-          d_charge: o_type === "Delivery" ? deliveryCharge : 0,
-          store_charge: storeCharge,
+          start_date: referenceStartDate,
+          end_date: referenceEndDate,
+          settingTax,
+          d_charge: o_type === "Delivery" ? 0 : 0,
+          store_charge:  0,
           cou_id: appliedCoupon ? appliedCoupon.id : null,
           cou_amt: couponAmount,
           subtotal: parseFloat(subtotal),
@@ -240,6 +205,7 @@ const subscribeOrder = async (req, res) => {
           a_note,
           order_id: orderId,
           status: "Pending",
+          is_paper_bag
         },
         { transaction: t }
       );
@@ -247,29 +213,26 @@ const subscribeOrder = async (req, res) => {
       // Create order items
       const orderItems = await Promise.all(
         products.map(async item => {
-          const weight = await WeightOption.findByPk(item.weight_id, { transaction: t });
-          const days = Object.keys(item.quantities).filter(day => validDays.includes(day.toLowerCase()) && item.quantities[day] > 0);
-          const deliveryDays = calculateDeliveryDays2(startDate, endDate, days);
-          const totalUnits = Object.values(item.quantities).reduce((sum, qty) => sum + qty * deliveryDays, 0);
-          const itemPrice = weight.subscribe_price * totalUnits;
-
           const schedule = {};
           validDays.forEach(day => {
             schedule[day] = item.quantities[day.toLowerCase()] || 0;
           });
+
+          const days = Object.keys(item.quantities).filter(day => validDays.includes(day.toLowerCase()) && item.quantities[day] > 0);
 
           return SubscribeOrderProduct.create(
             {
               oid: order.id,
               product_id: item.product_id,
               weight_id: item.weight_id,
-              price: itemPrice,
+              price: item.price || 0, // Use frontend-provided price if available, else 0
               timeslot_id: item.timeslot_id,
               schedule,
-              start_date,
-              end_date: end_date || null,
+              start_date: referenceStartDate,
+              end_date: referenceEndDate,
               repeat_day: days,
               status: "Pending",
+              order_id: orderId,
             },
             { transaction: t }
           );
@@ -1189,12 +1152,33 @@ const calculateDeliveryDays = (startDate, endDate, days) => {
 
 
 
+const getRandomMinute = () => Math.floor(Math.random() * 30); //0 to 300 minutes
+const scheduleDailyRandom = () => {
+  const randomMinute = getRandomMinute();
+  const hour = Math.floor(randomMinute / 60);
+  const minute = randomMinute % 60;
 
+  // random time
+  const cronExpression = `${minute} ${hour} * * *`;// e.g., "23 1 * * *" for 1:23 AM
+  console.log(`Scheduling auto-resume job for ${hour}:${minute.toString().padStart(2, '0')} AM`);
+
+  cron.schedule(cronExpression, async () => {
+    console.log(`Running auto-resume job at ${new Date().toISOString()}`);
+    await autoResumeSubscriptionOrder();
+    // Reschedule for the next day at a new random time
+    scheduleDailyRandom();
+  }, {
+    timezone: "Asia/Kolkata"
+  })
+
+}
+// Start the scheduling
+scheduleDailyRandom();
 
 // Schedule daily at midnight
 // cron.schedule("*/1 * * * *", autoResumeSubscriptionOrder);
 // cron.schedule("0 0 * * *", autoResumeSubscriptionOrder);
-setInterval(autoResumeSubscriptionOrder, 20 * 1000); // every 20 seconds
+// setInterval(autoResumeSubscriptionOrder, 20 * 1000); // every 20 seconds
 
 
 
