@@ -2,7 +2,7 @@ const { Sequelize, Op } = require("sequelize");
 const SubscribeOrder = require("../../Models/SubscribeOrder");
 const Product = require("../../Models/Product");
 const SubscribeOrderProduct = require("../../Models/SubscribeOrderProduct");
-const pauseHistory=require("../../Models/PauseHistory")
+const pauseHistory = require("../../Models/PauseHistory")
 const Notification = require("../../Models/Notification");
 const NormalOrder = require("../../Models/NormalOrder");
 const User = require("../../Models/User");
@@ -22,7 +22,7 @@ const sequelize = require("../../config/db");
 const cron = require("node-cron");
 const { sendPushNotification } = require("../../notifications/alert.service");
 const { sendInAppNotification } = require("../../notifications/notification.service");
-const { calculateDeliveryDays, generateOrderId } = require("../helper/orderUtils");
+const { calculateDeliveryDays2, generateOrderId } = require("../helper/orderUtils");
 
 
 const MAX_RETRIES = 3;
@@ -31,22 +31,22 @@ const subscribeOrder = async (req, res) => {
   const {
     coupon_id,
     products,
-    start_date,
-    end_date,
     o_type,
     store_id,
     address_id,
     a_note,
     tax,
-    delivery_fee,
+    // delivery_fee,
+    // store_charge,
     subtotal,
     o_total,
+    is_paper_bag,
   } = req.body;
 
   const uid = req.user.userId;
 
   // Basic validations
-  if (!uid || !Array.isArray(products) || products.length === 0 || !start_date || !o_type || !store_id || !subtotal || !o_total) {
+  if (!uid || !Array.isArray(products) || products.length === 0 || !o_type || !store_id || !subtotal || !o_total) {
     return res.status(400).json({
       ResponseCode: "400",
       Result: "false",
@@ -62,8 +62,11 @@ const subscribeOrder = async (req, res) => {
     });
   }
 
-  // Validate product structure and quantities
+  // Validate product structure and dates
   const validDays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+  let referenceStartDate = null;
+  let referenceEndDate = null;
+
   for (const item of products) {
     if (
       !item.product_id ||
@@ -71,6 +74,8 @@ const subscribeOrder = async (req, res) => {
       !item.quantities ||
       typeof item.quantities !== "object" ||
       !item.timeslot_id ||
+      !item.start_date ||
+      !item.end_date ||
       Object.keys(item.quantities).length === 0 ||
       !Object.keys(item.quantities).every(day => validDays.includes(day.toLowerCase())) ||
       !Object.values(item.quantities).every(qty => typeof qty === "number" && qty >= 0)
@@ -78,12 +83,36 @@ const subscribeOrder = async (req, res) => {
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
-        ResponseMsg: "Invalid product structure or values in quantities.",
+        ResponseMsg: "Invalid product structure, quantities, or missing start_date/end_date.",
+      });
+    }
+
+    // Validate dates
+    const startDate = new Date(item.start_date);
+    const endDate = new Date(item.end_date);
+
+    if (isNaN(startDate) || isNaN(endDate)) {
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Invalid start_date or end_date format in products!",
+      });
+    }
+
+    // Ensure all products have the same start_date and end_date
+    if (!referenceStartDate) {
+      referenceStartDate = startDate;
+      referenceEndDate = endDate;
+    } else if (startDate.getTime() !== referenceStartDate.getTime() || endDate.getTime() !== referenceEndDate.getTime()) {
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "All products must have the same start_date and end_date!",
       });
     }
   }
 
-  // Fetch settings
+  // Fetch settings for minimum subscription days
   const setting = await Setting.findOne();
   if (!setting) {
     return res.status(500).json({
@@ -94,33 +123,14 @@ const subscribeOrder = async (req, res) => {
   }
 
   const minimumSubscriptionDays = parseInt(setting.minimum_subscription_days, 10) || 30;
-  const deliveryCharge = parseFloat(setting.delivery_charges) || 0;
-  const storeCharge = parseFloat(setting.store_charges) || 0;
-  const settingTax = parseFloat(setting.tax) || 0;
+  // const deliveryCharge = parseFloat(delivery_fee) || 0;
+  // const storeCharge = parseFloat(store_charge) || 0;
+  const settingTax = parseFloat(tax) || 0;
 
-  // Validate tax and delivery fee
-  if (tax !== settingTax || (o_type === "Delivery" && delivery_fee !== deliveryCharge)) {
-    return res.status(400).json({
-      ResponseCode: "400",
-      Result: "false",
-      ResponseMsg: "Tax or delivery fee mismatch with settings!",
-    });
-  }
-
-  // Validate dates
-  const startDate = new Date(start_date);
-  if (isNaN(startDate)) {
-    return res.status(400).json({ ResponseCode: "400", Result: "false", ResponseMsg: "Invalid start_date format!" });
-  }
-
-  const endDate = end_date ? new Date(end_date) : new Date(startDate.getTime() + 365 * 24 * 60 * 60 * 1000); // Default to 1 year if not provided
-  if (isNaN(endDate)) {
-    return res.status(400).json({ ResponseCode: "400", Result: "false", ResponseMsg: "Invalid end_date format!" });
-  }
-
-  const minEndDate = new Date(startDate);
-  minEndDate.setDate(startDate.getDate() + minimumSubscriptionDays - 1);
-  if (endDate < minEndDate) {
+  // Validate subscription duration
+  const minEndDate = new Date(referenceStartDate);
+  minEndDate.setDate(referenceStartDate.getDate() + minimumSubscriptionDays - 1);
+  if (referenceEndDate < minEndDate) {
     return res.status(400).json({
       ResponseCode: "400",
       Result: "false",
@@ -141,7 +151,7 @@ const subscribeOrder = async (req, res) => {
       console.log(`Attempt ${attempt} of ${MAX_RETRIES}`);
 
       // Validate user and store
-      const user = await User.findOne({ where: { id: uid }, transaction: t, lock: t.LOCK.UPDATE });
+      const user = await User.findOne({ where: { id: uid }, transaction: t });
       if (!user) throw new Error("User not found");
 
       const store = await Store.findOne({ where: { id: store_id }, transaction: t });
@@ -150,50 +160,6 @@ const subscribeOrder = async (req, res) => {
       if (o_type === "Delivery") {
         const address = await Address.findOne({ where: { id: address_id }, transaction: t });
         if (!address) throw new Error("Address not found");
-      }
-
-      // Validate products and calculate subtotal
-      const calculatedSubtotalDetails = await Promise.all(
-        products.map(async item => {
-          const product = await Product.findOne({
-            where: { id: item.product_id },
-            transaction: t,
-            lock: t.LOCK.UPDATE,
-          });
-          const weight = await WeightOption.findByPk(item.weight_id, { transaction: t });
-          const timeslot = await Time.findByPk(item.timeslot_id, { transaction: t });
-
-          if (!product) throw new Error(`Product not found: ${item.product_id}`);
-          if (!weight) throw new Error(`Weight option not found: ${item.weight_id}`);
-          if (!timeslot) throw new Error(`Timeslot not found: ${item.timeslot_id}`);
-          if (product.quantity <= 0) throw new Error(`Product out of stock: ${item.product_id}`);
-          if (product.subscription_required !== 1) throw new Error(`Subscription not allowed for product: ${item.product_id}`);
-
-          const days = Object.keys(item.quantities).filter(day => validDays.includes(day.toLowerCase()) && item.quantities[day] > 0);
-          const deliveryDays = calculateDeliveryDays(startDate, endDate, days);
-          const totalUnits = Object.values(item.quantities).reduce((sum, qty) => sum + qty * deliveryDays, 0);
-
-          if (product.quantity < totalUnits) {
-            throw new Error(`Insufficient stock for product: ${item.product_id}. Available: ${product.quantity}, Requested: ${totalUnits}`);
-          }
-
-          const itemPrice = weight.subscribe_price * totalUnits;
-
-          await product.update(
-            {
-              quantity: product.quantity - totalUnits,
-              out_of_stock: product.quantity - totalUnits <= 0 ? 1 : 0,
-            },
-            { transaction: t }
-          );
-
-          return { item, price: itemPrice, subscribe_price: weight.subscribe_price, deliveryDays, days };
-        })
-      );
-
-      const calculatedSubtotal = calculatedSubtotalDetails.reduce((sum, d) => sum + d.price, 0);
-      if (Math.abs(calculatedSubtotal - parseFloat(subtotal)) > 0.01) {
-        throw new Error("Provided subtotal does not match calculated subtotal");
       }
 
       // Coupon validation
@@ -227,11 +193,11 @@ const subscribeOrder = async (req, res) => {
           address_id: o_type === "Delivery" ? address_id : null,
           odate: new Date(),
           o_type,
-          start_date,
-          end_date: end_date || null,
-          tax,
-          d_charge: o_type === "Delivery" ? deliveryCharge : 0,
-          store_charge: storeCharge,
+          start_date: referenceStartDate,
+          end_date: referenceEndDate,
+          settingTax,
+          d_charge: o_type === "Delivery" ? 0 : 0,
+          store_charge:  0,
           cou_id: appliedCoupon ? appliedCoupon.id : null,
           cou_amt: couponAmount,
           subtotal: parseFloat(subtotal),
@@ -239,6 +205,7 @@ const subscribeOrder = async (req, res) => {
           a_note,
           order_id: orderId,
           status: "Pending",
+          is_paper_bag
         },
         { transaction: t }
       );
@@ -246,29 +213,26 @@ const subscribeOrder = async (req, res) => {
       // Create order items
       const orderItems = await Promise.all(
         products.map(async item => {
-          const weight = await WeightOption.findByPk(item.weight_id, { transaction: t });
-          const days = Object.keys(item.quantities).filter(day => validDays.includes(day.toLowerCase()) && item.quantities[day] > 0);
-          const deliveryDays = calculateDeliveryDays(startDate, endDate, days);
-          const totalUnits = Object.values(item.quantities).reduce((sum, qty) => sum + qty * deliveryDays, 0);
-          const itemPrice = weight.subscribe_price * totalUnits;
-
           const schedule = {};
           validDays.forEach(day => {
             schedule[day] = item.quantities[day.toLowerCase()] || 0;
           });
+
+          const days = Object.keys(item.quantities).filter(day => validDays.includes(day.toLowerCase()) && item.quantities[day] > 0);
 
           return SubscribeOrderProduct.create(
             {
               oid: order.id,
               product_id: item.product_id,
               weight_id: item.weight_id,
-              price: itemPrice,
+              price: item.price || 0, // Use frontend-provided price if available, else 0
               timeslot_id: item.timeslot_id,
               schedule,
-              start_date,
-              end_date: end_date || null,
+              start_date: referenceStartDate,
+              end_date: referenceEndDate,
               repeat_day: days,
               status: "Pending",
+              order_id: orderId,
             },
             { transaction: t }
           );
@@ -541,8 +505,8 @@ const editSubscriptionOrder = async (req, res) => {
       const endDate = order.end_date ? new Date(order.end_date) : null;
       const pausedPeriods = order.paused_periods || [];
 
-      const originalDeliveryDays = calculateDeliveryDays(startDate, endDate, existingProduct.days, pausedPeriods);
-      const newDeliveryDays = calculateDeliveryDays(startDate, endDate, item.days, pausedPeriods);
+      const originalDeliveryDays = calculateDeliveryDays2(startDate, endDate, existingProduct.days, pausedPeriods);
+      const newDeliveryDays = calculateDeliveryDays2(startDate, endDate, item.days, pausedPeriods);
 
       if (newDeliveryDays === 0) {
         await t.rollback();
@@ -703,111 +667,58 @@ const pauseSubscriptionOrder = async (req, res) => {
       throw new Error("Pause period must be within order period and valid");
     }
 
-    const pausedPeriods = subscribeOrderProduct.paused_period || [];
-    const overlap = pausedPeriods.some(
-      (period) => new Date(period.start_date) <= pauseEnd && new Date(period.end_date) >= pauseStart
-    );
-    if (overlap) throw new Error("Pause period overlaps with existing paused periods");
-
-    const orderProducts = await SubscribeOrderProduct.findAll({ where: { oid: orderId }, transaction: t });
-
-    let refundAmount = 0;
-    const pausedDays = Math.ceil((pauseEnd - pauseStart) / (1000 * 60 * 60 * 24)) + 1;
-
-    for (const product of orderProducts) {
-      const totalDeliveryDays = calculateDeliveryDays(orderStart, orderEnd, product.repeat_day, product.paused_period || []);
-      if (totalDeliveryDays === 0) continue;
-
-      const perDayCost = product.price / totalDeliveryDays;
-      refundAmount += parseFloat((perDayCost * pausedDays).toFixed(2));
-    }
-
-    // const updatedPaused = [...pausedPeriods, { start_date, end_date }];
-
     await subscribeOrderProduct.update(
       {
         pause: true,
         status: "Paused",
+        start_period: new Date(start_date),
+        paused_period: new Date(end_date),
       },
       { transaction: t }
     );
     await pauseHistory.create({
-      user_id:uid,
+      user_id: uid,
       subscribe_order_product_id: subscribeOrderProductId,
       pause_start_date: new Date(start_date),
       pause_end_date: new Date(end_date),
-    },{transaction:t})
+    }, { transaction: t })
 
-    const refundDate = new Date(pauseEnd);
-    refundDate.setDate(refundDate.getDate() + 1);
-
-    const currentDate = new Date();
-
-    if (currentDate >= refundDate) {
-      const user = await User.findByPk(uid, { transaction: t });
-      await user.update({ wallet: user.wallet + refundAmount }, { transaction: t });
-
-      await WalletReport.create(
-        {
-          uid,
-          amt: refundAmount,
-          message: `Refund for paused subscription order ${activeOrder.order_id} for ${pausedDays} days.`,
-          transaction_no: activeOrder.order_id,
-          tdate: new Date(),
-          transaction_type: "Credited",
-          status: 1,
-        },
-        { transaction: t }
-      );
-
-      // await Notification.create(
-      //   {
-      //     uid,
-      //     datetime: new Date(),
-      //     title: "Refund Credited",
-      //     description: `₹${refundAmount} credited for paused order ${activeOrder.order_id}.`,
-      //   },
-      //   { transaction: t }
-      // );
-
-
-    }
 
     const user = await User.findByPk(uid, { transaction: t });
 
-    // await Promise.all([
-    //   sendNotification(user.one_subscription, process.env.ONESIGNAL_CUSTOMER_APP_ID, process.env.ONESIGNAL_CUSTOMER_API_KEY, {
-    //     title: "Subscription Order Paused!",
-    //     content: `${user.name}, your order has been paused from ${start_date} to ${end_date}`,
-    //     data: { user_id: user.id, type: "Subscription order paused" },
-    //   }),
-    //   sendNotification(store.one_subscription, process.env.ONESIGNAL_STORE_APP_ID, process.env.ONESIGNAL_STORE_API_KEY, {
-    //     title: "Subscription Order Paused",
-    //     content: `Subscription order paused! Order ID: ${activeOrder.order_id}`,
-    //     data: { store_id: store.id, type: "subscription order paused" },
-    //   }),
-    // ]);
-
-    // await Promise.all([
-    //   Notification.create(
-    //     {
-    //       uid,
-    //       datetime: new Date(),
-    //       title: "Subscription Order Paused",
-    //       description: `Your subscription order has been paused from ${start_date} to ${end_date}.`,
-    //     },
-    //     { transaction: t }
-    //   ),
-    //   Notification.create(
-    //     {
-    //       uid: store.id,
-    //       datetime: new Date(),
-    //       title: "Subscription Order Paused",
-    //       description: `Subscription order paused! Order ID: ${activeOrder.order_id}`,
-    //     },
-    //     { transaction: t }
-    //   ),
-    // ]);
+    // Send notifications after commit
+    try {
+      await Promise.all([
+        sendPushNotification({
+          appId: process.env.ONESIGNAL_CUSTOMER_APP_ID,
+          apiKey: process.env.ONESIGNAL_CUSTOMER_API_KEY,
+          playerIds: [user.one_subscription],
+          data: { user_id: user.id, type: "Subscription order paused" },
+          contents: { en: `${user.name}, your order has been paused from ${start_date} to ${end_date}`, },
+          headings: { en: "Subscription Order Paused!" },
+        }),
+        sendPushNotification({
+          appId: process.env.ONESIGNAL_STORE_APP_ID,
+          apiKey: process.env.ONESIGNAL_STORE_API_KEY,
+          playerIds: [storeData.one_subscription],
+          data: { store_id: store.id, type: "subscription order paused" },
+          contents: { en: `Subscription order paused! Order ID: ${activeOrder.order_id}`, },
+          headings: { en: "Subscription Order Paused!" },
+        }),
+        sendInAppNotification({
+          uid,
+          title: "Subscription Order Paused!",
+          description: `Your subscription order has been paused from ${start_date} to ${end_date}.`,
+        }),
+        sendInAppNotification({
+          uid: store.id,
+          title: "Subscription Order Paused!",
+          description: `Subscription order paused! Order ID: ${activeOrder.order_id}`,
+        }),
+      ]);
+    } catch (notificationError) {
+      console.error("Notification error:", notificationError);
+    }
 
     await t.commit();
 
@@ -815,8 +726,7 @@ const pauseSubscriptionOrder = async (req, res) => {
       ResponseCode: "200",
       Result: "true",
       ResponseMsg: `Subscription order paused successfully from ${start_date} to ${end_date}!`,
-      refundAmount,
-      refundDate: refundDate.toISOString().split("T")[0],
+
     });
   } catch (error) {
     if (!t.finished) await t.rollback();
@@ -834,7 +744,7 @@ const pauseSubscriptionOrder = async (req, res) => {
 const resumeSubscriptionOrder = async (req, res) => {
   const uid = req.user.userId;
   const { orderId, subscribeOrderProductId } = req.body;
-  console.log("resumeSubscriptionOrder called with data:", req.body);
+
   if (!uid) {
     return res.status(401).json({
       ResponseCode: "401",
@@ -852,14 +762,26 @@ const resumeSubscriptionOrder = async (req, res) => {
   }
 
   const t = await sequelize.transaction();
+
   try {
+    // Fetch paused subscription product
     const pausedOrder = await SubscribeOrderProduct.findOne({
       where: { id: subscribeOrderProductId, oid: orderId },
+      include: {
+        model: Product,
+        as: "productDetails",
+        attributes: ["title"],
+      },
       transaction: t,
     });
 
-    if (!pausedOrder || !pausedOrder.pause) {
-      if (!t.finished) await t.rollback();
+    if (
+      !pausedOrder ||
+      pausedOrder.pause !== true ||
+      !pausedOrder.start_period ||
+      !pausedOrder.paused_period
+    ) {
+      await t.rollback();
       return res.status(404).json({
         ResponseCode: "404",
         Result: "false",
@@ -867,9 +789,10 @@ const resumeSubscriptionOrder = async (req, res) => {
       });
     }
 
+    // Fetch the order, store, and user for validations
     const order = await SubscribeOrder.findByPk(orderId, { transaction: t });
     if (!order) {
-      if (!t.finished) await t.rollback();
+      await t.rollback();
       return res.status(404).json({
         ResponseCode: "404",
         Result: "false",
@@ -879,7 +802,7 @@ const resumeSubscriptionOrder = async (req, res) => {
 
     const store = await Store.findByPk(order.store_id, { transaction: t });
     if (!store) {
-      if (!t.finished) await t.rollback();
+      await t.rollback();
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
@@ -889,7 +812,7 @@ const resumeSubscriptionOrder = async (req, res) => {
 
     const user = await User.findByPk(uid, { transaction: t });
     if (!user) {
-      if (!t.finished) await t.rollback();
+      await t.rollback();
       return res.status(404).json({
         ResponseCode: "404",
         Result: "false",
@@ -897,152 +820,85 @@ const resumeSubscriptionOrder = async (req, res) => {
       });
     }
 
-    const pauseHstry=await pauseHistory.findAll({subscribe_order_product_id:subscribeOrderProductId})
-    const refundDate = new Date(pauseHstry.pause_end_date);
-    refundDate.setDate(refundDate.getDate() + 1);
-    const currentDate = new Date();
+    // Dates for pause calculation
+    const resumeDate = new Date();
+    const pauseStart = new Date(pausedOrder.start_period);
+    const plannedPauseEnd = new Date(pausedOrder.paused_period);
 
-    if (currentDate >= refundDate) {
-      const pausedDays = Math.ceil((pauseHstry.pause_end_date - pauseHstry.pause_start_date) / (1000 * 60 * 60 * 24)) + 1;
-
-      const orderProducts = await SubscribeOrderProduct.findAll({
-        where: { oid: orderId ,status:"Paused"},
-        transaction: t,
-      });
-
-      let refundAmount = 0;
-      const orderStart = new Date(pauseHstry.pause_start_date);
-      const orderEnd = pauseHstry.pause_end_date ? new Date(pauseHstry.pause_end_date) : null;
-
-      for (const product of orderProducts) {
-        const totalDeliveryDays = calculateDeliveryDays(
-          orderStart,
-          orderEnd,
-          product.repeat_day || [],
-          product.paused_periods || []
-        );
-        if (totalDeliveryDays === 0) continue;
-
-        const perDayCost = product.price / totalDeliveryDays;
-        refundAmount += parseFloat((perDayCost * pausedDays).toFixed(2));
-      }
-
-      const existingRefund = await WalletReport.findOne({
-        where: {
-          uid,
-          transaction_no: order.order_id,
-          transaction_type: "Credited",
-          message: {
-            [Op.like]: `%Refund for paused subscription order ${order.order_id}%`,
-          },
-        },
-        transaction: t,
-      });
-
-      if (!existingRefund && refundAmount > 0) {
-        await user.update({ wallet: user.wallet + refundAmount }, { transaction: t });
-
-        await WalletReport.create(
-          {
-            uid,
-            amt: refundAmount,
-            message: `Refund for paused subscription order ${order.order_id} for ${pausedDays} days.`,
-            transaction_no: order.order_id,
-            tdate: new Date(),
-            transaction_type: "Credited",
-            status: 1,
-          },
-          { transaction: t }
-        );
-
-        try {
-          await sendPushNotification({
-            appId: process.env.ONESIGNAL_CUSTOMER_APP_ID,
-            apiKey: process.env.ONESIGNAL_CUSTOMER_API_KEY,
-            playerIds: [user.one_subscription],
-            data: { user_id: user.id, type: "Subscription refund credited" },
-            contents: {
-              en: `${user.name}, ₹${refundAmount} has been credited to your wallet for paused order ${order.order_id}!`,
-            },
-            headings: { en: "Refund Credited!" },
-          });
-
-          await sendInAppNotification({
-            uid,
-            title: "Refund Credited",
-            description: `₹${refundAmount} credited for paused order ${order.order_id}.`,
-          });
-        } catch (notificationError) {
-          console.error("Refund notification error:", notificationError.message);
-        }
-      }
+    if (isNaN(pauseStart) || isNaN(plannedPauseEnd)) {
+      throw new Error("Invalid pause start or pause end dates");
     }
 
-    await SubscribeOrderProduct.update(
+    // Effective pause end is the earlier of resumeDate or plannedPauseEnd
+    const effectivePauseEnd = resumeDate < plannedPauseEnd ? resumeDate : plannedPauseEnd;
+
+    let actualPausedDays = 0;
+    if (pauseStart <= effectivePauseEnd) {
+      actualPausedDays =
+        Math.ceil((effectivePauseEnd - pauseStart) / (1000 * 60 * 60 * 24)) + 1; // inclusive of both days
+    }
+
+    if (actualPausedDays < 0) actualPausedDays = 0;
+
+    // Use pausedOrder's subscription product start and end dates for calculation
+    const orderStart = pausedOrder.start_date ? new Date(pausedOrder.start_date) : null;
+    const orderEnd = pausedOrder.end_date ? new Date(pausedOrder.end_date) : null;
+
+    if (!orderStart || isNaN(orderStart) || !orderEnd || isNaN(orderEnd)) {
+      throw new Error("Invalid subscription product start or end dates");
+    }
+
+    const totalDays = Math.ceil((orderEnd - orderStart) / (1000 * 60 * 60 * 24)) + 1;
+
+    if (totalDays <= 0) {
+      throw new Error("Subscription product has invalid total days");
+    }
+
+    // Calculate refund based on paused days
+    const perDayCost = pausedOrder.price / totalDays;
+    const refundAmount = parseFloat((perDayCost * actualPausedDays).toFixed(2));
+
+    // Update subscription product: unpause and reset periods
+    await pausedOrder.update(
       {
         pause: false,
         status: "Active",
+        paused_period: null, // clear paused period
+        start_period: resumeDate, // reset start_period to resume date
       },
-      {
-        where: { oid: orderId },
-        transaction: t,
-      }
+      { transaction: t }
     );
-    await pauseHistory.update({
-      pause_start_date:null,
-      pause_end_date:null,
-    })
 
-    try {
-      await Promise.all([
-        sendPushNotification({
-          appId: process.env.ONESIGNAL_CUSTOMER_APP_ID,
-          apiKey: process.env.ONESIGNAL_CUSTOMER_API_KEY,
-          playerIds: [user.one_subscription],
-          data: { user_id: user.id, type: "Subscription order resumed" },
-          contents: {
-            en: `${user.name}, Your subscription order ${order.order_id} has been resumed!`,
-          },
-          headings: { en: "Subscription Order Resumed!" },
-        }),
-        sendPushNotification({
-          appId: process.env.ONESIGNAL_STORE_APP_ID,
-          apiKey: process.env.ONESIGNAL_STORE_API_KEY,
-          playerIds: [store.one_subscription],
-          data: { store_id: store.id, type: "subscription order resumed" },
-          contents: { en: `Subscription order resumed! Order ID: ${order.order_id}` },
-          headings: { en: "Subscription Order Resumed!" },
-        }),
-        sendInAppNotification({
-          uid,
-          title: "Subscription Order Resumed",
-          description: `Your subscription order ${order.order_id} has been resumed.`,
-        }),
-        sendInAppNotification({
-          uid: store.id,
-          title: "Subscription Order Resumed",
-          description: `Subscription order resumed! Order ID: ${order.order_id}`,
-        }),
-      ]);
-    } catch (notificationError) {
-      console.error("Resume notification error:", notificationError.message);
-    }
+    // Credit refund to user's wallet
+    await user.update({ wallet: user.wallet + refundAmount }, { transaction: t });
+
+    // Create wallet report entry for refund
+    await WalletReport.create(
+      {
+        uid: user.id,
+        amt: refundAmount,
+        message: `Refund for resumed subscription order ${order.order_id} after ${actualPausedDays} paused days.`,
+        transaction_no: order.order_id,
+        tdate: new Date(),
+        transaction_type: "Credited",
+        status: 1,
+      },
+      { transaction: t }
+    );
+
+    // Update order status to Active
+    await order.update({ status: "Active" }, { transaction: t });
 
     await t.commit();
 
     return res.status(200).json({
       ResponseCode: "200",
       Result: "true",
-      ResponseMsg: "Subscription order resumed successfully!",
+      ResponseMsg: `Subscription order resumed successfully! ₹${refundAmount} credited for ${actualPausedDays} paused days.`,
     });
   } catch (error) {
     if (!t.finished) await t.rollback();
-    console.error("Error resuming subscription order:", {
-      message: error.message,
-      stack: error.stack,
-      orderId,
-      subscribeOrderProductId,
-    });
+    console.error("Error resuming subscription order:", error.message);
     return res.status(500).json({
       ResponseCode: "500",
       Result: "false",
@@ -1052,191 +908,283 @@ const resumeSubscriptionOrder = async (req, res) => {
   }
 };
 
-// const autoResumeSubscriptionOrder = async () => {
-//   console.log("Running auto-resume job for paused subscription orders...");
-//   const currentDate = new Date();
-//   const t = await sequelize.transaction();
-//   try {
-//     const pausedOrders = await SubscribeOrder.findAll({
-//       where: { status: "Paused" },
-//       transaction: t,
-//     });
 
-//     for (const order of pausedOrders) {
-//       const latestPause = order.paused_periods[order.paused_periods.length - 1];
-//       if (!latestPause) continue;
 
-//       const pauseEnd = new Date(latestPause.end_date);
-//       const refundDate = new Date(pauseEnd);
-//       refundDate.setDate(refundDate.getDate() + 1);
+const autoResumeSubscriptionOrder = async () => {
+  console.log("\n[Job Start] Running auto-resume job for paused subscription orders...");
 
-//       if (currentDate < refundDate) continue;
+  const currentDate = new Date();
+  console.log("Current Date:", currentDate.toISOString());
 
-//       const pauseStart = new Date(latestPause.start_date);
-//       const pausedDays = Math.ceil((pauseEnd - pauseStart) / (1000 * 60 * 60 * 24)) + 1;
+  const t = await sequelize.transaction(); // Simple transaction
 
-//       const orderProducts = await SubscribeOrderProduct.findAll({
-//         where: { oid: order.id },
-//         transaction: t,
-//       });
+  try {
+    const pausedOrders = await SubscribeOrderProduct.findAll({
+      where: {
+        pause: true,
+        status: 'Paused',
+      },
+      include: [
+        {
+          model: SubscribeOrder,
+          as: 'subscriberid',
+          attributes: ['uid'],
+        },
+      ],
+      transaction: t,
+    });
 
-//       let refundAmount = 0;
-//       const orderStart = new Date(order.start_date);
-//       const orderEnd = new Date(order.end_date);
-//       const pausedPeriods = order.paused_periods || [];
+    console.log(`Found ${pausedOrders.length} paused orders.`);
 
-//       for (const product of orderProducts) {
-//         const totalDeliveryDays = calculateDeliveryDays(orderStart, orderEnd, product.days, pausedPeriods);
-//         if (totalDeliveryDays === 0) continue;
+    if (pausedOrders.length === 0) {
+      console.log("No paused orders to process.");
+      await t.commit();
+      return;
+    }
 
-//         const perDayCost = product.price / totalDeliveryDays;
-//         refundAmount += parseFloat((perDayCost * pausedDays).toFixed(2));
-//       }
+    for (const order of pausedOrders) {
+      console.log(`\nProcessing order ID: ${order.id}`);
 
-//       const user = await User.findByPk(order.uid, { transaction: t });
-//       const store = await Store.findByPk(order.store_id, { transaction: t });
+      // Validate pause dates
+      if (!order.start_period || !order.paused_period) {
+        console.log("Missing pause dates, skipping.");
+        continue;
+      }
 
-//       if (!existingRefund && user) {
-//         await user.update({ wallet: user.wallet + refundAmount }, { transaction: t });
+      // Validate subscriberid association
+      if (!order.subscriberid || !order.subscriberid.uid) {
+        console.log("Missing subscriberid or uid, skipping.");
+        continue;
+      }
 
-//         await WalletReport.create(
-//           {
-//             uid: order.uid,
-//             amt: refundAmount,
-//             message: `Refund for paused subscription order ${order.order_id} for ${pausedDays} days.`,
-//             transaction_no: order.order_id,
-//             tdate: new Date(),
-//             transaction_type: "Credited",
-//             status: 1,
-//           },
-//           { transaction: t }
-//         );
+      const pauseStart = new Date(order.start_period);
+      const pauseEnd = new Date(order.paused_period);
+      const orderStart = new Date(order.start_date);
+      const orderEnd = order.end_date ? new Date(order.end_date) : new Date();
 
-//         try {
-//           await axios.post(
-//             "https://onesignal.com/api/v1/notifications",
-//             {
-//               app_id: process.env.ONESIGNAL_CUSTOMER_APP_ID,
-//               include_player_ids: [user.one_subscription],
-//               data: { user_id: user.id, type: "Subscription refund credited" },
-//               contents: {
-//                 en: `${user.name}, ₹${refundAmount} has been credited to your wallet for paused order ${order.order_id}!`,
-//               },
-//               headings: { en: "Refund Credited!" },
-//             },
-//             {
-//               headers: {
-//                 "Content-Type": "application/json; charset=utf-8",
-//                 Authorization: `Basic ${process.env.ONESIGNAL_CUSTOMER_API_KEY}`,
-//               },
-//             }
-//           );
-//         } catch (error) {
-//           console.error("User refund notification error:", error.message);
-//         }
+      console.log("Pause Start:", pauseStart.toISOString());
+      console.log("Pause End:", pauseEnd.toISOString());
+      console.log("Subscription Start:", orderStart.toISOString());
+      console.log("Subscription End:", orderEnd.toISOString());
 
-//         await Notification.create(
-//           {
-//             uid: order.uid,
-//             datetime: new Date(),
-//             title: "Refund Credited",
-//             description: `₹${refundAmount} credited for paused order ${order.order_id}.`,
-//           },
-//           { transaction: t }
-//         );
-//       }
+      // Validate dates
+      if (isNaN(pauseStart) || isNaN(pauseEnd) || isNaN(orderStart) || isNaN(orderEnd)) {
+        console.log("Invalid subscription or pause dates, skipping.");
+        continue;
+      }
 
-//       await order.update({ status: "Active" }, { transaction: t });
+      // Check if pause period is over
+      if (currentDate < pauseEnd) {
+        console.log(`Skipping - pause still in effect until ${pauseEnd.toISOString()}`);
+        continue;
+      }
 
-//       if (user) {
-//         try {
-//           await axios.post(
-//             "https://onesignal.com/api/v1/notifications",
-//             {
-//               app_id: process.env.ONESIGNAL_CUSTOMER_APP_ID,
-//               include_player_ids: [user.one_subscription],
-//               data: { user_id: user.id, type: "Subscription order resumed" },
-//               contents: {
-//                 en: `${user.name}, Your subscription order ${order.order_id} has been resumed!`,
-//               },
-//               headings: { en: "Subscription Order Resumed!" },
-//             },
-//             {
-//               headers: {
-//                 "Content-Type": "application/json; charset=utf-8",
-//                 Authorization: `Basic ${process.env.ONESIGNAL_CUSTOMER_API_KEY}`,
-//               },
-//             }
-//           );
-//         } catch (error) {
-//           console.error("User resume notification error:", error.message);
-//         }
-//       }
+      // Calculate paused days (inclusive of start and end)
+      const pausedDays = Math.ceil(
+        (pauseEnd.getTime() - pauseStart.getTime()) / (1000 * 60 * 60 * 24)
+      ) + 1;
 
-//       if (store) {
-//         try {
-//           await axios.post(
-//             "https://onesignal.com/api/v1/notifications",
-//             {
-//               app_id: process.env.ONESIGNAL_STORE_APP_ID,
-//               include_player_ids: [store.one_subscription],
-//               data: { store_id: store.id, type: "subscription order resumed" },
-//               contents: {
-//                 en: `Subscription order resumed! Order ID: ${order.order_id}`,
-//               },
-//               headings: { en: "Subscription Order Resumed" },
-//             },
-//             {
-//               headers: {
-//                 "Content-Type": "application/json; charset=utf-8",
-//                 Authorization: `Basic ${process.env.ONESIGNAL_STORE_API_KEY}`,
-//               },
-//             }
-//           );
-//         } catch (error) {
-//           console.error("Store resume notification error:", error.message);
-//         }
-//       }
+      console.log("Paused Days:", pausedDays);
 
-//       await Promise.all([
-//         user &&
-//         Notification.create(
-//           {
-//             uid: order.uid,
-//             datetime: new Date(),
-//             title: "Subscription Order Resumed",
-//             description: `Your subscription order ${order.order_id} has been resumed.`,
-//           },
-//           { transaction: t }
-//         ),
-//         store &&
-//         Notification.create(
-//           {
-//             uid: store.id,
-//             datetime: new Date(),
-//             title: "Subscription Order Resumed",
-//             description: `Subscription order resumed! Order ID: ${order.order_id}`,
-//           },
-//           { transaction: t }
-//         ),
-//       ]);
-//     }
+      if (pausedDays <= 0) {
+        console.log("Invalid paused days, skipping.");
+        continue;
+      }
 
-//     await t.commit();
-//     console.log("Auto-resume job completed successfully.");
-//   } catch (error) {
-//     await t.rollback();
-//     console.error("Error in auto-resume job:", error.message);
-//   }
-// };
+      // Calculate refund based on paused days
+      let refundAmount = 0;
+      if (order.price > 0) {
+        const subscriptionDays = Math.ceil(
+          (orderEnd.getTime() - orderStart.getTime()) / (1000 * 60 * 60 * 24)
+        ) + 1;
+
+        if (subscriptionDays <= 0) {
+          console.log("Invalid subscription duration, skipping refund.");
+        } else {
+          const perDayCost = order.price / subscriptionDays;
+          refundAmount = parseFloat((perDayCost * pausedDays).toFixed(2));
+          console.log("Subscription Days:", subscriptionDays);
+          console.log("Per Day Cost:", perDayCost.toFixed(2));
+          console.log("Refund Amount:", refundAmount);
+        }
+      } else {
+        console.log("Invalid price, skipping refund.");
+      }
+
+      // Fetch user and store
+      const user = await User.findByPk(order.subscriberid.uid, { transaction: t });
+      const store = await Store.findByPk(order.store_id, { transaction: t });
+
+      // Process refund if user exists and refund is applicable
+      let refundProcessed = false;
+      if (user && refundAmount > 0) {
+        console.log(`Crediting ₹${refundAmount} to user wallet (UID: ${order.subscriberid.uid}).`);
+
+        try {
+          await user.update(
+            { wallet: user.wallet + refundAmount },
+            { transaction: t, logging: console.log }
+          );
+
+          await WalletReport.create(
+            {
+              uid: order.subscriberid.uid,
+              amt: refundAmount,
+              message: `Refund for paused subscription order ${order.order_id} for ${pausedDays} days.`,
+              transaction_no: order.id,
+              tdate: new Date(),
+              transaction_type: "Credited",
+              status: 1,
+            },
+            { transaction: t, logging: console.log }
+          );
+
+          console.log("Refund processed and wallet updated.");
+          refundProcessed = true;
+        } catch (refundError) {
+          console.error(`Failed to process refund for order ID ${order.id}:`, refundError.message, refundError.stack);
+          // Continue to resume subscription
+        }
+      } else {
+        console.log("User not found or no refund required, proceeding to resume order.");
+      }
+
+      // Resume the subscription in a new transaction if refund fails
+      let updateTransaction = t;
+      if (!refundProcessed && t.finished) {
+        console.log("Main transaction rolled back, creating new transaction for update.");
+        updateTransaction = await sequelize.transaction(); // Simple transaction
+      }
+
+      try {
+        const [updatedRows] = await SubscribeOrderProduct.update(
+          {
+            pause: false,
+            status: "Active",
+            paused_period: null,
+            start_period: null,
+          },
+          {
+            where: { id: order.id },
+            transaction: updateTransaction,
+            logging: console.log,
+          }
+        );
+
+        if (updatedRows === 0) {
+          console.log("Failed to update order status: No rows affected.");
+          continue;
+        }
+
+        console.log("Order status updated to Active.");
+      } catch (updateError) {
+        console.error(`Failed to update order ID ${order.id}:`, updateError.message, updateError.stack);
+        throw updateError;
+      } finally {
+        if (updateTransaction !== t && updateTransaction && !updateTransaction.finished) {
+          await updateTransaction.commit();
+        }
+      }
+    }
+
+    if (!t.finished) {
+      await t.commit();
+    }
+    console.log("[Job Complete] Auto-resume job completed successfully.\n");
+  } catch (error) {
+    if (t && !t.finished) {
+      await t.rollback();
+    }
+    console.error("Error in auto-resume job:", error.message, error.stack);
+    throw error; // Rethrow for job scheduler to handle
+  }
+};
+
+const calculateDeliveryDays = (startDate, endDate, days) => {
+  if (!days || !Array.isArray(days) || days.length === 0) {
+    console.log("Invalid or empty repeat_day, returning 0 delivery days.");
+    return 0;
+  }
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  end.setHours(23, 59, 59, 999);
+
+  if (isNaN(start) || isNaN(end) || end < start) {
+    console.log("Invalid start or end date, returning 0 delivery days.");
+    return 0;
+  }
+
+  // Normalize days to lowercase strings
+  const validDays = days.map((d) => {
+    if (typeof d === "number") {
+      const dayNames = [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+      ];
+      return dayNames[d] ? dayNames[d].toLowerCase() : null;
+    }
+    return typeof d === "string" ? d.toLowerCase() : null;
+  }).filter((d) => d && typeof d === "string");
+
+  if (validDays.length === 0) {
+    console.log("No valid days after normalization, returning 0 delivery days.");
+    return 0;
+  }
+
+  let deliveryDays = 0;
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    const currentDate = new Date(d);
+    const dayName = currentDate.toLocaleString("en-US", { weekday: "long" }).toLowerCase();
+    if (validDays.includes(dayName)) {
+      deliveryDays++;
+    }
+  }
+
+  return deliveryDays;
+};
+
+
+
+
+const getRandomMinute = () => Math.floor(Math.random() * 30); //0 to 300 minutes
+const scheduleDailyRandom = () => {
+  const randomMinute = getRandomMinute();
+  const hour = Math.floor(randomMinute / 60);
+  const minute = randomMinute % 60;
+
+  // random time
+  const cronExpression = `${minute} ${hour} * * *`;// e.g., "23 1 * * *" for 1:23 AM
+  console.log(`Scheduling auto-resume job for ${hour}:${minute.toString().padStart(2, '0')} AM`);
+
+  cron.schedule(cronExpression, async () => {
+    console.log(`Running auto-resume job at ${new Date().toISOString()}`);
+    await autoResumeSubscriptionOrder();
+    // Reschedule for the next day at a new random time
+    scheduleDailyRandom();
+  }, {
+    timezone: "Asia/Kolkata"
+  })
+
+}
+// Start the scheduling
+scheduleDailyRandom();
 
 // Schedule daily at midnight
+// cron.schedule("*/1 * * * *", autoResumeSubscriptionOrder);
 // cron.schedule("0 0 * * *", autoResumeSubscriptionOrder);
+// setInterval(autoResumeSubscriptionOrder, 20 * 1000); // every 20 seconds
 
 
 
 const getOrdersByStatus = async (req, res) => {
   const uid = req.user.userId;
+
   if (!uid) {
     return res.status(401).json({
       ResponseCode: "401",
@@ -1244,39 +1192,40 @@ const getOrdersByStatus = async (req, res) => {
       ResponseMsg: "Unauthorized",
     });
   }
+
   try {
-    const { status } = req.params;
-
-    const validStatuses = ["Pending", "Processing", "Active", "Completed", "Cancelled"];
-    if (!validStatuses.includes(status)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid order status" });
-    }
-
     const orders = await SubscribeOrder.findAll({
-      where: { uid, status },
-      attributes: ['id', 'uid', 'status', 'createdAt', 'address_id'], // Explicitly list SubscribeOrder fields
+      where: { uid },
+      attributes: ['id', 'uid', 'status', 'createdAt', 'address_id', 'order_id', 'odate', 'subtotal', 'o_total'],
       include: [
         {
           model: SubscribeOrderProduct,
           as: "orderProducts",
-          attributes: ["pquantity", "timeslot_id", "weight_id", "product_id"],
+          attributes: ["id", "timeslot_id", "weight_id", "product_id", "status"],
           include: [
+            {
+              model: WeightOption,
+              as: 'subscribeProductWeight',
+              attributes: ['id', 'weight', 'subscribe_price', 'mrp_price', 'normal_price'],
+              include: [
+                {
+                  model: Product,
+                  as: "product",
+                  attributes: ['id', 'title', 'img', 'discount', 'description'],
+                  include: [
+                    {
+                      model: ProductReview,
+                      as: 'ProductReviews', // Ensure model alias matches
+                      attributes: ['id', 'rating', 'review'],
+                    }
+                  ]
+                },
+              ]
+            },
             {
               model: Time,
               as: "timeslotss",
-              attributes: ["id", "mintime", "maxtime"],
-            },
-            {
-              model: WeightOption,
-              as: "subscribeProductWeight",
-              attributes: ["id", "normal_price", "subscribe_price", "mrp_price", "weight"],
-            },
-            {
-              model: Product,
-              as: "productDetails",
-              attributes: ["id", "title", "img", "description"],
+              attributes: ['id', 'mintime', 'maxtime'],
             },
           ],
         },
@@ -1290,66 +1239,119 @@ const getOrdersByStatus = async (req, res) => {
         },
       ],
       order: [["createdAt", "DESC"]],
-      logging: console.log,
     });
 
-    // Manually attach ProductReviews
     for (let order of orders) {
-      for (let orderProduct of order.orderProducts) {
-        const productReviews = await ProductReview.findAll({
-          where: {
-            user_id: uid,
-            product_id: orderProduct.productDetails?.id, // Add null check
-            order_id: order.id,
-          },
-        });
-        orderProduct.productDetails?.setDataValue("ProductReviews", productReviews); // Add null check
+      // Calculate average rating for the order
+      const averageRating = (() => {
+        const allReviews = order.orderProducts.flatMap(orderProduct => [
+          ...(orderProduct.subscribeProductWeight?.product?.ProductReviews || []),
+          ...(orderProduct.productReviews || [])
+        ]);
+        const totalRating = allReviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+        return allReviews.length > 0 ? totalRating / allReviews.length : 0;
+      })();
+      order.setDataValue('averageRating', averageRating);
+
+      // Determine group status based on product statuses
+      const productStatuses = order.orderProducts.map(p => p.status?.toLowerCase() || '');
+
+      const hasPending = productStatuses.includes("pending");
+      const hasCompleted = productStatuses.includes("completed");
+      const allCancelled = productStatuses.every(status => status === "cancelled");
+
+      if (hasPending) {
+        order.setDataValue("group_status", "Pending");
+        order.status = "Pending";
+      } else if (hasCompleted) {
+        order.setDataValue("group_status", "Completed");
+        order.status = "Completed";
+      } else if (allCancelled) {
+        order.setDataValue("group_status", "Cancelled");
+        order.status = "Cancelled";
+      } else {
+        order.setDataValue("group_status", "InProgress");
+        order.status = "InProgress";
       }
+
+      // Attach product reviews for the user
+      // for (let orderProduct of order.orderProducts) {
+      //   const productReviews = await ProductReview.findAll({
+      //     where: {
+      //       user_id: uid,
+      //       product_id: orderProduct.subscribeProductWeight?.product?.id,
+      //       order_id: order.id,
+      //     },
+      //     attributes: ['id', 'rating', 'review'],
+      //   });
+      //   orderProduct.setDataValue("productReviews", productReviews);
+      // }
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       ResponseCode: "200",
       Result: "true",
-      ResponseMsg: "Subscribe Order fetched successfully!",
+      ResponseMsg: "Subscribe Orders fetched successfully!",
       orders,
     });
   } catch (error) {
     console.error("Error fetching orders:", error.stack);
-    res.status(500).json({
+    return res.status(500).json({
       ResponseCode: "500",
       Result: "false",
       ResponseMsg: "Server Error",
       error: error.message,
-      stack: error.stack, // Include stack trace for debugging
     });
   }
 };
+
 
 const getOrderDetails = async (req, res) => {
   const { id } = req.params;
 
   try {
-    if (!Number.isInteger(parseInt(id))) {
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "Invalid Order ID",
-      });
-    }
+    // if (!Number.isInteger(parseInt(id))) {
+    //   return res.status(400).json({
+    //     ResponseCode: "400",
+    //     Result: "false",
+    //     ResponseMsg: "Invalid Order ID",
+    //   });
+    // }
 
     const orderDetails = await SubscribeOrder.findOne({
       where: { id },
-      attributes: ['id', 'uid', 'status', 'createdAt', 'address_id'], // Explicitly list fields
+      attributes: ['id', 'uid', 'odate', 'o_type', 'delivered_dates', 'tax', 'd_charge', 'cou_amt', 'o_total', 'subtotal', 'status', 'commission', 'store_charge', 'order_id'],
       include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['name', 'email', 'mobile', 'wallet'],
+        },
         {
           model: SubscribeOrderProduct,
           as: "orderProducts",
-          attributes: ['timeslot_id', 'weight_id', 'product_id'],
+          attributes: ['id', 'start_date', 'end_date', 'start_period', 'paused_period', 'pause', 'status', 'price', 'repeat_day', 'schedule'],
           include: [
             {
-              model: Product,
-              as: "productDetails",
-              attributes: ['id', 'title', 'img', 'description'],
+              model: WeightOption,
+              as: 'subscribeProductWeight',
+              attributes: ['id', 'weight', 'subscribe_price', 'mrp_price', 'normal_price'],
+              include: [
+
+                {
+                  model: Product,
+                  as: "product",
+                  attributes: ['id', 'title', 'img', 'discount', 'description'],
+                  include: [
+                    {
+                      model: ProductReview,
+                      as: 'ProductReviews',
+                      attributes: ['id', 'rating', 'review'],
+                    }
+                  ]
+                },
+
+              ]
             },
             {
               model: Time,
@@ -1366,7 +1368,23 @@ const getOrderDetails = async (req, res) => {
       order: [['createdAt', 'DESC']],
       logging: console.log, // Debug SQL
     });
+    // const averageRating=orderDetails.orderProducts.subscribeProductWeight.product.productReviews.forEach(orderProduct=>{
 
+    // })
+
+    const averageRating = (() => {
+      const allReviews = orderDetails.orderProducts.flatMap(orderProduct => {
+        const reviews = orderProduct.subscribeProductWeight?.product?.ProductReviews || [];
+        // console.log('Reviews for product ID', orderProduct.id, ':', reviews);
+        return reviews;
+      });
+      // console.log('All Reviews:', allReviews);
+      const totalRating = allReviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+      // console.log('Total Rating:', totalRating);
+      const average = allReviews.length > 0 ? totalRating / allReviews.length : 0;
+      // console.log('Average Rating:', average);
+      return average;
+    })();
     if (!orderDetails) {
       return res.status(404).json({
         ResponseCode: "404",
@@ -1378,8 +1396,9 @@ const getOrderDetails = async (req, res) => {
     return res.status(200).json({
       ResponseCode: "200",
       Result: "true",
-      ResponseMsg: "Instant Order fetched successfully!",
+      ResponseMsg: "Subscribe Order fetched successfully!",
       orderDetails,
+      averageRating
     });
   } catch (error) {
     console.error("Error fetching order:", error.stack);
@@ -1393,8 +1412,9 @@ const getOrderDetails = async (req, res) => {
   }
 };
 
+// this cancelled for particular order
 const cancelOrder = async (req, res) => {
-  const { subscribeOrderProductId } = req.body;
+  const { subscribeOrderProductId, orderId } = req.body;
   const uid = req.user.userId;
 
   if (!uid) {
@@ -1405,11 +1425,11 @@ const cancelOrder = async (req, res) => {
     });
   }
 
-  if (!subscribeOrderProductId) {
+  if (!subscribeOrderProductId || !orderId) {
     return res.status(400).json({
       ResponseCode: "400",
       Result: "false",
-      ResponseMsg: "subscribeOrderProductId is required!",
+      ResponseMsg: "subscribeOrderProductId and orderId are required!",
     });
   }
 
@@ -1417,11 +1437,11 @@ const cancelOrder = async (req, res) => {
   try {
     const orderProduct = await SubscribeOrderProduct.findOne({
       where: { id: subscribeOrderProductId },
-      include: [{ model: SubscribeOrder,as:"oid", where: { uid } }],
+      include: [{ model: SubscribeOrder, as: "subscriberid", where: { uid } }],
       transaction: t,
     });
 
-    if (!orderProduct || !orderProduct.SubscribeOrder) {
+    if (!orderProduct || !orderProduct.oid) {
       if (!t.finished) await t.rollback();
       return res.status(400).json({
         ResponseCode: "400",
@@ -1429,10 +1449,11 @@ const cancelOrder = async (req, res) => {
         ResponseMsg: "Product not found or not owned by user!",
       });
     }
-
-    const order = orderProduct.SubscribeOrder;
+    console.log(orderProduct, "ooooooooooooooooooo")
+    const order = orderProduct.subscriberid;
     const user = await User.findByPk(uid, { transaction: t });
     const store = await Store.findByPk(order.store_id, { transaction: t });
+
     if (!user || !store) {
       if (!t.finished) await t.rollback();
       return res.status(400).json({
@@ -1461,8 +1482,8 @@ const cancelOrder = async (req, res) => {
     const currentDate = new Date();
     currentDate.setHours(23, 59, 59, 999);
 
-    const totalDeliveryDays = calculateDeliveryDays(startDate, endDate, orderProduct.repeat_day || [], orderProduct.paused_periods || []);
-    const completedDeliveryDays = calculateDeliveryDays(
+    const totalDeliveryDays = calculateDeliveryDays2(startDate, endDate, orderProduct.repeat_day || [], orderProduct.paused_periods || []);
+    const completedDeliveryDays = calculateDeliveryDays2(
       startDate,
       currentDate < endDate ? currentDate : endDate,
       orderProduct.repeat_day || [],
@@ -1479,7 +1500,7 @@ const cancelOrder = async (req, res) => {
       });
     }
 
-    const productPrice = orderProduct.price;
+    const productPrice = parseFloat(orderProduct.price);
     const perDayCost = productPrice / totalDeliveryDays;
     const refundAmount = parseFloat((perDayCost * remainingDeliveryDays).toFixed(2));
 
@@ -1492,15 +1513,16 @@ const cancelOrder = async (req, res) => {
       });
     }
 
-    // Update product status to Cancelled
+    // Cancel this product
     await orderProduct.update({ status: "Cancelled" }, { transaction: t });
 
-    // Check remaining active products
+    // Check if other products in the same order are still active
     const remainingProducts = await SubscribeOrderProduct.findAll({
       where: { oid: order.id, status: { [Op.ne]: "Cancelled" } },
       transaction: t,
     });
 
+    // Adjust order totals
     let updatedSubtotal = parseFloat(order.subtotal) - productPrice;
     let updatedTotal = parseFloat(
       (
@@ -1512,14 +1534,15 @@ const cancelOrder = async (req, res) => {
       ).toFixed(2)
     );
 
-    let newStatus = order.status;
-    if (remainingProducts.length === 0) {
-      newStatus = "Cancelled";
+    // Update order status based on remaining products
+    let newStatus = "Cancelled";
+    if (remainingProducts.length > 0) {
+      newStatus = "Active";
+    } else {
       updatedSubtotal = 0;
       updatedTotal = 0;
     }
 
-    // Update order
     await order.update(
       {
         subtotal: updatedSubtotal,
@@ -1529,9 +1552,9 @@ const cancelOrder = async (req, res) => {
       { transaction: t }
     );
 
-    // Process refund
+    // Refund processing
     if (refundAmount > 0) {
-      const updatedWallet = user.wallet + refundAmount;
+      const updatedWallet = parseFloat(user.wallet) + refundAmount;
       await user.update({ wallet: updatedWallet }, { transaction: t });
 
       await WalletReport.create(
@@ -1548,7 +1571,7 @@ const cancelOrder = async (req, res) => {
       );
     }
 
-    // Send push notifications
+    // Notifications
     try {
       await Promise.all([
         sendPushNotification({
@@ -1613,6 +1636,112 @@ const cancelOrder = async (req, res) => {
   }
 };
 
+// this cancell all the products in the subscription order
+const cancelAllProductsInSubscriptionOrder = async (req, res) => {
+  const { orderId } = req.body;
+  const uid = req.user.userId;
+
+  if (!uid) {
+    return res.status(401).json({
+      ResponseCode: "401",
+      Result: "false",
+      ResponseMsg: "Unauthorized",
+    });
+  }
+
+  if (!orderId) {
+    return res.status(400).json({
+      ResponseCode: "400",
+      Result: "false",
+      ResponseMsg: "Order ID is required!",
+    });
+  }
+
+  const t = await sequelize.transaction();
+  try {
+    const order = await SubscribeOrder.findOne({
+      where: { id: orderId, uid, status: "Pending" },
+      include: [{
+        model: SubscribeOrderProduct,
+        as: "orderProducts",
+        where: { status: "Pending" }
+      }],
+      transaction: t,
+    });
+
+    if (!order || !order.orderProducts || order.orderProducts.length === 0) {
+      if (!t.finished) await t.rollback();
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Order not found or no pending products to cancel.",
+      });
+    }
+
+    const user = await User.findByPk(uid, { transaction: t });
+    const store = await Store.findByPk(order.store_id, { transaction: t });
+    const setting = await Setting.findOne({ transaction: t });
+
+    if (!user || !store || !setting) {
+      if (!t.finished) await t.rollback();
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Required data not found (user, store, or settings).",
+      });
+    }
+
+    const deliveryCharge = parseFloat(setting.delivery_charges) || 0;
+    const storeCharge = parseFloat(setting.store_charges) || 0;
+    const tax = parseFloat(setting.tax) || 0;
+
+    const totalProductPrice = order.orderProducts.reduce((sum, p) => sum + parseFloat(p.price || 0), 0);
+    const totalRefund = totalProductPrice + deliveryCharge + storeCharge + tax;
+
+    // Update all SubscribeOrderProduct to Cancelled
+    for (const product of order.orderProducts) {
+      await product.update({ status: "Cancelled" }, { transaction: t });
+    }
+
+    // Update SubscribeOrder to Cancelled
+    await order.update({ status: "Cancelled", subtotal: 0, o_total: 0 }, { transaction: t });
+
+    // Update user wallet
+    const updatedWallet = parseFloat(user.wallet || 0) + totalRefund;
+    await user.update({ wallet: updatedWallet }, { transaction: t });
+
+    // Create wallet transaction report
+    await WalletReport.create({
+      uid,
+      amt: totalRefund,
+      message: `Full refund for cancelling subscription order ${order.order_id}`,
+      transaction_no: order.order_id,
+      tdate: new Date(),
+      transaction_type: "Credited",
+      status: 1,
+    }, { transaction: t });
+
+    await t.commit();
+
+    return res.status(200).json({
+      ResponseCode: "200",
+      Result: "true",
+      ResponseMsg: "All subscription products cancelled and refund processed successfully.",
+      refund_amount: totalRefund.toFixed(2),
+    });
+
+  } catch (error) {
+    if (!t.finished) await t.rollback();
+    console.error("Error cancelling all subscription products:", error);
+    return res.status(500).json({
+      ResponseCode: "500",
+      Result: "false",
+      ResponseMsg: "Server Error",
+      error: error.message,
+    });
+  }
+};
+
 
 module.exports = {
   subscribeOrder,
@@ -1622,5 +1751,8 @@ module.exports = {
   cancelOrder,
   pauseSubscriptionOrder,
   resumeSubscriptionOrder,
-  // autoResumeSubscriptionOrder
+  // autoResumeSubscriptionOrder,
+  cancelAllProductsInSubscriptionOrder
 };
+
+
