@@ -15,6 +15,7 @@ router.get("/u_instant_order/:id",authMiddleware.isAuthenticated,instantOrderCon
 router.post("/u_instant_order/cancel",authMiddleware.isAuthenticated,instantOrderController.cancelOrder);
 router.get("/u_instant_order/get-recommendedProducts",authMiddleware.isAuthenticated,instantOrderController.getRecommendedProducts)
 router.get("/u_instant_order/near-by-storeProducts",authMiddleware.isAuthenticated,instantOrderController.getNearByProducts);
-router.post("/u_instant_order/order-again",authMiddleware.isAuthenticated,instantOrderController.instantOrderAgain)
+router.post("/u_instant_order/order-again",authMiddleware.isAuthenticated,instantOrderController.instantOrderAgain);
+router.post("/u_instant_order/add-to-cart",authMiddleware.isAuthenticated,instantOrderController.addPreviousOrderToCart);
 
-module.exports = router ;
+module.exports = router;
