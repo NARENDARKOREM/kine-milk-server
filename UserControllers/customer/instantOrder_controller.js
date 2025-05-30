@@ -1696,6 +1696,123 @@ const couponList = async(req,res)=>{
   }
 }
 
+// we can pass the previous orderId, so that ordered products will be added to cart if the the same products with weight options are available in cart then its quantity will be updated 
+const addPreviousOrderToCart = async(req,res)=>{
+  const uid = req.user.userId;
+  if (!uid) {
+    return res.status(401).json({
+      ResponseCode: "401",
+      Result: "false",
+      ResponseMsg: "Unauthorized: User not found!",
+    });
+  }
+  const {previousOrderId}=req.body;
+  if (!previousOrderId) {
+    return res.status(400).json({
+      ResponseCode: "400",
+      Result: "false",
+      ResponseMsg: "Previous order ID is required",
+    });
+  }
+  try {
+    const previousOrder = await NormalOrder.findOne({
+      where:{id:previousOrderId,uid:uid},
+      include:[
+        {
+          model:NormalOrderProduct,
+          as:"NormalProducts",
+          attributes:["id","product_id","weight_id","pquantity"],
+          include:[
+            {
+              model:WeightOption,
+              as:"productWeight",
+              attributes:["id","weight"],
+            },
+            {
+              model:Product,
+              as:"ProductDetails",
+              attributes:["id","title","img"],
+            }
+          ]
+        }
+      ]
+    })
+    if (!previousOrder) {
+      return res.status(404).json({
+        ResponseCode: "404",
+        Result: "false",
+        ResponseMsg: "Previous order not found",
+      });
+    }
+    const previousProducts = previousOrder.NormalProducts.map(item => ({
+      product_id: item.product_id,
+      weight_id: item.weight_id,
+      quantity: item.pquantity,
+      orderType: "Normal"
+    }));
+    if (previousProducts.length === 0) {
+      return res.status(404).json({
+        ResponseCode: "404",
+        Result: "false",
+        ResponseMsg: "No products found in the previous order",
+      });
+    }
+    // Check if products already exist in the cart
+    const existingCartItems = await Cart.findAll({
+      where: {
+        uid: uid,
+        [Op.or]: previousProducts.map(item => ({
+          product_id: item.product_id,
+          weight_id: item.weight_id,
+          orderType: "Normal"
+        }))
+      }
+    });
+    const existingCartMap = new Map();
+    existingCartItems.forEach(item => {
+      const key = `${item.product_id}-${item.weight_id}`;
+      existingCartMap.set(key, item);
+    });
+    const cartItemsToAdd = [];
+    for (const item of previousProducts) {
+      const key = `${item.product_id}-${item.weight_id}`;
+      if (existingCartMap.has(key)) {
+        // If item exists, update quantity
+        const existingItem = existingCartMap.get(key);
+        existingItem.quantity += item.quantity;
+        await existingItem.save();
+      } else {
+        // If item does not exist, add to cart
+        cartItemsToAdd.push({
+          uid: uid,
+          product_id: item.product_id,
+          weight_id: item.weight_id,
+          quantity: item.quantity,
+          orderType: "Normal"
+        });
+      }
+    }
+    if (cartItemsToAdd.length > 0) {
+      await Cart.bulkCreate(cartItemsToAdd);
+    }
+    res.status(200).json({
+      ResponseCode: "200",
+      Result: "true",
+      ResponseMsg: "Previous order items added to cart successfully",
+      cartItems: [...existingCartItems, ...cartItemsToAdd],
+    });
+  } catch (error) {
+    console.error("Error adding previous order to cart:", error);
+    res.status(500).json({
+      ResponseCode: "500",
+      Result: "false",
+      ResponseMsg: "Server Error",
+      error: error.message,
+    });
+  }
+}
+
+
 module.exports = {
   instantOrder,
   getOrdersByStatus,
@@ -1705,5 +1822,6 @@ module.exports = {
   getNearByProducts,
   getMyInstantOrders,
   couponList,
-  instantOrderAgain
+  instantOrderAgain,
+  addPreviousOrderToCart
 };
