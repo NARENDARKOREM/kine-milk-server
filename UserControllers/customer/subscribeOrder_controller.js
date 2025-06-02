@@ -23,7 +23,7 @@ const cron = require("node-cron");
 const { sendPushNotification } = require("../../notifications/alert.service");
 const { sendInAppNotification } = require("../../notifications/notification.service");
 const { calculateDeliveryDays2, generateOrderId } = require("../helper/orderUtils");
-
+const asyncLib = require("async")
 
 const MAX_RETRIES = 3;
 
@@ -356,6 +356,339 @@ const subscribeOrder = async (req, res) => {
   });
 };
 
+
+// const subscribeOrder = async (req, res) => {
+//   const {
+//     coupon_id,
+//     products,
+//     o_type,
+//     store_id,
+//     address_id,
+//     a_note,
+//     tax,
+//     // delivery_fee,
+//     // store_charge,
+//     subtotal,
+//     o_total,
+//     is_paper_bag,
+//   } = req.body;
+
+//   const uid = req.user.userId;
+//   const validDays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+
+
+//   // Basic validations
+//   if (!uid || !Array.isArray(products) || products.length === 0 || !o_type || !store_id || !subtotal || !o_total) {
+//     return res.status(400).json({
+//       ResponseCode: "400",
+//       Result: "false",
+//       ResponseMsg: "Missing required fields!",
+//     });
+//   }
+
+//   if (o_type === "Delivery" && !address_id) {
+//     return res.status(400).json({
+//       ResponseCode: "400",
+//       Result: "false",
+//       ResponseMsg: "Address ID is required for Delivery orders!",
+//     });
+//   }
+
+//   // Validate product structure and dates
+//   let referenceStartDate = null ,referenceEndDate = null;
+
+//   for (const item of products) {
+//     if (
+//       !item.product_id ||
+//       !item.weight_id ||
+//       !item.quantities ||
+//       typeof item.quantities !== "object" ||
+//       !item.timeslot_id ||
+//       !item.start_date ||
+//       !item.end_date ||
+//       Object.keys(item.quantities).length === 0 ||
+//       !Object.keys(item.quantities).every(day => validDays.includes(day.toLowerCase())) ||
+//       !Object.values(item.quantities).every(qty => typeof qty === "number" && qty >= 0)
+//     ) {
+//       return res.status(400).json({
+//         ResponseCode: "400",
+//         Result: "false",
+//         ResponseMsg: "Invalid product structure, quantities, or missing start_date/end_date.",
+//       });
+//     }
+
+//     // Validate dates
+//     const startDate = new Date(item.start_date);
+//     const endDate = new Date(item.end_date);
+
+//     if (isNaN(startDate) || isNaN(endDate)) {
+//       return res.status(400).json({
+//         ResponseCode: "400",
+//         Result: "false",
+//         ResponseMsg: "Invalid start_date or end_date format in products!",
+//       });
+//     }
+
+//     // Ensure all products have the same start_date and end_date
+//     if (!referenceStartDate) {
+//       referenceStartDate = startDate;
+//       referenceEndDate = endDate;
+//     } else if (startDate.getTime() !== referenceStartDate.getTime() || endDate.getTime() !== referenceEndDate.getTime()) {
+//       return res.status(400).json({
+//         ResponseCode: "400",
+//         Result: "false",
+//         ResponseMsg: "All products must have the same start_date and end_date!",
+//       });
+//     }
+//   }
+
+//   // Fetch settings for minimum subscription days
+//   const setting = await Setting.findOne();
+//   if (!setting) {
+//     return res.status(500).json({
+//       ResponseCode: "500",
+//       Result: "false",
+//       ResponseMsg: "Settings not found!",
+//     });
+//   }
+
+//   const minimumSubscriptionDays = parseInt(setting.minimum_subscription_days, 10) || 30;
+//   // const deliveryCharge = parseFloat(delivery_fee) || 0;
+//   // const storeCharge = parseFloat(store_charge) || 0;
+//   const settingTax = parseFloat(tax) || 0;
+
+//   // Validate subscription duration
+//   const minEndDate = new Date(referenceStartDate);
+//   minEndDate.setDate(referenceStartDate.getDate() + minimumSubscriptionDays - 1);
+//   if (referenceEndDate < minEndDate) {
+//     return res.status(400).json({
+//       ResponseCode: "400",
+//       Result: "false",
+//       ResponseMsg: `Subscription must be at least ${minimumSubscriptionDays} days.`,
+//     });
+//   }
+
+//   let attempt = 0;
+//   let orderResult = null;
+//   let orderItemsResult = null;
+//   let userData = null;
+//   let storeData = null;
+
+//   while (attempt < MAX_RETRIES) {
+//     const t = await sequelize.transaction();
+//     try {
+//       attempt++;
+//       console.log(`Attempt ${attempt} of ${MAX_RETRIES}`);
+
+//       // Validate user and store
+//       const user = await User.findOne({ where: { id: uid }, lock: t.LOCK.UPDATE, transaction: t });
+//       if (!user) throw new Error("User not found");
+
+//       const store = await Store.findOne({ where: { id: store_id }, lock: t.LOCK.UPDATE, transaction: t });
+//       if (!store) throw new Error("Store not found");
+
+//       if (o_type === "Delivery") {
+//         const address = await Address.findOne({ where: { id: address_id }, lock: t.LOCK.UPDATE, transaction: t });
+//         if (!address) throw new Error("Address not found");
+//       }
+
+//       // Coupon validation
+//       let appliedCoupon = null;
+//       let couponAmount = 0;
+//       let finalTotal = parseFloat(o_total);
+
+//       if (coupon_id) {
+//         const coupon = await Coupon.findByPk(coupon_id, { transaction: t });
+//         if (!coupon) throw new Error("Coupon not found");
+//         if (coupon.status !== 1 || new Date(coupon.end_date) < new Date()) throw new Error("Coupon expired");
+//         if (parseFloat(subtotal) < parseFloat(coupon.min_amt)) {
+//           throw new Error(`Subtotal < min amount (${coupon.min_amt}) for this coupon`);
+//         }
+//         couponAmount = parseFloat(coupon.coupon_val);
+//         finalTotal = Math.max(0, finalTotal - couponAmount);
+//         appliedCoupon = coupon;
+//       }
+
+//       // Wallet balance check
+//       if (user.wallet < finalTotal) {
+//         throw new Error(`Insufficient wallet balance. Add ₹${(finalTotal - user.wallet).toFixed(2)}`);
+//       }
+
+//       // Create order
+//       const orderId = await generateOrderId(t);
+//       const order = await SubscribeOrder.create(
+//         {
+//           uid,
+//           store_id,
+//           address_id: o_type === "Delivery" ? address_id : null,
+//           odate: new Date(),
+//           o_type,
+//           start_date: referenceStartDate,
+//           end_date: referenceEndDate,
+//           settingTax,
+//           d_charge: o_type === "Delivery" ? 0 : 0,
+//           store_charge: 0,
+//           cou_id: appliedCoupon ? appliedCoupon.id : null,
+//           cou_amt: couponAmount,
+//           subtotal: parseFloat(subtotal),
+//           o_total: finalTotal,
+//           a_note,
+//           order_id: orderId,
+//           status: "Pending",
+//           is_paper_bag
+//         },
+//         { transaction: t }
+//       );
+
+//       // Create order items
+//       const orderItems = await Promise.all(
+//         products.map(async item => {
+//           const schedule = {};
+//           validDays.forEach(day => {
+//             schedule[day] = item.quantities[day.toLowerCase()] || 0;
+//           });
+
+//           const days = Object.keys(item.quantities).filter(day => validDays.includes(day.toLowerCase()) && item.quantities[day] > 0);
+
+//           return SubscribeOrderProduct.bulkCreate(
+//             {
+//               oid: order.id,
+//               product_id: item.product_id,
+//               weight_id: item.weight_id,
+//               price: item.price || 0, // Use frontend-provided price if available, else 0
+//               timeslot_id: item.timeslot_id,
+//               schedule,
+//               start_date: referenceStartDate,
+//               end_date: referenceEndDate,
+//               repeat_day: days,
+//               status: "Pending",
+//               order_id: orderId,
+//             },
+//             { transaction: t }
+//           );
+//         })
+//       );
+
+//       // Remove cart items
+//       await Cart.destroy({
+//         where: {
+//           [Op.or]: products.map(item => ({
+//             uid,
+//             product_id: item.product_id,
+//             orderType: "Subscription",
+//             weight_id: item.weight_id,
+//           })),
+//         },
+//         transaction: t,
+//       });
+
+//       // Update wallet
+//       await user.update({ wallet: user.wallet - finalTotal }, { transaction: t });
+
+//       // Create wallet report
+//       await WalletReport.create(
+//         {
+//           uid,
+//           amt: finalTotal,
+//           message: `Subscription order placed. ₹${finalTotal} debited.`,
+//           transaction_no: order.order_id,
+//           tdate: new Date(),
+//           transaction_type: "Debited",
+//           status: 1,
+//         },
+//         { transaction: t }
+//       );
+
+//       // Store results
+//       orderResult = order;
+//       orderItemsResult = orderItems;
+//       userData = user;
+//       storeData = store;
+
+//       await t.commit();
+//       break;
+//     } catch (error) {
+//       if (!t.finished) await t.rollback();
+//       if (error.original?.code === "ER_LOCK_DEADLOCK" && attempt < MAX_RETRIES) {
+//         console.warn(`Deadlock detected on attempt ${attempt}, retrying...`);
+//         continue;
+//       }
+//       console.error("Transaction error:", error);
+//       return res.status(500).json({
+//         ResponseCode: "500",
+//         Result: "false",
+//         ResponseMsg: "Server Error",
+//         error: error.message,
+//       });
+//     }
+//   }
+
+//   if (!orderResult) {
+//     return res.status(500).json({
+//       ResponseCode: "500",
+//       Result: "false",
+//       ResponseMsg: "All retry attempts failed due to deadlocks or other errors.",
+//     });
+//   }
+
+//   // Send notifications after commit
+//   const notificationResults = await Promise.allSettled([
+//     sendPushNotification({
+//       appId: process.env.ONESIGNAL_CUSTOMER_APP_ID,
+//       apiKey: process.env.ONESIGNAL_CUSTOMER_API_KEY,
+//       playerIds: [userData.one_subscription],
+//       data: { user_id: userData.id, type: "Subscription order confirmed" },
+//       contents: { en: `${userData.name}, Your subscription order has been confirmed! Order ID: ${orderResult.order_id}` },
+//       headings: { en: "Subscription Order Confirmed!" },
+//     }),
+//     sendPushNotification({
+//       appId: process.env.ONESIGNAL_STORE_APP_ID,
+//       apiKey: process.env.ONESIGNAL_STORE_API_KEY,
+//       playerIds: [storeData.one_subscription],
+//       data: { store_id: storeData.id, type: "new subscription order received" },
+//       contents: { en: `New subscription order received! Order ID: ${orderResult.order_id}` },
+//       headings: { en: "New Subscription Order Alert" },
+//     }),
+//     sendInAppNotification({
+//       uid,
+//       title: "Subscription Order Confirmed",
+//       description: `Your subscription order created. Order ID: ${orderResult.order_id}.`,
+//     }),
+//     sendInAppNotification({
+//       uid: storeData.id,
+//       title: "New Subscription Order Received",
+//       description: `A new subscription order has been placed. Order ID: ${orderResult.order_id}.`,
+//     }),
+//   ])
+
+//   notificationResults.forEach((result, index) => {
+//     // console.log("allllllllllllllllllllllllllllllll")
+//     if (result.status === 'rejected') {
+//       console.error(`Notification ${index + 1} failed:`, result.reason);
+//     }
+//   })
+
+
+//   return res.status(200).json({
+//     ResponseCode: "200",
+//     Result: "true",
+//     ResponseMsg: "Subscription order created successfully!",
+//     order_id: orderResult.order_id,
+//     o_total: orderResult.o_total,
+//     is_coupon_applied: !!orderResult.cou_id,
+//     coupon_applied: orderResult.cou_id
+//       ? { id: orderResult.cou_id, title: orderResult.coupon?.coupon_title, amount: orderResult.cou_amt }
+//       : null,
+//     items: orderItemsResult.map(item => ({
+//       product_id: item.product_id,
+//       price: item.price,
+//       weight_id: item.weight_id,
+//       timeslot_id: item.timeslot_id,
+//       repeat_day: item.repeat_day,
+//       schedule: item.schedule,
+//     })),
+//   });
+// };
 
 const editSubscriptionOrder = async (req, res) => {
   const uid = req.user.userId;
@@ -1152,7 +1485,7 @@ const calculateDeliveryDays = (startDate, endDate, days) => {
 
 
 
-const getRandomMinute = () => Math.floor(Math.random() * 30); //0 to 300 minutes
+const getRandomMinute = () => Math.floor(Math.random() * 301); //0 to 300 minutes
 const scheduleDailyRandom = () => {
   const randomMinute = getRandomMinute();
   const hour = Math.floor(randomMinute / 60);
