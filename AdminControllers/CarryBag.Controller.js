@@ -145,8 +145,8 @@ const getCarryBagById = asyncHandler(async (req, res) => {
 });
 
 const toggleCarryBagStatus = asyncHandler(async (req, res) => {
-  const { id } = req.params; // Fixed: Get id from params
-  const { status } = req.body;
+  const { id, field, value } = req.body; // Get id, field, and value from body
+  console.log(id, field, value, "fhfhfhfhfhfhf");
   try {
     const carryBag = await CarryBag.findByPk(id);
     if (!carryBag) {
@@ -157,17 +157,18 @@ const toggleCarryBagStatus = asyncHandler(async (req, res) => {
         ResponseMsg: "Carry bag not found.",
       });
     }
-    const newStatus = status === 1 ? 0 : 1; // Toggle between 0 and 1
-    await carryBag.update({ status: newStatus });
-    logger.info(`Carry bag with ID ${id} status toggled to ${newStatus}`);
+
+    // Update the specified field with the provided value
+    await carryBag.update({ [field]: value });
+    logger.info(`Carry bag with ID ${id} ${field} updated to ${value}`);
     return res.status(200).json({
       ResponseCode: "200",
       Result: "true",
-      ResponseMsg: "Carry bag status updated successfully.",
+      ResponseMsg: `Carry bag ${field} updated successfully.`,
       carryBag,
     });
   } catch (error) {
-    logger.error(`Error toggling carry bag status for ID ${id}: ${error.message}`);
+    logger.error(`Error updating carry bag ${field} for ID ${id}: ${error.message}`);
     return res.status(500).json({
       ResponseCode: "500",
       Result: "false",
