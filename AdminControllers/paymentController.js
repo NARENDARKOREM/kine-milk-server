@@ -5,11 +5,12 @@ const Store = require('../Models/Store');
 const User = require('../Models/User');
 const { Op } = require('sequelize');
 const Coupon = require('../Models/Coupon');
+const SubscribeOrderProduct = require('../Models/SubscribeOrderProduct');
 
 // Normal Payments Controller
 const getNormalPayments = async (req, res) => {
   try {
-    const { search, fromDate, toDate, storeId, page = 1, limit = 10 } = req.query;
+    const { fromDate, toDate, storeId, page = 1, limit = 10 } = req.query;
 
     console.log('getNormalPayments query:', req.query);
 
@@ -25,13 +26,6 @@ const getNormalPayments = async (req, res) => {
     const where = {};
     if (storeId && storeId !== 'undefined' && storeId !== '') {
       where.store_id = storeId;
-    }
-    if (search) {
-      where[Op.or] = [
-        { order_id: { [Op.like]: `%${search}%` } },
-        { '$user.name$': { [Op.like]: `%${search}%` } },
-        { '$store.title$': { [Op.like]: `%${search}%` } },
-      ];
     }
     if (fromDate) {
       where.odate = { [Op.gte]: new Date(fromDate) };
@@ -237,7 +231,7 @@ const downloadSingleNormalPayment = async (req, res) => {
 // Subscribe Payments Controller
 const getSubscribePayments = async (req, res) => {
   try {
-    const { search, fromDate, toDate, storeId, page = 1, limit = 10 } = req.query;
+    const { fromDate, toDate, storeId, page = 1, limit = 10 } = req.query;
 
     console.log('getSubscribePayments query:', req.query);
 
@@ -254,13 +248,6 @@ const getSubscribePayments = async (req, res) => {
     if (storeId && storeId !== 'undefined' && storeId !== '') {
       where.store_id = storeId;
     }
-    if (search) {
-      where[Op.or] = [
-        { order_id: { [Op.like]: `%${search}%` } },
-        { '$user.name$': { [Op.like]: `%${search}%` } },
-        { '$store.title$': { [Op.like]: `%${search}%` } },
-      ];
-    }
     if (fromDate) {
       where.odate = { [Op.gte]: new Date(fromDate) };
     }
@@ -274,12 +261,17 @@ const getSubscribePayments = async (req, res) => {
     const { count, rows } = await SubscribeOrder.findAndCountAll({
       where,
       include: [
+        {
+          model: SubscribeOrderProduct,
+          as: 'orderProducts',
+          attributes: ['start_date', 'end_date'],
+        },
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
       ],
       attributes: [
         'order_id', 'odate', 'o_total', 'subtotal', 'tax', 'd_charge',
-        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission', 'end_date'
+        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission'
       ],
       limit: parseInt(limit),
       offset: parseInt(offset),
@@ -298,7 +290,12 @@ const getSubscribePayments = async (req, res) => {
       coupon_amount: payment.cou_amt || 0,
       wallet_amount: payment.wall_amt || 0,
       transaction_id: payment.trans_id || 'N/A',
-      end_date: payment.end_date ? new Date(payment.end_date).toLocaleDateString() : 'N/A',
+      start_date: payment.orderProducts?.[0]?.start_date
+        ? new Date(payment.orderProducts[0].start_date).toLocaleDateString()
+        : 'N/A',
+      end_date: payment.orderProducts?.[0]?.end_date
+        ? new Date(payment.orderProducts[0].end_date).toLocaleDateString()
+        : 'N/A',
     }));
 
     res.json({
@@ -343,12 +340,17 @@ const downloadSubscribePayments = async (req, res) => {
     const payments = await SubscribeOrder.findAll({
       where,
       include: [
+        {
+          model: SubscribeOrderProduct,
+          as: 'orderProducts',
+          attributes: ['start_date', 'end_date'],
+        },
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
       ],
       attributes: [
         'order_id', 'odate', 'o_total', 'subtotal', 'tax', 'd_charge',
-        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission', 'end_date'
+        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission'
       ],
       logging: (sql) => console.log('SQL Query:', sql),
     });
@@ -365,7 +367,12 @@ const downloadSubscribePayments = async (req, res) => {
       coupon_amount: payment.cou_amt || 0,
       wallet_amount: payment.wall_amt || 0,
       transaction_id: payment.trans_id || 'N/A',
-      end_date: payment.end_date ? new Date(payment.end_date).toLocaleDateString() : 'N/A',
+      start_date: payment.orderProducts?.[0]?.start_date
+        ? new Date(payment.orderProducts[0].start_date).toLocaleDateString()
+        : 'N/A',
+      end_date: payment.orderProducts?.[0]?.end_date
+        ? new Date(payment.orderProducts[0].end_date).toLocaleDateString()
+        : 'N/A',
     }));
 
     const workbook = new ExcelJS.Workbook();
@@ -383,6 +390,7 @@ const downloadSubscribePayments = async (req, res) => {
       { header: 'Coupon Amount', key: 'coupon_amount', width: 15 },
       { header: 'Wallet Amount', key: 'wallet_amount', width: 15 },
       { header: 'Transaction ID', key: 'transaction_id', width: 20 },
+      { header: 'Start Date', key: 'start_date', width: 20 },
       { header: 'End Date', key: 'end_date', width: 20 },
     ];
 
@@ -407,12 +415,17 @@ const downloadSingleSubscribePayment = async (req, res) => {
     const payment = await SubscribeOrder.findOne({
       where: { order_id: orderId },
       include: [
+        {
+          model: SubscribeOrderProduct,
+          as: 'orderProducts',
+          attributes: ['start_date', 'end_date'],
+        },
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
       ],
       attributes: [
         'order_id', 'odate', 'o_total', 'subtotal', 'tax', 'd_charge',
-        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission', 'end_date'
+        'cou_amt', 'wall_amt', 'trans_id', 'store_charge', 'commission'
       ],
       logging: (sql) => console.log('SQL Query:', sql),
     });
@@ -433,7 +446,12 @@ const downloadSingleSubscribePayment = async (req, res) => {
       coupon_amount: payment.cou_amt || 0,
       wallet_amount: payment.wall_amt || 0,
       transaction_id: payment.trans_id || 'N/A',
-      end_date: payment.end_date ? new Date(payment.end_date).toLocaleDateString() : 'N/A',
+      start_date: payment.orderProducts?.[0]?.start_date
+        ? new Date(payment.orderProducts[0].start_date).toLocaleDateString()
+        : 'N/A',
+      end_date: payment.orderProducts?.[0]?.end_date
+        ? new Date(payment.orderProducts[0].end_date).toLocaleDateString()
+        : 'N/A',
     };
 
     const workbook = new ExcelJS.Workbook();
@@ -451,6 +469,7 @@ const downloadSingleSubscribePayment = async (req, res) => {
       { header: 'Coupon Amount', key: 'coupon_amount', width: 15 },
       { header: 'Wallet Amount', key: 'wallet_amount', width: 15 },
       { header: 'Transaction ID', key: 'transaction_id', width: 20 },
+      { header: 'Start Date', key: 'start_date', width: 20 },
       { header: 'End Date', key: 'end_date', width: 20 },
     ];
 

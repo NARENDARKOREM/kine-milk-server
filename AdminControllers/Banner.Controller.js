@@ -392,7 +392,7 @@ const toggleBannerStatus = asyncHandler(async (req, res) => {
         return res.status(400).json({
           ResponseCode: "400",
           Result: "false",
-          ResponseMsg: "Cannot toggle status to Published for a banner with an expired endTime. Please edit the banner to update the endTime.",
+          ResponseMsg: "Cannot Toggle status After Date Exprired.",
         });
       }
     }

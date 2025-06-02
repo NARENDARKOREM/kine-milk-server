@@ -9,7 +9,7 @@ const { Op } = require('sequelize');
 
 const getStockReports = async (req, res) => {
   try {
-    const { search, storeId } = req.query;
+    const { storeId } = req.query;
 
     console.log('getStockReports query:', req.query);
 
@@ -25,9 +25,6 @@ const getStockReports = async (req, res) => {
     const where = {};
     if (storeId && storeId !== 'undefined' && storeId !== '') {
       where.id = storeId;
-    }
-    if (search) {
-      where.title = { [Op.like]: `%${search}%` };
     }
 
     console.log('Query where:', where);
@@ -62,10 +59,10 @@ const getStockReports = async (req, res) => {
                   attributes: ['weight'],
                 },
               ],
-              attributes: ['quantity', 'total'],
+              attributes: ['quantity', 'subscription_quantity'],
             },
           ],
-          attributes: ['id', 'total', 'date'],
+          attributes: ['id', 'date'],
         },
       ],
       logging: (sql) => console.log('SQL Query:', sql),
@@ -99,13 +96,21 @@ const getStockReports = async (req, res) => {
 
         const weightDetails = inventory.storeWeightOptions.map((weightOpt) => ({
           weight: weightOpt.weightOption?.weight || 'N/A',
-          quantity: weightOpt.quantity || 0,
+          instant_quantity: weightOpt.quantity || 0,
+          subscription_quantity: weightOpt.subscription_quantity || 0,
         }));
+
+        // Calculate product stock as sum of instant_quantity and subscription_quantity
+        const productStock = inventory.storeWeightOptions.reduce(
+          (sum, weightOpt) =>
+            sum + (weightOpt.quantity || 0) + (weightOpt.subscription_quantity || 0),
+          0
+        );
 
         categoriesMap[category.id].products.push({
           id: product.id,
           title: product.title,
-          stock: inventory.total,
+          stock: productStock,
           lastUpdated: inventory.date,
           weightDetails,
         });
@@ -127,7 +132,15 @@ const getStockReports = async (req, res) => {
 
       const categories = Object.values(categoriesMap);
       const totalProducts = inventories.length;
-      const totalStock = inventories.reduce((sum, inv) => sum + (inv.total || 0), 0);
+      // Calculate total stock for the store as sum of all product stocks
+      const totalStock = inventories.reduce((sum, inv) => {
+        const productStock = inv.storeWeightOptions.reduce(
+          (invSum, weightOpt) =>
+            invSum + (weightOpt.quantity || 0) + (weightOpt.subscription_quantity || 0),
+          0
+        );
+        return sum + productStock;
+      }, 0);
 
       return {
         id: store.id,
@@ -195,10 +208,10 @@ const downloadAllStockReports = async (req, res) => {
                   attributes: ['weight'],
                 },
               ],
-              attributes: ['quantity'],
+              attributes: ['quantity', 'subscription_quantity'],
             },
           ],
-          attributes: ['total', 'date'],
+          attributes: ['date'],
         },
       ],
       logging: (sql) => console.log('SQL Query:', sql),
@@ -212,8 +225,9 @@ const downloadAllStockReports = async (req, res) => {
       { header: 'Category', key: 'category', width: 20 },
       { header: 'Product Title', key: 'productTitle', width: 30 },
       { header: 'Weight', key: 'weight', width: 15 },
-      { header: 'Stock Quantity', key: 'stock', width: 15 },
-      { header: 'Total Stock', key: 'totalStock', width: 15 },
+      { header: 'Instant Quantity', key: 'instantQuantity', width: 15 },
+      { header: 'Subscription Quantity', key: 'subscriptionQuantity', width: 15 },
+      { header: 'Instant + Subscription Quantity', key: 'totalStock', width: 20 },
       { header: 'Last Updated', key: 'lastUpdated', width: 20 },
     ];
 
@@ -221,6 +235,11 @@ const downloadAllStockReports = async (req, res) => {
       const inventories = store.productInventories || [];
       inventories.forEach((inventory) => {
         const weightOptions = inventory.storeWeightOptions || [];
+        const productStock = weightOptions.reduce(
+          (sum, weightOpt) =>
+            sum + (weightOpt.quantity || 0) + (weightOpt.subscription_quantity || 0),
+          0
+        );
         if (weightOptions.length > 0) {
           weightOptions.forEach((weightOpt) => {
             worksheet.addRow({
@@ -228,8 +247,9 @@ const downloadAllStockReports = async (req, res) => {
               category: inventory.inventoryProducts?.category?.title || 'N/A',
               productTitle: inventory.inventoryProducts?.title || 'N/A',
               weight: weightOpt.weightOption?.weight || 'N/A',
-              stock: weightOpt.quantity || 0,
-              totalStock: inventory.total || 0,
+              instantQuantity: weightOpt.quantity || 0,
+              subscriptionQuantity: weightOpt.subscription_quantity || 0,
+              totalStock: productStock,
               lastUpdated: inventory.date ? new Date(inventory.date).toLocaleDateString() : 'N/A',
             });
           });
@@ -239,8 +259,9 @@ const downloadAllStockReports = async (req, res) => {
             category: inventory.inventoryProducts?.category?.title || 'N/A',
             productTitle: inventory.inventoryProducts?.title || 'N/A',
             weight: 'N/A',
-            stock: 0,
-            totalStock: inventory.total || 0,
+            instantQuantity: 0,
+            subscriptionQuantity: 0,
+            totalStock: 0,
             lastUpdated: inventory.date ? new Date(inventory.date).toLocaleDateString() : 'N/A',
           });
         }
@@ -292,10 +313,10 @@ const downloadSingleStoreStockReport = async (req, res) => {
                   attributes: ['weight'],
                 },
               ],
-              attributes: ['quantity'],
+              attributes: ['quantity', 'subscription_quantity'],
             },
           ],
-          attributes: ['total', 'date'],
+          attributes: ['date'],
         },
       ],
       logging: (sql) => console.log('SQL Query:', sql),
@@ -313,14 +334,20 @@ const downloadSingleStoreStockReport = async (req, res) => {
       { header: 'Category', key: 'category', width: 20 },
       { header: 'Product Title', key: 'productTitle', width: 30 },
       { header: 'Weight', key: 'weight', width: 15 },
-      { header: 'Stock Quantity', key: 'stock', width: 15 },
-      { header: 'Total Stock', key: 'totalStock', width: 15 },
+      { header: 'Instant Quantity', key: 'instantQuantity', width: 15 },
+      { header: 'Subscription Quantity', key: 'subscriptionQuantity', width: 15 },
+      { header: 'Instant + Subscription Quantity', key: 'totalStock', width: 20 },
       { header: 'Last Updated', key: 'lastUpdated', width: 20 },
     ];
 
     const inventories = store.productInventories || [];
     inventories.forEach((inventory) => {
       const weightOptions = inventory.storeWeightOptions || [];
+      const productStock = weightOptions.reduce(
+        (sum, weightOpt) =>
+          sum + (weightOpt.quantity || 0) + (weightOpt.subscription_quantity || 0),
+        0
+      );
       if (weightOptions.length > 0) {
         weightOptions.forEach((weightOpt) => {
           worksheet.addRow({
@@ -328,8 +355,9 @@ const downloadSingleStoreStockReport = async (req, res) => {
             category: inventory.inventoryProducts?.category?.title || 'N/A',
             productTitle: inventory.inventoryProducts?.title || 'N/A',
             weight: weightOpt.weightOption?.weight || 'N/A',
-            stock: weightOpt.quantity || 0,
-            totalStock: inventory.total || 0,
+            instantQuantity: weightOpt.quantity || 0,
+            subscriptionQuantity: weightOpt.subscription_quantity || 0,
+            totalStock: productStock,
             lastUpdated: inventory.date ? new Date(inventory.date).toLocaleDateString() : 'N/A',
           });
         });
@@ -339,8 +367,9 @@ const downloadSingleStoreStockReport = async (req, res) => {
           category: inventory.inventoryProducts?.category?.title || 'N/A',
           productTitle: inventory.inventoryProducts?.title || 'N/A',
           weight: 'N/A',
-          stock: 0,
-          totalStock: inventory.total || 0,
+          instantQuantity: 0,
+          subscriptionQuantity: 0,
+          totalStock: 0,
           lastUpdated: inventory.date ? new Date(inventory.date).toLocaleDateString() : 'N/A',
         });
       }

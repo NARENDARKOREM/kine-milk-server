@@ -41,7 +41,7 @@ const NormalOrder = sequelize.define(
     },
     d_charge: {
       type: DataTypes.FLOAT,
-      allowNull: false,
+      allowNull: true,
     },
     cou_id: {
       type: DataTypes.UUID,
@@ -123,7 +123,7 @@ const NormalOrder = sequelize.define(
     },
     store_charge: {
       type: DataTypes.FLOAT,
-      allowNull: false,
+      allowNull: true,
     },
     order_status: {
       type: DataTypes.INTEGER,
@@ -144,8 +144,16 @@ const NormalOrder = sequelize.define(
     order_id:{
       type:DataTypes.TEXT,
       allowNull:true
+    },
+    is_paper_bag:{
+      type:DataTypes.BOOLEAN,
+      defaultValue:false,
+    },
+    delivery_tip:{
+      type: DataTypes.FLOAT,
+      allowNull: true,
+      defaultValue: 0,
     }
-    
   },
   { tableName: "tbl_normal_order", timestamps: true, paranoid: true }
 );

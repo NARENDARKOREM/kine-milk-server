@@ -25,6 +25,7 @@ const StoreWeightOption = require("../../Models/StoreWeightOption");
 const WalletReport = require("../../Models/WalletReport");
 const ProductInventory = require("../../Models/ProductInventory");
 const Rider = require("../../Models/Rider");
+const CarryBag = require("../../Models/Carry_Bag");
 
 const generateOrderId = () => {
   const randomNum = Math.floor(100000 + Math.random() * 900000);
@@ -59,7 +60,7 @@ const instantOrder = async (req, res) => {
     coupon_id,
     subtotal,
     d_charge,
-    store_charge,
+    // store_charge,
     tax,
     o_total,
     odate,
@@ -68,6 +69,8 @@ const instantOrder = async (req, res) => {
     a_note,
     trans_id,
     receiver,
+    is_paper_bag,
+    delivery_tip
   } = req.body;
 
   console.log("Request body:", req.body);
@@ -290,12 +293,14 @@ const instantOrder = async (req, res) => {
             cou_amt: couponAmount,
             subtotal,
             d_charge: parseFloat(d_charge) || 0,
-            store_charge: parseFloat(store_charge) || 0,
+            // store_charge: parseFloat(store_charge) || 0,
             tax: parseFloat(tax) || 0,
             o_total: finalTotal,
             a_note,
             order_id: orderNumber,
             trans_id,
+            is_paper_bag: is_paper_bag,
+            delivery_tip: parseFloat(delivery_tip) || 0,
           },
           { transaction }
         );
