@@ -197,7 +197,7 @@ const subscribeOrder = async (req, res) => {
           end_date: referenceEndDate,
           settingTax,
           d_charge: o_type === "Delivery" ? 0 : 0,
-          store_charge:  0,
+          store_charge: 0,
           cou_id: appliedCoupon ? appliedCoupon.id : null,
           cou_amt: couponAmount,
           subtotal: parseFloat(subtotal),
@@ -1016,12 +1016,20 @@ const pauseSubscriptionOrder = async (req, res) => {
       pause_end_date: new Date(end_date),
     }, { transaction: t })
 
-
+    //// Check if all other products in this order are also paused
+    const allProducts = await SubscribeOrderProduct.findAll({
+      where: { oid: orderId },
+      transaction: t
+    })
+    const allPaused = allProducts.length > 0 && allProducts.every(p => p.status === "Paused")
+    if (allPaused) {
+      await SubscribeOrder.update({ status: "Paused" }, { transaction: t })
+    }
     const user = await User.findByPk(uid, { transaction: t });
 
     // Send notifications after commit
     try {
-      await Promise.all([
+      await Promise.allSettled([
         sendPushNotification({
           appId: process.env.ONESIGNAL_CUSTOMER_APP_ID,
           apiKey: process.env.ONESIGNAL_CUSTOMER_API_KEY,
@@ -1875,6 +1883,17 @@ const cancelOrder = async (req, res) => {
       { transaction: t }
     );
 
+    const allProducts = await SubscribeOrderProduct.findAll({
+      where: { oid: order.id },
+      transaction: t,
+    });
+
+    const allCancelled = allProducts.length > 0 && allProducts.every(p => p.status === "Cancelled");
+
+    if (allCancelled) {
+      await order.update({ status: "Cancelled" }, { transaction: t });
+    }
+
     // Refund processing
     if (refundAmount > 0) {
       const updatedWallet = parseFloat(user.wallet) + refundAmount;
@@ -1896,7 +1915,7 @@ const cancelOrder = async (req, res) => {
 
     // Notifications
     try {
-      await Promise.all([
+      await Promise.allSettled([
         sendPushNotification({
           appId: process.env.ONESIGNAL_CUSTOMER_APP_ID,
           apiKey: process.env.ONESIGNAL_CUSTOMER_API_KEY,
