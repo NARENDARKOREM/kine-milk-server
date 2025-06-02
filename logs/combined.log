@@ -1,0 +1,10 @@
+{"level":"info","message":"Illustration ID eb9e902e-2545-4fb9-9330-38766a91d201 published at 2/6/2025, 3:34:00 pm. startTime preserved: 28/5/2025, 1:40:00 pm","service":"kine_milk_server","timestamp":"2025-06-02T10:04:00.331Z"}
+{"level":"info","message":"Coupon ID 5b5cd690-1acd-4c58-a24c-e04a11b8750f published at 2/6/2025, 3:34:00 pm. start_date preserved: 30/5/2025, 11:31:00 am","service":"kine_milk_server","timestamp":"2025-06-02T10:04:00.345Z"}
+{"level":"info","message":"Ad ID 5b2e50af-8d84-4562-87b8-c0fd7e010cb7 published at 2/6/2025, 3:34:00 pm","service":"kine_milk_server","timestamp":"2025-06-02T10:04:00.361Z"}
+{"level":"info","message":"Illustration ID eb9e902e-2545-4fb9-9330-38766a91d201 unpublished at 2/6/2025, 3:34:00 pm. endTime preserved: 28/5/2025, 2:09:00 pm","service":"kine_milk_server","timestamp":"2025-06-02T10:04:00.454Z"}
+{"level":"info","message":"Ad ID 5b2e50af-8d84-4562-87b8-c0fd7e010cb7 unpublished at 2/6/2025, 3:34:00 pm","service":"kine_milk_server","timestamp":"2025-06-02T10:04:00.457Z"}
+{"level":"info","message":"Coupon ID 5b5cd690-1acd-4c58-a24c-e04a11b8750f unpublished at 2/6/2025, 3:34:00 pm. end_date preserved: 30/5/2025, 11:32:00 am","service":"kine_milk_server","timestamp":"2025-06-02T10:04:00.460Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-02T10:04:09.192Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-02T10:04:09.241Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-02T10:04:09.307Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-02T10:04:09.332Z"}
