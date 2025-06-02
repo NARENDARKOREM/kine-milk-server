@@ -23,7 +23,7 @@ const cron = require("node-cron");
 const { sendPushNotification } = require("../../notifications/alert.service");
 const { sendInAppNotification } = require("../../notifications/notification.service");
 const { calculateDeliveryDays2, generateOrderId } = require("../helper/orderUtils");
-
+const asyncLib = require("async")
 
 const MAX_RETRIES = 3;
 
@@ -1037,7 +1037,7 @@ const calculateDeliveryDays = (startDate, endDate, days) => {
 
 
 
-const getRandomMinute = () => Math.floor(Math.random() * 30); //0 to 300 minutes
+const getRandomMinute = () => Math.floor(Math.random() * 301); //0 to 300 minutes
 const scheduleDailyRandom = () => {
   const randomMinute = getRandomMinute();
   const hour = Math.floor(randomMinute / 60);
