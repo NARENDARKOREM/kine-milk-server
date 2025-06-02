@@ -1548,7 +1548,7 @@ const getOrdersByStatus = async (req, res) => {
                   include: [
                     {
                       model: ProductReview,
-                      as: 'ProductReviews', // Ensure model alias matches
+                      as: 'ProductReviews',
                       attributes: ['id', 'rating', 'review'],
                     }
                   ]
@@ -1574,8 +1574,10 @@ const getOrdersByStatus = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
 
+    const statusPriority = ["Active", "Processing", "Paused", "Pending", "Completed", "Cancelled"];
+
     for (let order of orders) {
-      // Calculate average rating for the order
+      // Calculate average rating
       const averageRating = (() => {
         const allReviews = order.orderProducts.flatMap(orderProduct => [
           ...(orderProduct.subscribeProductWeight?.product?.ProductReviews || []),
@@ -1586,39 +1588,25 @@ const getOrdersByStatus = async (req, res) => {
       })();
       order.setDataValue('averageRating', averageRating);
 
-      // Determine group status based on product statuses
-      const productStatuses = order.orderProducts.map(p => p.status?.toLowerCase() || '');
+      // Extract product statuses
+      const productStatuses = (order.orderProducts || []).map(p => p.status || "");
 
-      const hasPending = productStatuses.includes("pending");
-      const hasCompleted = productStatuses.includes("completed");
-      const allCancelled = productStatuses.every(status => status === "cancelled");
+      // Determine group status by priority
+      let groupStatus = "Pending"; // default fallback (instead of Unknown)
 
-      if (hasPending) {
-        order.setDataValue("group_status", "Pending");
-        order.status = "Pending";
-      } else if (hasCompleted) {
-        order.setDataValue("group_status", "Completed");
-        order.status = "Completed";
-      } else if (allCancelled) {
-        order.setDataValue("group_status", "Cancelled");
-        order.status = "Cancelled";
+      if (productStatuses.length === 0) {
+        groupStatus = "Pending"; // Treat empty orders as Pending (or you can use "Empty")
       } else {
-        order.setDataValue("group_status", "InProgress");
-        order.status = "InProgress";
+        for (const status of statusPriority) {
+          if (productStatuses.includes(status)) {
+            groupStatus = status;
+            break;
+          }
+        }
       }
 
-      // Attach product reviews for the user
-      // for (let orderProduct of order.orderProducts) {
-      //   const productReviews = await ProductReview.findAll({
-      //     where: {
-      //       user_id: uid,
-      //       product_id: orderProduct.subscribeProductWeight?.product?.id,
-      //       order_id: order.id,
-      //     },
-      //     attributes: ['id', 'rating', 'review'],
-      //   });
-      //   orderProduct.setDataValue("productReviews", productReviews);
-      // }
+      order.setDataValue("group_status", groupStatus);
+      order.status = groupStatus;
     }
 
     return res.status(200).json({
@@ -1637,6 +1625,8 @@ const getOrdersByStatus = async (req, res) => {
     });
   }
 };
+
+
 
 
 const getOrderDetails = async (req, res) => {
