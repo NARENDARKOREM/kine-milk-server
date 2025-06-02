@@ -69,7 +69,8 @@ const instantOrder = async (req, res) => {
     a_note,
     trans_id,
     receiver,
-    carry_bag_cost
+    is_paper_bag,
+    delivery_tip
   } = req.body;
 
   console.log("Request body:", req.body);
@@ -298,7 +299,8 @@ const instantOrder = async (req, res) => {
             a_note,
             order_id: orderNumber,
             trans_id,
-            carry_bag_cost: carry_bag_cost || 0,
+            is_paper_bag: is_paper_bag,
+            delivery_tip: parseFloat(delivery_tip) || 0,
           },
           { transaction }
         );
