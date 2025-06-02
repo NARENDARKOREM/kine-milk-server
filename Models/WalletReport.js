@@ -24,7 +24,7 @@ const WalletReport = sequelize.define(
       defaultValue:1
     },
     amt: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
     transaction_no:{

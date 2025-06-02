@@ -27,7 +27,7 @@ const SubscribeOrderProduct = sequelize.define(
       type: DataTypes.UUID,
       allowNull: true,
     },
-     start_date: {
+    start_date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
@@ -41,57 +41,57 @@ const SubscribeOrderProduct = sequelize.define(
     },
     paused_period: {
       type: DataTypes.DATEONLY,
-      allowNull:true
+      allowNull: true
     },
 
-    pause :{
+    pause: {
       type: DataTypes.BOOLEAN,
-      defaultValue:0
+      defaultValue: 0
     },
     status: {
-      type: DataTypes.ENUM("Pending", "Active", "Processing", "Completed", "Cancelled","Paused"),
+      type: DataTypes.ENUM("Pending", "Active", "Processing", "Completed", "Cancelled", "Paused"),
       allowNull: false,
       defaultValue: "Pending",
     },
-    price:{
+    price: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
     timeslot_id: {
-      type: DataTypes.UUID, 
+      type: DataTypes.UUID,
       allowNull: false,
     },
-    repeat_day:{
+    repeat_day: {
       type: DataTypes.JSON,
     },
-     schedule: { // it stored product quantity and days 
-          type: DataTypes.JSON,
-          allowNull: true,
-          validate: {
-            isValidSchedule(value) {
-              const allowedDays = [
-                "monday",
-                "tuesday",
-                "wednesday",
-                "thursday",
-                "friday",
-                "saturday",
-                "sunday",
-              ];
-              if (typeof value !== "object" || Array.isArray(value)) {
-                throw new Error("Schedule must be a valid JSON object");
-              }
-              for (const day in value) {
-                if (!allowedDays.includes(day.toLowerCase())) {
-                  throw new Error(`Invalid day in schedule: ${day}`);
-                }
-                if (typeof value[day] !== "number" || value[day] < 0) {
-                  throw new Error(`Invalid quantity for ${day}: must be a positive number`);
-                }
-              }
-            },
-          },
+    schedule: { // it stored product quantity and days 
+      type: DataTypes.JSON,
+      allowNull: true,
+      validate: {
+        isValidSchedule(value) {
+          const allowedDays = [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday",
+          ];
+          if (typeof value !== "object" || Array.isArray(value)) {
+            throw new Error("Schedule must be a valid JSON object");
+          }
+          for (const day in value) {
+            if (!allowedDays.includes(day.toLowerCase())) {
+              throw new Error(`Invalid day in schedule: ${day}`);
+            }
+            if (typeof value[day] !== "number" || value[day] < 0) {
+              throw new Error(`Invalid quantity for ${day}: must be a positive number`);
+            }
+          }
         },
+      },
+    },
   },
   { tableName: "tbl_subscribe_order_product", timestamps: true, paranoid: true }
 );
