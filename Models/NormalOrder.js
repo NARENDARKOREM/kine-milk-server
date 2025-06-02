@@ -148,6 +148,11 @@ const NormalOrder = sequelize.define(
     is_paper_bag:{
       type:DataTypes.BOOLEAN,
       defaultValue:false,
+    },
+    delivery_tip:{
+      type: DataTypes.FLOAT,
+      allowNull: true,
+      defaultValue: 0,
     }
   },
   { tableName: "tbl_normal_order", timestamps: true, paranoid: true }
