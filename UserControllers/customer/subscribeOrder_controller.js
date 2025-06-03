@@ -23,7 +23,7 @@ const cron = require("node-cron");
 const { sendPushNotification } = require("../../notifications/alert.service");
 const { sendInAppNotification } = require("../../notifications/notification.service");
 const { calculateDeliveryDays2, generateOrderId } = require("../helper/orderUtils");
-
+const asyncLib = require("async")
 
 const MAX_RETRIES = 3;
 
@@ -197,7 +197,7 @@ const subscribeOrder = async (req, res) => {
           end_date: referenceEndDate,
           settingTax,
           d_charge: o_type === "Delivery" ? 0 : 0,
-          store_charge:  0,
+          store_charge: 0,
           cou_id: appliedCoupon ? appliedCoupon.id : null,
           cou_amt: couponAmount,
           subtotal: parseFloat(subtotal),
@@ -357,265 +357,150 @@ const subscribeOrder = async (req, res) => {
 };
 
 
-const editSubscriptionOrder = async (req, res) => {
+const editSubscribeOrder = async (req, res) => {
+  const { order_id, products, address_id, a_note, tax, o_total, subtotal , diffAmount, diffType } = req.body;
   const uid = req.user.userId;
-  const { orderId, products } = req.body; // products: [{ product_id, weight_id, timeslot_id, days }]
 
-  if (!uid || !orderId) {
+  if (!order_id || !Array.isArray(products) || products.length === 0) {
     return res.status(400).json({
       ResponseCode: "400",
       Result: "false",
-      ResponseMsg: "User ID and Order ID are required!",
-    });
-  }
-
-  if (!products || !Array.isArray(products) || products.length === 0) {
-    return res.status(400).json({
-      ResponseCode: "400",
-      Result: "false",
-      ResponseMsg: "Products array is required to update timeslot or days!",
+      ResponseMsg: "Missing required fields!",
     });
   }
 
   const t = await sequelize.transaction();
   try {
-    // Fetch the order
-    const order = await SubscribeOrder.findOne({
-      where: { id: orderId, uid, status: { [Op.in]: ["Pending", "Active", "Processing"] } },
-      transaction: t,
-    });
+    const order = await SubscribeOrder.findOne({ where: { id:order_id, uid }, transaction: t });
+    if (!order) throw new Error("Order not found");
 
-    if (!order) {
-      await t.rollback();
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "Order not found, not owned by user, or not in editable status!",
-      });
-    }
-
-    // Validate order dates
-    if (!order.start_date) {
-      await t.rollback();
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "Order start_date is invalid or missing!",
-      });
-    }
-
-    // Fetch user and store
-    const user = await User.findByPk(uid, { transaction: t });
-    const store = await Store.findByPk(order.store_id, { transaction: t });
-    if (!user || !store) {
-      await t.rollback();
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "User or store not found!",
-      });
-    }
-
-    // Fetch settings
-    const setting = await Setting.findOne({ transaction: t });
-    if (!setting) {
-      await t.rollback();
-      return res.status(500).json({
-        ResponseCode: "500",
-        Result: "false",
-        ResponseMsg: "Settings not found!",
-      });
-    }
-
-    const deliveryCharge = parseFloat(setting.delivery_charges) || 0;
-    const storeCharge = parseFloat(setting.store_charges) || 0;
-    const tax = parseFloat(setting.tax) || 0;
-
-    // Initialize variables
-    let updatedSubtotal = parseFloat(order.subtotal);
-    let updatedTotal = parseFloat(order.o_total);
-    let walletAdjustment = 0;
-    let walletTransactionMessage = [];
-
-    // Validate products
     const validDays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
-    for (const item of products) {
-      if (
-        !item.product_id ||
-        !item.weight_id ||
-        !item.timeslot_id ||
-        !item.days ||
-        !Array.isArray(item.days) ||
-        !item.days.every((day) => validDays.includes(day))
-      ) {
-        await t.rollback();
-        return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: "Each product must have valid product_id, weight_id, timeslot_id, and days array!",
-        });
+    
+    const updatedItems = await Promise.all(
+      products.map(async (item) => {
+        if (
+          !item.product_id || !item.weight_id || !item.quantities || !item.timeslot_id || !item.start_date ||
+          !item.end_date ||
+          typeof item.quantities !== "object" || Object.keys(item.quantities).length === 0
+        ) {
+          throw new Error("Invalid product data");
+        }
+
+        const startDate = new Date(item.start_date);
+        const endDate = new Date(item.end_date);
+
+        const weight = await WeightOption.findByPk(item.weight_id, { transaction: t });
+        const days = Object.keys(item.quantities).filter(day => validDays.includes(day.toLowerCase()) && item.quantities[day] > 0);
+        const deliveryDays = calculateDeliveryDays2(startDate, endDate, days);
+        const totalUnits = Object.values(item.quantities).reduce((sum, qty) => sum + qty * deliveryDays, 0);
+        
+
+        return {
+          product_id: item.product_id,
+          weight_id: item.weight_id,
+          timeslot_id: item.timeslot_id,
+          schedule: validDays.reduce((acc, day) => ({ ...acc, [day]: item.quantities[day] || 0 }), {}),
+          repeat_day: days,
+          deliveryDays,
+          start_date: startDate,
+          end_date: endDate,
+        };
+      })
+    );
+
+  
+
+    const user = await User.findByPk(uid, { transaction: t });
+    // Wallet handling
+    if ( diffType ==="debit" ) {
+      if (user.wallet < diffAmount) {
+        throw new Error(`Insufficient wallet balance. Add ₹${(diffAmount).toFixed(2)}`);
       }
+      await user.update({ wallet: user.wallet - diffAmount }, { transaction: t });
+      await WalletReport.create({
+        uid,
+        amt: diffAmount,
+        message: `Order updated. ₹${diffAmount} debited.`,
+        transaction_no: order.order_id,
+        tdate: new Date(),
+        transaction_type: "Debited",
+        status: 1,
+      }, { transaction: t });
+    } else if (diffType === "credit") {
+      const refund = Math.abs(diffAmount);
+      await user.update({ wallet: user.wallet + refund }, { transaction: t });
+      await WalletReport.create({
+        uid,
+        amt: refund,
+        message: `Order updated. ₹${refund} refunded.`,
+        transaction_no: order.order_id,
+        tdate: new Date(),
+        transaction_type: "Credited",
+        status: 1,
+      }, { transaction: t });
     }
 
-    // Fetch existing order products
-    const existingOrderProducts = await SubscribeOrderProduct.findAll({
-      where: { oid: orderId },
+    // Update main order
+    await order.update({
+      address_id: order.o_type === "Delivery" ? address_id : null,
+      o_total: o_total,
+      subtotal,
+      tax,
+      a_note,
+    }, { transaction: t });
+
+    // Update or create SubscribeOrderProduct entries
+    const existingProducts = await SubscribeOrderProduct.findAll({
+      where: { oid: order.id },
       transaction: t,
     });
 
-    // Process each product update
-    for (const item of products) {
-      const existingProduct = existingOrderProducts.find(
-        (p) => p.product_id === item.product_id && p.weight_id === item.weight_id
-      );
-
-      if (!existingProduct) {
-        await t.rollback();
-        return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: `Product ${item.product_id} with weight ${item.weight_id} not found in order!`,
-        });
-      }
-
-      const product = await Product.findByPk(item.product_id, { transaction: t });
-      const weight = await WeightOption.findByPk(item.weight_id, { transaction: t });
-      const timeslot = await Time.findByPk(item.timeslot_id, { transaction: t });
-
-      if (!product || !weight || !timeslot) {
-        await t.rollback();
-        return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: "Product, weight option, or timeslot not found!",
-        });
-      }
-
-      if (product.out_of_stock === 1) {
-        await t.rollback();
-        return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: `Product ${item.product_id} is out of stock!`,
-        });
-      }
-
-      // Calculate delivery days
-      const startDate = new Date(order.start_date);
-      const endDate = order.end_date ? new Date(order.end_date) : null;
-      const pausedPeriods = order.paused_periods || [];
-
-      const originalDeliveryDays = calculateDeliveryDays2(startDate, endDate, existingProduct.days, pausedPeriods);
-      const newDeliveryDays = calculateDeliveryDays2(startDate, endDate, item.days, pausedPeriods);
-
-      if (newDeliveryDays === 0) {
-        await t.rollback();
-        return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: `No delivery days for product ${item.product_id} with new schedule!`,
-        });
-      }
-
-      // Calculate cost adjustment
-      const itemPrice = existingProduct.price;
-      const perDayCost = itemPrice / originalDeliveryDays;
-      const deliveryDaysAdjustment = perDayCost * (newDeliveryDays - originalDeliveryDays);
-
-      walletAdjustment += deliveryDaysAdjustment;
-      walletTransactionMessage.push(
-        `Product ${item.product_id} (weight ${item.weight_id}): Delivery days changed from ${originalDeliveryDays} to ${newDeliveryDays} (${deliveryDaysAdjustment >= 0 ? "+" : "-"}₹${Math.abs(deliveryDaysAdjustment).toFixed(2)})`
-      );
-
-      // Update order product
-      await existingProduct.update(
-        {
-          timeslot_id: item.timeslot_id,
-          days: item.days,
-        },
-        { transaction: t }
-      );
-    }
-
-    // Update order total
-    updatedTotal = parseFloat(
-      (updatedSubtotal + (order.o_type === "Delivery" ? deliveryCharge : 0) + storeCharge + tax - (order.cou_amt || 0)).toFixed(2)
+    const updatedKeys = updatedItems.map(i =>
+      `${i.product_id}-${i.weight_id}-${i.timeslot_id}`
     );
 
-    // Wallet transaction
-    const walletTransactionType = walletAdjustment > 0 ? "Debited" : walletAdjustment < 0 ? "Credited" : "No Change";
-
-    if (walletAdjustment > 0) {
-      const updatedWallet = user.wallet - walletAdjustment;
-      if (updatedWallet < 0) {
-        await t.rollback();
-        return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: `Insufficient wallet balance! Current: ₹${user.wallet.toFixed(2)}, Required: ₹${walletAdjustment.toFixed(2)}.`,
-        });
-      }
-      await user.update({ wallet: updatedWallet }, { transaction: t });
-
-      await WalletReport.create(
-        {
-          uid,
-          amt: walletAdjustment,
-          message: `Subscription order edited: ${walletTransactionMessage.join("; ")}.`,
-          transaction_no: order.order_id,
-          tdate: new Date(),
-          transaction_type: "Debited",
-          status: 1,
-        },
-        { transaction: t }
+    for (const item of updatedItems) {
+      const existing = existingProducts.find(
+        (prod) =>
+          prod.product_id === item.product_id &&
+          prod.weight_id === item.weight_id &&
+          prod.timeslot_id === item.timeslot_id
       );
-    } else if (walletAdjustment < 0) {
-      await user.update({ wallet: user.wallet + Math.abs(walletAdjustment) }, { transaction: t });
 
-      await WalletReport.create(
-        {
-          uid,
-          amt: Math.abs(walletAdjustment),
-          message: `Refund for subscription order edit: ${walletTransactionMessage.join("; ")}.`,
-          transaction_no: order.order_id,
-          tdate: new Date(),
-          transaction_type: "Credited",
-          status: 1,
-        },
-        { transaction: t }
-      );
+      if (existing) {
+        await existing.update({
+          schedule: item.schedule,
+          repeat_day: item.repeat_day,
+          start_date: item.start_date,
+          end_date: item.end_date,
+          status: "Pending",
+          price: item.price,
+        }, { transaction: t });
+      } 
     }
 
-    // Update order
-    await order.update(
-      {
-        o_total: updatedTotal,
-      },
-      { transaction: t }
-    );
-
-    // Send notifications
+    // Mark products not present in new list as removed (optional)
+    for (const existing of existingProducts) {
+      const key = `${existing.product_id}-${existing.weight_id}-${existing.timeslot_id}`;
+      if (!updatedKeys.includes(key)) {
+        await existing.update({ status: "Removed" }, { transaction: t });
+      }
+    }
 
     await t.commit();
-
     return res.status(200).json({
       ResponseCode: "200",
       Result: "true",
       ResponseMsg: "Subscription order updated successfully!",
       order_id: order.order_id,
-      o_total: updatedTotal,
-      wallet_adjustment: walletAdjustment,
-      wallet_transaction_type: walletTransactionType,
-      updated_products: products,
     });
   } catch (error) {
     await t.rollback();
-    console.error("Error editing subscription order:", error.message);
+    console.error("Edit error:", error);
     return res.status(500).json({
       ResponseCode: "500",
       Result: "false",
-      ResponseMsg: "Server Error",
-      error: error.message,
+      ResponseMsg: error.message || "Server Error",
     });
   }
 };
@@ -683,12 +568,20 @@ const pauseSubscriptionOrder = async (req, res) => {
       pause_end_date: new Date(end_date),
     }, { transaction: t })
 
-
+    //// Check if all other products in this order are also paused
+    const allProducts = await SubscribeOrderProduct.findAll({
+      where: { oid: orderId },
+      transaction: t
+    })
+    const allPaused = allProducts.length > 0 && allProducts.every(p => p.status === "Paused")
+    if (allPaused) {
+      await SubscribeOrder.update({ status: "Paused" }, { transaction: t })
+    }
     const user = await User.findByPk(uid, { transaction: t });
 
     // Send notifications after commit
     try {
-      await Promise.all([
+      await Promise.allSettled([
         sendPushNotification({
           appId: process.env.ONESIGNAL_CUSTOMER_APP_ID,
           apiKey: process.env.ONESIGNAL_CUSTOMER_API_KEY,
@@ -1152,7 +1045,7 @@ const calculateDeliveryDays = (startDate, endDate, days) => {
 
 
 
-const getRandomMinute = () => Math.floor(Math.random() * 30); //0 to 300 minutes
+const getRandomMinute = () => Math.floor(Math.random() * 301); //0 to 300 minutes
 const scheduleDailyRandom = () => {
   const randomMinute = getRandomMinute();
   const hour = Math.floor(randomMinute / 60);
@@ -1215,7 +1108,7 @@ const getOrdersByStatus = async (req, res) => {
                   include: [
                     {
                       model: ProductReview,
-                      as: 'ProductReviews', // Ensure model alias matches
+                      as: 'ProductReviews',
                       attributes: ['id', 'rating', 'review'],
                     }
                   ]
@@ -1241,8 +1134,10 @@ const getOrdersByStatus = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
 
+    const statusPriority = ["Active", "Processing", "Paused", "Pending", "Completed", "Cancelled"];
+
     for (let order of orders) {
-      // Calculate average rating for the order
+      // Calculate average rating
       const averageRating = (() => {
         const allReviews = order.orderProducts.flatMap(orderProduct => [
           ...(orderProduct.subscribeProductWeight?.product?.ProductReviews || []),
@@ -1253,39 +1148,25 @@ const getOrdersByStatus = async (req, res) => {
       })();
       order.setDataValue('averageRating', averageRating);
 
-      // Determine group status based on product statuses
-      const productStatuses = order.orderProducts.map(p => p.status?.toLowerCase() || '');
+      // Extract product statuses
+      const productStatuses = (order.orderProducts || []).map(p => p.status || "");
 
-      const hasPending = productStatuses.includes("pending");
-      const hasCompleted = productStatuses.includes("completed");
-      const allCancelled = productStatuses.every(status => status === "cancelled");
+      // Determine group status by priority
+      let groupStatus = "Pending"; // default fallback (instead of Unknown)
 
-      if (hasPending) {
-        order.setDataValue("group_status", "Pending");
-        order.status = "Pending";
-      } else if (hasCompleted) {
-        order.setDataValue("group_status", "Completed");
-        order.status = "Completed";
-      } else if (allCancelled) {
-        order.setDataValue("group_status", "Cancelled");
-        order.status = "Cancelled";
+      if (productStatuses.length === 0) {
+        groupStatus = "Pending"; // Treat empty orders as Pending (or you can use "Empty")
       } else {
-        order.setDataValue("group_status", "InProgress");
-        order.status = "InProgress";
+        for (const status of statusPriority) {
+          if (productStatuses.includes(status)) {
+            groupStatus = status;
+            break;
+          }
+        }
       }
 
-      // Attach product reviews for the user
-      // for (let orderProduct of order.orderProducts) {
-      //   const productReviews = await ProductReview.findAll({
-      //     where: {
-      //       user_id: uid,
-      //       product_id: orderProduct.subscribeProductWeight?.product?.id,
-      //       order_id: order.id,
-      //     },
-      //     attributes: ['id', 'rating', 'review'],
-      //   });
-      //   orderProduct.setDataValue("productReviews", productReviews);
-      // }
+      order.setDataValue("group_status", groupStatus);
+      order.status = groupStatus;
     }
 
     return res.status(200).json({
@@ -1304,6 +1185,8 @@ const getOrdersByStatus = async (req, res) => {
     });
   }
 };
+
+
 
 
 const getOrderDetails = async (req, res) => {
@@ -1552,6 +1435,17 @@ const cancelOrder = async (req, res) => {
       { transaction: t }
     );
 
+    const allProducts = await SubscribeOrderProduct.findAll({
+      where: { oid: order.id },
+      transaction: t,
+    });
+
+    const allCancelled = allProducts.length > 0 && allProducts.every(p => p.status === "Cancelled");
+
+    if (allCancelled) {
+      await order.update({ status: "Cancelled" }, { transaction: t });
+    }
+
     // Refund processing
     if (refundAmount > 0) {
       const updatedWallet = parseFloat(user.wallet) + refundAmount;
@@ -1573,7 +1467,7 @@ const cancelOrder = async (req, res) => {
 
     // Notifications
     try {
-      await Promise.all([
+      await Promise.allSettled([
         sendPushNotification({
           appId: process.env.ONESIGNAL_CUSTOMER_APP_ID,
           apiKey: process.env.ONESIGNAL_CUSTOMER_API_KEY,
@@ -1745,7 +1639,7 @@ const cancelAllProductsInSubscriptionOrder = async (req, res) => {
 
 module.exports = {
   subscribeOrder,
-  editSubscriptionOrder,
+  editSubscribeOrder,
   getOrdersByStatus,
   getOrderDetails,
   cancelOrder,
