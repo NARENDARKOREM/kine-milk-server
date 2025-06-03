@@ -9,22 +9,31 @@ const StoreWeightOption = require("../../Models/StoreWeightOption");
 
 
 const upsertCart = async (req, res) => {
-  const uid = req.user.userId;
-  if(!uid){
+  const uid = req.user?.userId;
+  if (!uid) {
     return res.status(401).json({
-      ResponseCode:"401",
-      Result:"false",
-      ResponseMsg:"Unauthorized"
-    })
+      ResponseCode: '401',
+      Result: 'false',
+      ResponseMsg: 'Unauthorized',
+    });
   }
-  const {product_id, orderType, weights } = req.body;
+
+  const { product_id, orderType, weights } = req.body;
 
   // Validate required fields
   if (!product_id || !orderType || !weights || !Array.isArray(weights) || weights.length === 0) {
     return res.status(400).json({
-      ResponseCode: "400",
-      Result: "false",
-      ResponseMsg: "Missing or invalid required fields: uid, product_id, orderType, and non-empty weights array are required!",
+      ResponseCode: '400',
+      Result: 'false',
+      ResponseMsg: 'Missing or invalid required fields: product_id, orderType, and non-empty weights array are required!',
+    });
+  }
+
+  if (!['Normal', 'Subscription'].includes(orderType)) {
+    return res.status(400).json({
+      ResponseCode: '400',
+      Result: 'false',
+      ResponseMsg: 'Invalid orderType! Must be "Normal" or "Subscription".',
     });
   }
 
@@ -32,9 +41,9 @@ const upsertCart = async (req, res) => {
   for (const weight of weights) {
     if (!weight.weight_id || !Number.isInteger(weight.quantity) || weight.quantity <= 0) {
       return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "Each weight object must have a valid weight_id and a positive integer quantity!",
+        ResponseCode: '400',
+        Result: 'false',
+        ResponseMsg: 'Each weight object must have a valid weight_id and a positive integer quantity!',
       });
     }
   }
@@ -47,12 +56,7 @@ const upsertCart = async (req, res) => {
     // Validate product
     const product = await Product.findByPk(product_id, { transaction });
     if (!product) {
-      await transaction.rollback();
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: `Product with ID ${product_id} not found!`,
-      });
+      throw new Error(`Product ID ${product_id} not found`);
     }
 
     // Aggregate quantities for duplicate weight_ids
@@ -66,34 +70,18 @@ const upsertCart = async (req, res) => {
     // Process each unique weight_id
     for (const [weight_id, quantity] of Object.entries(weightMap)) {
       // Validate weight_id
-      const weightOption = await WeightOption.findOne({
-        where: { id: weight_id },
-        transaction,
-      });
+      const weightOption = await WeightOption.findByPk(weight_id, { transaction });
       if (!weightOption) {
-        await transaction.rollback();
-        return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: `Weight option with ID ${weight_id} not found!`,
-        });
+        throw new Error(`Weight option ID ${weight_id} not found`);
       }
 
-      // Validate weight_id for product (using StoreWeightOption)
+      // Validate weight_id for product
       const isValidWeight = await StoreWeightOption.findOne({
-        where: {
-          weight_id,
-          product_id,
-        },
+        where: { weight_id, product_id },
         transaction,
       });
       if (!isValidWeight) {
-        await transaction.rollback();
-        return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: `Weight option ${weight_id} is not valid for product ${product_id}!`,
-        });
+        throw new Error(`Weight option ${weight_id} is not valid for product ${product_id}`);
       }
 
       // Check for existing cart item
@@ -105,15 +93,14 @@ const upsertCart = async (req, res) => {
       let cartItem;
 
       if (existingCartItem) {
-        // Update quantity
+        const newQuantity = existingCartItem.quantity + quantity;
+        console.log(`Updating cart item ${existingCartItem.id}: old quantity=${existingCartItem.quantity}, adding=${quantity}, new=${newQuantity}`);
         await Cart.update(
-          { quantity: existingCartItem.quantity + quantity },
+          { quantity: newQuantity },
           { where: { id: existingCartItem.id }, transaction }
         );
         cartItem = await Cart.findByPk(existingCartItem.id, { transaction });
-        console.log(`Updated cart item: ${existingCartItem.id}, new quantity: ${cartItem.quantity}`);
       } else {
-        // Create new cart item
         cartItem = await Cart.create(
           {
             uid,
@@ -124,7 +111,7 @@ const upsertCart = async (req, res) => {
           },
           { transaction }
         );
-        console.log(`Created new cart item: ${cartItem.id}`);
+        console.log(`Created cart item ${cartItem.id}: quantity=${quantity}`);
       }
 
       cartItems.push({
@@ -140,19 +127,19 @@ const upsertCart = async (req, res) => {
     await transaction.commit();
 
     return res.status(200).json({
-      ResponseCode: "200",
-      Result: "true",
-      ResponseMsg: "Cart items processed successfully!",
+      ResponseCode: '200',
+      Result: 'true',
+      ResponseMsg: 'Cart items processed successfully!',
       data: cartItems,
     });
   } catch (error) {
-    console.error("Error adding/updating cart items:", error);
+    console.error('Error adding/updating cart items:', error);
     if (transaction) await transaction.rollback();
     return res.status(500).json({
-      ResponseCode: "500",
-      Result: "false",
-      ResponseMsg: "Server Error",
-      error: error.message,
+      ResponseCode: '500',
+      Result: 'false',
+      ResponseMsg: 'Server Error',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
     });
   }
 };
@@ -189,18 +176,29 @@ const getCartByUser = async (req, res) => {
           model: Product,
           attributes: ['id', 'title', 'img', 'description'],
           as: 'CartproductDetails',
+          required: false, // Allow cart items without product (rare)
         },
         {
           model: WeightOption,
           as: 'cartweight',
           attributes: ['weight', 'subscribe_price', 'normal_price', 'mrp_price'],
-          where: {
-            id: sequelize.col('Cart.weight_id'),
-          },
-        
+          include: [
+            {
+              model: StoreWeightOption,
+              as: 'storeWeightOption',
+              attributes: ['id', 'product_id', 'weight_id', 'quantity', 'total'],
+            },
+          ],
         },
       ],
     });
+
+    // Debug: Log missing WeightOption
+    for (const item of cartItems) {
+      if (!item.cartweight) {
+        console.warn(`Cart item ${item.id} (weight_id: ${item.weight_id}) has no matching WeightOption`);
+      }
+    }
 
     return res.status(200).json({
       ResponseCode: '200',
