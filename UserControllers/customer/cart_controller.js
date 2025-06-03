@@ -157,57 +157,67 @@ const upsertCart = async (req, res) => {
   }
 };
 
-  const getCartByUser = async (req, res) => {
-    try {
-      const uid  = req.user.userId;
-      const {orderType} = req.params;
-      if (!uid) {
-        return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: "User ID is required!",
-        });
-      }
-  
-      const cartItems = await Cart.findAll({ 
-        where: { uid, orderType },
-        include: [
-          {
-              model: Product,
-              attributes: ["id", "title", "img", "description"],
-              as: "CartproductDetails"
-          },{
-            model:WeightOption,
-            as:"cartweight",
-            attributes:["weight","subscribe_price","normal_price","mrp_price"],
-            include:[
-              {
-                model:StoreWeightOption,
-              as:"storeWeightOption",
-              attributes: ["id", "product_id", "weight_id", "quantity", "total"],
-            }
-            ]
-          }
-      ]
-      });
+const getCartByUser = async (req, res) => {
+  try {
+    const uid = req.user?.userId;
+    const { orderType } = req.params;
 
-  
-      return res.status(200).json({
-        ResponseCode: "200",
-        Result: "true",
-        ResponseMsg: "Cart items retrieved successfully!",
-        data: cartItems,
-      });
-    } catch (error) {
-      console.error("Error fetching cart items:", error);
-      res.status(500).json({
-        ResponseCode: "500",
-        Result: "false",
-        ResponseMsg: "Server Error",
-        error: error.message,
+    console.log('Request:', { uid, orderType });
+
+    // Validate inputs
+    if (!uid) {
+      return res.status(401).json({
+        ResponseCode: '401',
+        Result: 'false',
+        ResponseMsg: 'Unauthorized: User ID is required!',
       });
     }
+
+    if (!['Normal', 'Subscription'].includes(orderType)) {
+      return res.status(400).json({
+        ResponseCode: '400',
+        Result: 'false',
+        ResponseMsg: 'Invalid orderType! Must be "Normal" or "Subscription".',
+      });
+    }
+
+    // Fetch cart items
+    const cartItems = await Cart.findAll({
+      where: { uid, orderType },
+      include: [
+        {
+          model: Product,
+          attributes: ['id', 'title', 'img', 'description'],
+          as: 'CartproductDetails',
+        },
+        {
+          model: WeightOption,
+          as: 'cartweight',
+          attributes: ['weight', 'subscribe_price', 'normal_price', 'mrp_price'],
+          where: {
+            id: sequelize.col('Cart.weight_id'),
+          },
+        
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      ResponseCode: '200',
+      Result: 'true',
+      ResponseMsg: cartItems.length ? 'Cart items retrieved successfully!' : 'Cart is empty.',
+      data: cartItems,
+    });
+  } catch (error) {
+    console.error('Error fetching cart items:', error);
+    return res.status(500).json({
+      ResponseCode: '500',
+      Result: 'false',
+      ResponseMsg: 'Server Error',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    });
   }
+};
 
   const deleteCart = async (req, res) => {
     const { id } = req.params;
