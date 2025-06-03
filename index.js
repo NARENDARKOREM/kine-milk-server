@@ -16,7 +16,12 @@ const xss = require("xss-clean");
 const csrf = require("csurf");
 const rateLimit = require("express-rate-limit");
 const swaggerFile = require('./swagger-op.json');
+const radisConnect = require('./config/connectRedis');
 const app=express()
+const http=require("http")
+const socketSetup=require("./sockets")
+const server=http.createServer(app)
+socketSetup(server)
 
 
 const csrfProtection = csrf({ cookie: true });
@@ -162,7 +167,40 @@ app.get("/", (req, res) => {
   res.send("Server is Running");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is Running on PORT http://localhost:${PORT}`);
-  console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
-});
+// ⬇️ Add at the bottom of index.js
+const startServer = async () => {
+  let redisClient;
+  try {
+    redisClient = await radisConnect();
+    app.locals.redisClient = redisClient;
+
+    server.listen(PORT, () => {
+      console.log(`🚀 Server is Running on PORT http://localhost:${PORT}`);
+      console.log(`📘 Swagger docs available at http://localhost:${PORT}/api-docs`);
+    });
+
+    const shutdown = async () => {
+      console.info('🛑 Shutting down...');
+      try {
+        await redisClient.quit();
+        server.close(() => {
+          console.info('✅ Server shut down cleanly');
+          process.exit(0);
+        });
+      } catch (err) {
+        console.error('❌ Shutdown error:', err.message);
+        process.exit(1);
+      }
+    };
+
+    process.on('SIGINT', shutdown);
+    process.on('SIGTERM', shutdown);
+  } catch (err) {
+    console.error(`❌ Failed to start server: ${err.message}`);
+    if (redisClient) await redisClient.quit();
+    process.exit(1);
+  }
+};
+
+startServer();
+
