@@ -99,11 +99,15 @@ const subscribeOrder = async (req, res) => {
       });
     }
 
+    console.log(startDate, "startDate")
+    console.log(endDate, "endDate")
     // Ensure all products have the same start_date and end_date
     if (!referenceStartDate) {
       referenceStartDate = startDate;
       referenceEndDate = endDate;
     } else if (startDate.getTime() !== referenceStartDate.getTime() || endDate.getTime() !== referenceEndDate.getTime()) {
+      console.log(referenceStartDate, "referenceStartDate")
+      console.log(referenceEndDate, "referenceEndDate")
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
@@ -225,7 +229,7 @@ const subscribeOrder = async (req, res) => {
               oid: order.id,
               product_id: item.product_id,
               weight_id: item.weight_id,
-              price: item.price || 0, // Use frontend-provided price if available, else 0
+              price: item.product_total || 0, // Use frontend-provided price if available, else 0
               timeslot_id: item.timeslot_id,
               schedule,
               start_date: referenceStartDate,
@@ -1213,7 +1217,7 @@ const getOrderDetails = async (req, res) => {
         {
           model: SubscribeOrderProduct,
           as: "orderProducts",
-          attributes: ['id', 'start_date', 'end_date', 'start_period', 'paused_period', 'pause', 'status', 'price', 'repeat_day', 'schedule'],
+          attributes: ['id', 'start_date', 'end_date', 'start_period', 'paused_period', 'pause', 'status', 'price', 'repeat_day', 'schedule','price'],
           include: [
             {
               model: WeightOption,
