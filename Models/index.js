@@ -391,3 +391,8 @@ Time.hasMany(SubscribeOrderProduct,{as:"timeslotss",foreignKey:"timeslot_id"})
 
 NormalOrder.hasOne(PersonRecord, { foreignKey: "order_id", as: "receiver" });
 PersonRecord.belongsTo(NormalOrder, { foreignKey: "order_id" });
+
+SubscribeOrderProduct.hasMany(StoreWeightOption,{foreignKey:"store_weight_id",as:"soptions"})
+StoreWeightOption.belongsTo(SubscribeOrderProduct,{foreignKey:"store_weight_id",as:"soptions"})
+
+StoreWeightOption.belongsTo(Product,{foreignKey:"product_id",as:"storeProduct"})
