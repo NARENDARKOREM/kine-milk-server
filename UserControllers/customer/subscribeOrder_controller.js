@@ -102,7 +102,7 @@ const subscribeOrder = async (req, res) => {
 
     console.log(startDate, "startDate")
     console.log(endDate, "endDate")
-    
+
     // Ensure all products have the same start_date and end_date
     if (!referenceStartDate) {
       referenceStartDate = startDate;
@@ -365,7 +365,7 @@ const subscribeOrder = async (req, res) => {
 
 
 const editSubscribeOrder = async (req, res) => {
-  const { order_id, products, address_id, a_note, tax, o_total, subtotal , diffAmount, diffType } = req.body;
+  const { order_id, products, address_id, a_note, tax, o_total, subtotal, diffAmount, diffType } = req.body;
   const uid = req.user.userId;
 
   if (!order_id || !Array.isArray(products) || products.length === 0) {
@@ -378,11 +378,11 @@ const editSubscribeOrder = async (req, res) => {
 
   const t = await sequelize.transaction();
   try {
-    const order = await SubscribeOrder.findOne({ where: { id:order_id, uid }, transaction: t });
+    const order = await SubscribeOrder.findOne({ where: { id: order_id, uid }, transaction: t });
     if (!order) throw new Error("Order not found");
 
     const validDays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
-    
+
     const updatedItems = await Promise.all(
       products.map(async (item) => {
         if (
@@ -400,7 +400,7 @@ const editSubscribeOrder = async (req, res) => {
         const days = Object.keys(item.quantities).filter(day => validDays.includes(day.toLowerCase()) && item.quantities[day] > 0);
         const deliveryDays = calculateDeliveryDays2(startDate, endDate, days);
         const totalUnits = Object.values(item.quantities).reduce((sum, qty) => sum + qty * deliveryDays, 0);
-        
+
 
         return {
           product_id: item.product_id,
@@ -415,11 +415,11 @@ const editSubscribeOrder = async (req, res) => {
       })
     );
 
-  
+
 
     const user = await User.findByPk(uid, { transaction: t });
     // Wallet handling
-    if ( diffType ==="debit" ) {
+    if (diffType === "debit") {
       if (user.wallet < diffAmount) {
         throw new Error(`Insufficient wallet balance. Add ₹${(diffAmount).toFixed(2)}`);
       }
@@ -483,7 +483,7 @@ const editSubscribeOrder = async (req, res) => {
           status: "Pending",
           price: item.price,
         }, { transaction: t });
-      } 
+      }
     }
 
     // Mark products not present in new list as removed (optional)
@@ -1096,12 +1096,12 @@ const getOrdersByStatus = async (req, res) => {
   try {
     const orders = await SubscribeOrder.findAll({
       where: { uid },
-      attributes: ['id', 'uid', 'status', 'createdAt', 'address_id', 'order_id', 'odate', 'subtotal', 'o_total'],
+      // attributes: ['id', 'uid', 'status', 'createdAt', 'address_id', 'order_id', 'odate', 'subtotal', 'o_total'],
       include: [
         {
           model: SubscribeOrderProduct,
           as: "orderProducts",
-          attributes: ["id", "timeslot_id", "weight_id", "product_id", "status"],
+          // attributes: ["id", "timeslot_id", "weight_id", "product_id", "status"],
           include: [
             {
               model: WeightOption,
@@ -1197,20 +1197,36 @@ const getOrdersByStatus = async (req, res) => {
 
 
 const getOrderDetails = async (req, res) => {
+  const uid = req.user.userId;
+
+  if (!uid) {
+    return res.status(401).json({
+      ResponseCode: "401",
+      Result: "false",
+      ResponseMsg: "Unauthorized",
+    });
+  }
   const { id } = req.params;
 
   try {
-    // if (!Number.isInteger(parseInt(id))) {
-    //   return res.status(400).json({
-    //     ResponseCode: "400",
-    //     Result: "false",
-    //     ResponseMsg: "Invalid Order ID",
-    //   });
-    // }
-
     const orderDetails = await SubscribeOrder.findOne({
       where: { id },
-      attributes: ['id', 'uid', 'odate', 'o_type', 'delivered_dates', 'tax', 'd_charge', 'cou_amt', 'o_total', 'subtotal', 'status', 'commission', 'store_charge', 'order_id'],
+      attributes: [
+        'id',
+        'uid',
+        'odate',
+        'o_type',
+        'delivered_dates',
+        'tax',
+        'd_charge',
+        'cou_amt',
+        'o_total',
+        'subtotal',
+        'status',
+        'commission',
+        'store_charge',
+        'order_id',
+      ],
       include: [
         {
           model: User,
@@ -1220,27 +1236,72 @@ const getOrderDetails = async (req, res) => {
         {
           model: SubscribeOrderProduct,
           as: "orderProducts",
-          attributes: ['id', 'start_date', 'end_date', 'start_period', 'paused_period', 'pause', 'status', 'price', 'repeat_day', 'schedule','price'],
+          attributes: [
+            'id',
+            'start_date',
+            'end_date',
+            'start_period',
+            'paused_period',
+            'pause',
+            'status',
+            'price',
+            'repeat_day',
+            'schedule',
+            'price',
+            'store_weight_id',
+            'product_id', // Add product_id for debugging
+          ],
           include: [
             {
               model: StoreWeightOption,
               as: 'soptions',
+              attributes: [
+                'id',
+                'product_inventory_id',
+                'product_id',
+                'weight_id',
+                'quantity',
+                'subscription_quantity',
+                'total',
+              ],
               include: [
-
                 {
-                  model: Product,
-                  as: "storeProduct",
-                  attributes: ['id', 'title', 'img', 'discount', 'description'],
+                  model: WeightOption,
+                  as: 'weightOption',
+                  attributes: [
+                    'id',
+                    'product_id',
+                    'weight',
+                    'subscribe_price',
+                    'normal_price',
+                    'mrp_price',
+                  ],
                   include: [
                     {
-                      model: ProductReview,
-                      as: 'ProductReviews',
-                      attributes: ['id', 'rating', 'review'],
-                    }
-                  ]
+                      model: Product,
+                      as: "product",
+                      attributes: ['id', 'title', 'img', 'discount', 'description'],
+                    },
+                  ],
                 },
-
-              ]
+              ],
+            },
+            {
+              model: Product,
+              as: "subscribeProduct",
+              attributes: ["id", "title", "img", "description"],
+              include: [
+                {
+                  model: ProductReview,
+                  as: "ProductReviews",
+                  attributes: ["id", "rating", "review", "user_id", "order_id"],
+                  where: {
+                    user_id: uid,
+                    order_id: id,
+                  },
+                  required: false,
+                },
+              ],
             },
             {
               model: Time,
@@ -1253,27 +1314,15 @@ const getOrderDetails = async (req, res) => {
           model: Address,
           as: "subOrdAddress",
         },
+        {
+          model: Review,
+          as: "suborderdeliveryreview",
+        },
       ],
       order: [['createdAt', 'DESC']],
       logging: console.log, // Debug SQL
     });
-    // const averageRating=orderDetails.orderProducts.subscribeProductWeight.product.productReviews.forEach(orderProduct=>{
 
-    // })
-
-    const averageRating = (() => {
-      const allReviews = orderDetails.orderProducts.flatMap(orderProduct => {
-        const reviews = orderProduct.subscribeProductWeight?.product?.ProductReviews || [];
-        // console.log('Reviews for product ID', orderProduct.id, ':', reviews);
-        return reviews;
-      });
-      // console.log('All Reviews:', allReviews);
-      const totalRating = allReviews.reduce((sum, review) => sum + (review.rating || 0), 0);
-      // console.log('Total Rating:', totalRating);
-      const average = allReviews.length > 0 ? totalRating / allReviews.length : 0;
-      // console.log('Average Rating:', average);
-      return average;
-    })();
     if (!orderDetails) {
       return res.status(404).json({
         ResponseCode: "404",
@@ -1282,12 +1331,28 @@ const getOrderDetails = async (req, res) => {
       });
     }
 
+    // Debug: Log orderProducts to check data
+    console.log(
+      'Order Products:',
+      JSON.stringify(orderDetails.orderProducts, null, 2)
+    );
+
+    const averageRating = (() => {
+      const allReviews = orderDetails.orderProducts.flatMap(orderProduct => {
+        const reviews = orderProduct.subscribeProduct?.ProductReviews || [];
+        return reviews;
+      });
+      const totalRating = allReviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+      const average = allReviews.length > 0 ? totalRating / allReviews.length : 0;
+      return average;
+    })();
+
     return res.status(200).json({
       ResponseCode: "200",
       Result: "true",
       ResponseMsg: "Subscribe Order fetched successfully!",
-      orderDetails,
-      averageRating
+      orderDetails: orderDetails.toJSON(), // Ensure proper serialization
+      averageRating,
     });
   } catch (error) {
     console.error("Error fetching order:", error.stack);
@@ -1300,6 +1365,8 @@ const getOrderDetails = async (req, res) => {
     });
   }
 };
+
+module.exports = getOrderDetails;
 
 // this cancelled for particular order
 const cancelOrder = async (req, res) => {

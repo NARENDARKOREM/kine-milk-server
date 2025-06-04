@@ -392,13 +392,19 @@ Time.hasMany(SubscribeOrderProduct,{as:"timeslotss",foreignKey:"timeslot_id"})
 NormalOrder.hasOne(PersonRecord, { foreignKey: "order_id", as: "receiver" });
 PersonRecord.belongsTo(NormalOrder, { foreignKey: "order_id" });
 
-SubscribeOrderProduct.hasMany(StoreWeightOption,{foreignKey:"store_weight_id",as:"soptions"})
-StoreWeightOption.belongsTo(SubscribeOrderProduct,{foreignKey:"store_weight_id",as:"soptions"})
+StoreWeightOption.hasMany(SubscribeOrderProduct,{foreignKey:"store_weight_id",as:"soptions"})
+SubscribeOrderProduct.belongsTo(StoreWeightOption,{foreignKey:"store_weight_id",as:"soptions"})
 
-StoreWeightOption.belongsTo(Product,{foreignKey:"product_id",as:"storeProduct"})
+Product.belongsTo(StoreWeightOption,{foreignKey:"product_id",as:"storeProduct"})
+StoreWeightOption.hasMany(Product,{foreignKey:"product_id",as:"storeProduct"})
 Cart.belongsTo(StoreWeightOption, { foreignKey: "store_weight_id", as: "storeWeightOption" });
 
 StoreWeightOption.hasMany(Cart, {
   foreignKey: "store_weight_id",
   as: "cartItems",
+});
+
+SubscribeOrderProduct.belongsTo(Product, {
+  foreignKey: "product_id",
+  as: "subscribeProduct",
 });
