@@ -102,19 +102,21 @@ const subscribeOrder = async (req, res) => {
 
     console.log(startDate, "startDate")
     console.log(endDate, "endDate")
+    
     // Ensure all products have the same start_date and end_date
     if (!referenceStartDate) {
       referenceStartDate = startDate;
       referenceEndDate = endDate;
-    } else if (startDate.getTime() !== referenceStartDate.getTime() || endDate.getTime() !== referenceEndDate.getTime()) {
-      console.log(referenceStartDate, "referenceStartDate")
-      console.log(referenceEndDate, "referenceEndDate")
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "All products must have the same start_date and end_date!",
-      });
     }
+    // } else if (startDate.getTime() !== referenceStartDate.getTime() || endDate.getTime() !== referenceEndDate.getTime()) {
+    //   console.log(referenceStartDate, "referenceStartDate")
+    //   console.log(referenceEndDate, "referenceEndDate")
+    //   return res.status(400).json({
+    //     ResponseCode: "400",
+    //     Result: "false",
+    //     ResponseMsg: "All products must have the same start_date and end_date!",
+    //   });
+    // }
   }
 
   // Fetch settings for minimum subscription days
