@@ -23,7 +23,8 @@ const cron = require("node-cron");
 const { sendPushNotification } = require("../../notifications/alert.service");
 const { sendInAppNotification } = require("../../notifications/notification.service");
 const { calculateDeliveryDays2, generateOrderId } = require("../helper/orderUtils");
-const asyncLib = require("async")
+const asyncLib = require("async");
+const StoreWeightOption = require("../../Models/StoreWeightOption");
 
 const MAX_RETRIES = 3;
 
@@ -70,7 +71,7 @@ const subscribeOrder = async (req, res) => {
   for (const item of products) {
     if (
       !item.product_id ||
-      !item.weight_id ||
+      !item.store_weight_id ||
       !item.quantities ||
       typeof item.quantities !== "object" ||
       !item.timeslot_id ||
@@ -101,19 +102,21 @@ const subscribeOrder = async (req, res) => {
 
     console.log(startDate, "startDate")
     console.log(endDate, "endDate")
+    
     // Ensure all products have the same start_date and end_date
     if (!referenceStartDate) {
       referenceStartDate = startDate;
       referenceEndDate = endDate;
-    } else if (startDate.getTime() !== referenceStartDate.getTime() || endDate.getTime() !== referenceEndDate.getTime()) {
-      console.log(referenceStartDate, "referenceStartDate")
-      console.log(referenceEndDate, "referenceEndDate")
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "All products must have the same start_date and end_date!",
-      });
     }
+    // } else if (startDate.getTime() !== referenceStartDate.getTime() || endDate.getTime() !== referenceEndDate.getTime()) {
+    //   console.log(referenceStartDate, "referenceStartDate")
+    //   console.log(referenceEndDate, "referenceEndDate")
+    //   return res.status(400).json({
+    //     ResponseCode: "400",
+    //     Result: "false",
+    //     ResponseMsg: "All products must have the same start_date and end_date!",
+    //   });
+    // }
   }
 
   // Fetch settings for minimum subscription days
@@ -228,7 +231,7 @@ const subscribeOrder = async (req, res) => {
             {
               oid: order.id,
               product_id: item.product_id,
-              weight_id: item.weight_id,
+              store_weight_id: item.store_weight_id,
               price: item.product_total || 0, // Use frontend-provided price if available, else 0
               timeslot_id: item.timeslot_id,
               schedule,
@@ -250,7 +253,7 @@ const subscribeOrder = async (req, res) => {
             uid,
             product_id: item.product_id,
             orderType: "Subscription",
-            weight_id: item.weight_id,
+            store_weight_id: item.store_weight_id,
           })),
         },
         transaction: t,
@@ -352,7 +355,7 @@ const subscribeOrder = async (req, res) => {
     items: orderItemsResult.map(item => ({
       product_id: item.product_id,
       price: item.price,
-      weight_id: item.weight_id,
+      store_weight_id: item.store_weight_id,
       timeslot_id: item.timeslot_id,
       repeat_day: item.repeat_day,
       schedule: item.schedule,
@@ -1220,14 +1223,13 @@ const getOrderDetails = async (req, res) => {
           attributes: ['id', 'start_date', 'end_date', 'start_period', 'paused_period', 'pause', 'status', 'price', 'repeat_day', 'schedule','price'],
           include: [
             {
-              model: WeightOption,
-              as: 'subscribeProductWeight',
-              attributes: ['id', 'weight', 'subscribe_price', 'mrp_price', 'normal_price'],
+              model: StoreWeightOption,
+              as: 'soptions',
               include: [
 
                 {
                   model: Product,
-                  as: "product",
+                  as: "storeProduct",
                   attributes: ['id', 'title', 'img', 'discount', 'description'],
                   include: [
                     {
