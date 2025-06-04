@@ -171,6 +171,17 @@ const startServer = async () => {
   let redisClient;
   try {
     redisClient = await radisConnect();
+    app.get('/test-redis', async (req, res) => {
+      try {
+        // Set a key
+        await redisClient.set('greeting', 'Hello from Upstash Redis!');
+        // Get the key
+        const val = await redisClient.get('greeting');
+        res.send({ message: val });
+      } catch (err) {
+        res.status(500).send({ error: 'Redis error', details: err.message });
+      }
+    });
     app.locals.redisClient = redisClient;
 
     server.listen(PORT, () => {

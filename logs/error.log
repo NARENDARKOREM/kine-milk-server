@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {"level":"error","message":"Error in illustration scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-03T10:25:00.649Z"}
 {"level":"error","message":"Error in ad scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-03T10:25:00.671Z"}
 {"level":"error","message":"Error in coupon scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-03T10:25:00.673Z"}
@@ -35,3 +36,5 @@
 {"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-04T09:03:00.788Z"}
 {"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-04T09:03:00.817Z"}
 {"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-04T09:03:00.824Z"}
+=======
+>>>>>>> b734b2d3e2a0d6f500d892ea4075340a5dd6c871
