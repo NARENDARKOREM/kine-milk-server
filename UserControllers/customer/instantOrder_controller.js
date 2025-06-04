@@ -60,7 +60,6 @@ const instantOrder = async (req, res) => {
     coupon_id,
     subtotal,
     d_charge,
-    // store_charge,
     tax,
     o_total,
     odate,
@@ -70,7 +69,7 @@ const instantOrder = async (req, res) => {
     trans_id,
     receiver,
     is_paper_bag,
-    delivery_tip
+    delivery_tip,
   } = req.body;
 
   console.log("Request body:", req.body);
@@ -107,11 +106,11 @@ const instantOrder = async (req, res) => {
 
   // Validate products
   for (const item of products) {
-    if (!item.product_id || !item.weight_id || !item.quantity || item.quantity <= 0) {
+    if (!item.product_id || !item.store_weight_id || !item.quantity || item.quantity <= 0) {
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
-        ResponseMsg: "Each product must have a valid product_id, weight_id, and quantity > 0!",
+        ResponseMsg: "Each product must have a valid product_id, store_weight_id, and quantity > 0!",
       });
     }
   }
@@ -168,82 +167,64 @@ const instantOrder = async (req, res) => {
         if (receiver && receiver.address_id) {
           orderAddressId = receiver.address_id;
           const receiverAddress = await Address.findByPk(receiver.address_id, { transaction });
-          if (!receiverAddress) {
-            throw new Error("Receiver address does not exist");
-          }
-          if (receiverAddress.uid !== uid) {
-            throw new Error("Receiver address does not belong to you");
+          if (!receiverAddress || receiverAddress.uid !== uid) {
+            throw new Error("Receiver address does not exist or does not belong to you");
           }
         } else if (address_id) {
           const orderAddress = await Address.findByPk(address_id, { transaction });
-          if (!orderAddress) {
-            throw new Error("Order address does not exist");
-          }
-          if (orderAddress.uid !== uid) {
-            throw new Error("Order address does not belong to you");
+          if (!orderAddress || orderAddress.uid !== uid) {
+            throw new Error("Order address does not exist or does not belong to you");
           }
         } else {
           throw new Error("Order address is required");
         }
 
-        // Validate products, weights, and stock
+        // Validate products and stock
         for (const item of products) {
-          const product = await Product.findByPk(item.product_id, {
+          const storeWeightOption = await StoreWeightOption.findByPk(item.store_weight_id, {
             transaction,
-            lock: transaction.LOCK,
+            lock: transaction.LOCK.UPDATE,
+            where: { status: 1 },
             include: [
               {
                 model: WeightOption,
-                as: "weightOptions",
-                where: { id: item.weight_id },
+                attributes: ['id', 'weight', 'normal_price', 'subscribe_price', 'mrp_price'],
+                as: 'weightOption',
+                required: true,
+              },
+              {
+                model: ProductInventory,
+                where: { store_id, status: 1 },
+                as: 'productInventory',
+                required: true,
               },
             ],
+          });
+
+          if (!storeWeightOption) {
+            console.error(`StoreWeightOption not found for ID: ${item.store_weight_id}, store_id: ${store_id}`);
+            throw new Error(`Store weight option with ID ${item.store_weight_id} does not exist or is inactive`);
+          }
+
+          if (storeWeightOption.product_id !== item.product_id) {
+            throw new Error(`Store weight option ${item.store_weight_id} does not match product ${item.product_id}`);
+          }
+
+          const product = await Product.findByPk(item.product_id, {
+            transaction,
+            lock: transaction.LOCK.UPDATE,
           });
           if (!product) {
             throw new Error(`Product with ID ${item.product_id} does not exist`);
           }
-          if (!product.weightOptions || !product.weightOptions.length) {
-            throw new Error(`Weight option ${item.weight_id} does not exist for product ${product.title}`);
-          }
-          const weightOption = product.weightOptions[0];
 
           if (product.out_of_stock === 1) {
             throw new Error(`Product ${product.title} is out of stock`);
           }
-          if (product.quantity < item.quantity) {
-            throw new Error(
-              `Not enough stock for ${product.title}: only ${product.quantity} available, ${item.quantity} requested`
-            );
-          }
 
-          const productInventory = await ProductInventory.findOne({
-            where: { store_id, product_id: item.product_id, status: 1 },
-            transaction,
-            lock: transaction.LOCK,
-          });
-          if (!productInventory) {
-            throw new Error(
-              `No inventory found for ${product.title} in store ${store.store_name || store_id}`
-            );
-          }
-
-          const storeWeightOption = await StoreWeightOption.findOne({
-            where: {
-              product_id: item.product_id,
-              weight_id: item.weight_id,
-              product_inventory_id: productInventory.id,
-            },
-            transaction,
-            lock: transaction.LOCK,
-          });
-          if (!storeWeightOption) {
-            throw new Error(
-              `Weight option ${weightOption.weight} not available for ${product.title} in store ${store.store_name || store_id}`
-            );
-          }
           if (storeWeightOption.quantity < item.quantity) {
             throw new Error(
-              `Not enough stock for ${product.title} (${weightOption.weight}) in store ${store.store_name || store_id}: only ${storeWeightOption.quantity} available, ${item.quantity} requested`
+              `Not enough stock for ${product.title} (${storeWeightOption.weightOption.weight}) in store ${store.store_name || store_id}: only ${storeWeightOption.quantity} available, ${item.quantity} requested`
             );
           }
         }
@@ -255,12 +236,8 @@ const instantOrder = async (req, res) => {
 
         if (coupon_id) {
           const coupon = await Coupon.findByPk(coupon_id, { transaction });
-          if (!coupon) {
-            throw new Error("Coupon does not exist");
-          }
-          const currentDate = new Date();
-          if (coupon.status !== 1 || new Date(coupon.end_date) < currentDate) {
-            throw new Error("Coupon is inactive or expired");
+          if (!coupon || coupon.status !== 1 || new Date(coupon.end_date) < new Date()) {
+            throw new Error("Coupon does not exist, is inactive, or expired");
           }
           const subtotalNum = parseFloat(subtotal);
           if (subtotalNum < parseFloat(coupon.min_amt)) {
@@ -293,13 +270,12 @@ const instantOrder = async (req, res) => {
             cou_amt: couponAmount,
             subtotal,
             d_charge: parseFloat(d_charge) || 0,
-            // store_charge: parseFloat(store_charge) || 0,
             tax: parseFloat(tax) || 0,
             o_total: finalTotal,
             a_note,
             order_id: orderNumber,
             trans_id,
-            is_paper_bag: is_paper_bag,
+            is_paper_bag: !!is_paper_bag,
             delivery_tip: parseFloat(delivery_tip) || 0,
           },
           { transaction }
@@ -326,9 +302,24 @@ const instantOrder = async (req, res) => {
         // Create Order Items and Update Quantities
         const items = [];
         for (const item of products) {
-          const product = await Product.findByPk(item.product_id, { transaction });
-          const weight = await WeightOption.findByPk(item.weight_id, { transaction });
-          const itemPrice = weight.normal_price * item.quantity;
+          const storeWeightOption = await StoreWeightOption.findByPk(item.store_weight_id, {
+            transaction,
+            include: [
+              {
+                model: WeightOption,
+                as: 'weightOption',
+                attributes: ['id', 'weight', 'normal_price', 'subscribe_price', 'mrp_price'],
+              },
+            ],
+          });
+
+          if (!storeWeightOption || !storeWeightOption.weightOption) {
+            console.error(`Failed to fetch WeightOption for store_weight_id: ${item.store_weight_id}`);
+            throw new Error(`Invalid store weight option or associated weight option for ID ${item.store_weight_id}`);
+          }
+
+          const weightOption = storeWeightOption.weightOption;
+          const itemPrice = weightOption.normal_price * item.quantity;
 
           const orderItem = await NormalOrderProduct.create(
             {
@@ -337,42 +328,40 @@ const instantOrder = async (req, res) => {
               product_id: item.product_id,
               pquantity: item.quantity,
               price: itemPrice,
-              weight_id: item.weight_id,
+              store_weight_id: item.store_weight_id,
             },
             { transaction }
           );
           items.push(orderItem);
 
+          // Update Product stock
+          const product = await Product.findByPk(item.product_id, { transaction });
           await Product.update(
             { quantity: product.quantity - item.quantity },
             { where: { id: item.product_id }, transaction }
           );
 
-          const productInventory = await ProductInventory.findOne({
-            where: { store_id, product_id: item.product_id, status: 1 },
-            transaction,
-          });
-
+          // Update StoreWeightOption stock
           await StoreWeightOption.update(
             { quantity: sequelize.literal(`quantity - ${item.quantity}`) },
             {
-              where: {
-                product_id: item.product_id,
-                weight_id: item.weight_id,
-                product_inventory_id: productInventory.id,
-              },
+              where: { id: item.store_weight_id },
               transaction,
             }
           );
         }
 
         // Remove Cart Items
-        const cartItems = products.map(({ product_id, weight_id }) => ({
-          uid,
-          product_id,
-          weight_id,
-          orderType: "Normal",
-        }));
+        const cartItems = [];
+        for (const item of products) {
+          const storeWeightOption = await StoreWeightOption.findByPk(item.store_weight_id, { transaction });
+          cartItems.push({
+            uid,
+            product_id: item.product_id,
+            weight_id: storeWeightOption.weight_id,
+            orderType: "Normal",
+          });
+        }
         await Cart.destroy({ where: { [Op.or]: cartItems }, transaction });
 
         // Wallet Payment
@@ -457,7 +446,6 @@ const instantOrder = async (req, res) => {
       ResponseMsg: "Instant Order Created Successfully",
       id: order.id,
       o_total: finalTotal,
-      // order_number: order.order_id,
       coupon_applied: appliedCoupon
         ? {
             id: appliedCoupon.id,
@@ -474,7 +462,7 @@ const instantOrder = async (req, res) => {
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
-        ResponseMsg: "Invalid weight option specified for the product",
+        ResponseMsg: "Invalid store weight option specified for the product",
       });
     }
     return res.status(500).json({
