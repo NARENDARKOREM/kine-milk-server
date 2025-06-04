@@ -62,7 +62,7 @@ const Product = sequelize.define(
       },
     },
     batch_number:{
-      type:DataTypes.FLOAT,
+      type:DataTypes.STRING,
       allowNull:false,
       validate: {
         is: {
