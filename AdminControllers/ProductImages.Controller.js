@@ -68,94 +68,99 @@ const toggleProductImageStatus = asyncHandler(async (req, res) => {
 });
 
 const upsertProductImages = async (req, res) => {
-    const { id, product_id, status, existing_images } = req.body;
+     const { id, product_id, status, existing_images } = req.body;
 
-    try {
-        if (!product_id) {
-            return res.status(400).json({ error: "Product ID is required." });
-        }
+     try {
+       if (!product_id) {
+         return res.status(400).json({ error: "Product ID is required." });
+       }
 
-        const files = req.files;
-        const imgFiles = files?.img ? (Array.isArray(files.img) ? files.img : [files.img]) : [];
+       const product = await Product.findByPk(product_id);
+       if (!product) {
+         return res.status(400).json({ error: "Invalid product ID." });
+       }
 
-        let product_imgUrls = [];
+       const files = req.file;
+       console.log(files,"fffffffffffffffffiles")
+       const imgFiles = files?.img ? (Array.isArray(files.img) ? files.img : [files.img]) : [];
 
-        if (imgFiles.length > 0) {
-            product_imgUrls = await uploadToS3(imgFiles, "Product-Images");
-            if (!Array.isArray(product_imgUrls)) {
-                product_imgUrls = [product_imgUrls];
-            }
-        }
+       let product_imgUrls = [];
+       if (imgFiles.length > 0) {
+         product_imgUrls = await uploadToS3(imgFiles, "Product-Images");
+         if (!Array.isArray(product_imgUrls)) {
+           product_imgUrls = [product_imgUrls];
+         }
+       }
 
-        let existingImageUrls = [];
-        if (existing_images) {
-            try {
-                existingImageUrls = JSON.parse(existing_images);
-                if (!Array.isArray(existingImageUrls)) {
-                    existingImageUrls = [existingImageUrls];
-                }
-            } catch (e) {
-                console.error("Error parsing existing_images:", e);
-                return res.status(400).json({ error: "Invalid existing_images format." });
-            }
-        }
+       let existingImageUrls = [];
+       if (existing_images) {
+         try {
+           existingImageUrls = JSON.parse(existing_images);
+           if (!Array.isArray(existingImageUrls)) {
+             existingImageUrls = [existingImageUrls];
+           }
+         } catch (e) {
+           console.error("Error parsing existing_images:", e);
+           return res.status(400).json({ error: "Invalid existing_images format." });
+         }
+       }
 
-        if (id) {
-            const existingProductImage = await ProductImage.findByPk(id);
-            if (!existingProductImage) {
-                return res.status(404).json({ error: "Product image not found" });
-            }
+       if (id) {
+         const existingProductImage = await ProductImage.findByPk(id);
+         if (!existingProductImage) {
+           return res.status(404).json({ error: "Product image not found" });
+         }
 
-            let currentImages = [];
-            if (existingProductImage.img) {
-                try {
-                    currentImages = JSON.parse(existingProductImage.img);
-                    if (!Array.isArray(currentImages)) {
-                        currentImages = [currentImages];
-                    }
-                } catch (e) {
-                    console.error("Error parsing current images:", e);
-                    currentImages = [];
-                }
-            }
+         let currentImages = [];
+         if (existingProductImage.img) {
+           try {
+             currentImages = JSON.parse(existingProductImage.img);
+             if (!Array.isArray(currentImages)) {
+               currentImages = [currentImages];
+             }
+           } catch (e) {
+             console.error("Error parsing current images:", e);
+             currentImages = [];
+           }
+         }
 
-            const updatedImages = [
-                ...existingImageUrls,
-                ...product_imgUrls,
-            ];
+         const updatedImages = [...existingImageUrls, ...product_imgUrls];
+         const uniqueImages = [...new Set(updatedImages)];
 
-            const uniqueImages = [...new Set(updatedImages)];
+         if (uniqueImages.length === 0 && currentImages.length === 0) {
+           return res.status(400).json({ error: "At least one image is required." });
+         }
 
-            existingProductImage.product_id = product_id;
-            existingProductImage.status = status;
-            existingProductImage.img = uniqueImages.length > 0 ? JSON.stringify(uniqueImages) : existingProductImage.img;
-            await existingProductImage.save();
+         existingProductImage.product_id = product_id;
+         existingProductImage.status = status;
+         existingProductImage.img = uniqueImages.length > 0 ? JSON.stringify(uniqueImages) : existingProductImage.img;
+         await existingProductImage.save();
 
-            return res.status(200).json({
-                message: product_imgUrls.length > 0 ? "Extra images added successfully!" : "Product image updated successfully!",
-                productImage: existingProductImage,
-            });
-        } else {
-            if (product_imgUrls.length === 0) {
-                return res.status(400).json({ error: "At least one image is required." });
-            }
+         return res.status(200).json({
+           message: product_imgUrls.length > 0 ? "Extra images added successfully!" : "Product image updated successfully!",
+           productImage: existingProductImage,
+         });
+       } else {
+         if (product_imgUrls.length === 0) {
+           return res.status(400).json({ error: "At least one image is required." });
+         }
 
-            const newProductImage = await ProductImage.create({
-                product_id,
-                status,
-                img: JSON.stringify(product_imgUrls),
-            });
+         const newProductImage = await ProductImage.create({
+           product_id,
+           status,
+           img: JSON.stringify(product_imgUrls),
+         });
 
-            return res.status(201).json({
-                message: "Product image created successfully!",
-                productImage: newProductImage,
-            });
-        }
-    } catch (error) {
-        console.error("Error in upsertProductImages:", error);
-        return res.status(500).json({ error: "Internal server error", details: error.message });
-    }
-};
+         return res.status(201).json({
+           message: "Product image created successfully!",
+           productImage: newProductImage,
+         });
+       }
+     } catch (error) {
+       console.error("Error in upsertProductImages:", error);
+       return res.status(500).json({ error: "Internal server error", details: error.message });
+     }
+   };
 
 const getProductImagesCount = asyncHandler(async (req, res) => {
     const productImagesCount = await ProductImage.count();
