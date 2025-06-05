@@ -632,7 +632,7 @@ const getDiscountOfferProducts = async (req, res) => {
       where: {
         status: 1,
         screenName: 'categories',
-        planTypes:{ [Op.in]: ['instant', 'subscribe'] },
+        planType:{ [Op.in]: ['instant', 'subscribe'] },
         couponPercentage: { [Op.ne]: null, [Op.gt]: 0 },
       },
       attributes: ['id', 'img', 'couponPercentage', 'planType'],

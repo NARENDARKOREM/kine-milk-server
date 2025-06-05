@@ -1,32 +1,4 @@
-// // sockets/index.js
-// const { Server } = require("socket.io");
 
-// module.exports = (server) => {
-//   const io = new Server(server, {
-//     cors: {
-//       origin: "*",
-//       methods: ["GET", "POST"],
-//       credentials: true,
-//     },
-//   });
-
-//   io.on("connection", (socket) => {
-//     console.log("Client connected:", socket.id);
-
-//     // Client joins a room based on riderId
-//     socket.on("joinDelivery", ({ riderId }) => {
-//       const room = `delivery:${riderId}`;
-//       socket.join(room);
-//       console.log(`${socket.id} joined room: ${room}`);
-//     });
-
-//     socket.on("disconnect", () => {
-//       console.log("Client disconnected:", socket.id);
-//     });
-//   });
-
-//   return io; // Return io instance for app.set("io", io)
-// };
 
 // sockets/index.js
 const { Server } = require("socket.io");
