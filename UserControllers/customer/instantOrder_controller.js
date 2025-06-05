@@ -352,17 +352,28 @@ const instantOrder = async (req, res) => {
         }
 
         // Remove Cart Items
-        const cartItems = [];
-        for (const item of products) {
-          const storeWeightOption = await StoreWeightOption.findByPk(item.store_weight_id, { transaction });
-          cartItems.push({
-            uid,
-            product_id: item.product_id,
-            weight_id: storeWeightOption.weight_id,
-            orderType: "Normal",
-          });
-        }
-        await Cart.destroy({ where: { [Op.or]: cartItems }, transaction });
+        // const cartItems = [];
+        // for (const item of products) {
+        //   const storeWeightOption = await StoreWeightOption.findByPk(item.store_weight_id, { transaction });
+        //   cartItems.push({
+        //     uid:uid,
+        //     product_id: item.product_id,
+        //     weight_id: storeWeightOption.weight_id,
+        //     orderType: "Normal",
+        //   });
+        // }
+        // await Cart.destroy({ where: { [Op.or]: cartItems }, transaction });
+
+        const cartItems = products.map(item => ({
+          uid:uid,
+          product_id: item.product_id,
+          store_weight_id: item.store_weight_id,
+          orderType: "Normal",
+        }));
+       await Cart.destroy({
+        where: { [Op.or]: cartItems },
+        transaction,
+      });
 
         // Wallet Payment
         if (!trans_id) {
@@ -1159,17 +1170,24 @@ const getOrderDetails = async (req, res) => {
         {
           model: NormalOrderProduct,
           as: "NormalProducts",
-          attributes: ["id", "product_id", "pquantity", "price", "weight_id"],
+          attributes: ["id", "product_id", "pquantity", "price", "store_weight_id"],
           include: [
             {
-              model: WeightOption,
-              as: "productWeight",
-              attributes: ["id", "normal_price", "subscribe_price", "mrp_price", "weight"],
+              model: StoreWeightOption,
+              as: "storeWeightOption", // Corrected alias
+              attributes: ["id", "product_id", "quantity"],
               include: [
                 {
-                  model: Product,
-                  as: "product",
-                  attributes: ["id", "title", "img", "description"],
+                  model: WeightOption,
+                  as: "weightOption",
+                  attributes: ["id", "weight", "normal_price", "subscribe_price", "mrp_price"],
+                  include:[
+                    {
+                      model:Product,
+                      as: "product",
+                      attributes: ["id", "title", "img", "description"],
+                    }
+                  ]
                 },
               ],
             },
@@ -1256,7 +1274,7 @@ const getOrderDetails = async (req, res) => {
     );
     const averageRating = allReviews.length > 0
       ? Number((allReviews.reduce((sum, review) => sum + review.rating, 0) / allReviews.length).toFixed(2))
-      : null; // or 0 if you prefer a default value
+      : null;
 
     // Format response
     res.status(200).json({
@@ -1277,28 +1295,29 @@ const getOrderDetails = async (req, res) => {
         cou_amt: order.cou_amt,
         subtotal: order.subtotal,
         d_charge: order.d_charge,
+        delivery_tip:order.delivery_tip || 0,
         store_charge: order.store_charge,
         tax: order.tax,
         o_total: order.o_total,
         a_note: order.a_note,
-        rid:order.rid,
+        rid: order.rid,
         trans_id: order.trans_id,
         createdAt: order.createdAt,
         updatedAt: order.updatedAt,
         products: order.NormalProducts,
         receiver: order.receiver,
-        rider:order.riders,
+        rider: order.riders,
         hasReviews: hasReviews,
         averageRating: averageRating,
       },
     });
   } catch (error) {
-    console.error("Error fetching order details:", error.message);
+    console.error("Error fetching order details:", error.stack);
     res.status(500).json({
       ResponseCode: "500",
       Result: "false",
       ResponseMsg: "Internal server error",
-      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+      error: process.env.NODE_ENV === "development" ? error.stack : undefined,
     });
   }
 };
@@ -1546,28 +1565,27 @@ const getMyInstantOrders = async (req, res) => {
             "id",
             "oid",
             "product_id",
-            "weight_id",
+            "store_weight_id",
             "pquantity",
             "price",
           ],
           include: [
             {
-              model: WeightOption,
-              as: "productWeight",
-              attributes: [
-                "id",
-                "normal_price",
-                "subscribe_price",
-                "mrp_price",
-                "weight",
-              ],
-              required: false,
+              model: StoreWeightOption,
+              as: "storeWeightOption", // Corrected alias
+              attributes: ["id", "product_id", "quantity"],
               include: [
                 {
-                  model: Product,
-                  as: "product",
-                  attributes: ["id", "title", "img", "description"],
-                  required: false,
+                  model: WeightOption,
+                  as: "weightOption",
+                  attributes: ["id", "weight", "normal_price", "subscribe_price", "mrp_price"],
+                  include:[
+                    {
+                      model:Product,
+                      as: "product",
+                      attributes: ["id", "title", "img", "description"],
+                    }
+                  ]
                 },
               ],
             },
