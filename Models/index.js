@@ -408,3 +408,7 @@ SubscribeOrderProduct.belongsTo(Product, {
   foreignKey: "product_id",
   as: "subscribeProduct",
 });
+
+
+NormalOrderProduct.belongsTo(StoreWeightOption, { foreignKey: "store_weight_id", as: "storeWeightOption" });
+StoreWeightOption.hasMany(NormalOrderProduct, { foreignKey: "store_weight_id", as: "normalOrderProducts" });
