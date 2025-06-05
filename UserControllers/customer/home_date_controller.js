@@ -232,7 +232,7 @@ const HomeScreenAPI = async(req,res)=>{
         ResponseMsg:"Ads are not found"
       })
     }
-    const offers = await Ads.findAll({where:{status:1,screenName:"categories"}},);
+    const offers = await Ads.findAll({where:{status:1,screenName:"categories",planType:{[Op.in]:['instant','subscribe']}}},);
     if(!offers || offers.length === 0){
       return res.status(401).json({
         ResponseMsg:"400",
@@ -631,7 +631,8 @@ const getDiscountOfferProducts = async (req, res) => {
     const offers = await Ads.findAll({
       where: {
         status: 1,
-        screenName: 'homescreen',
+        screenName: 'categories',
+        planTypes:{ [Op.in]: ['instant', 'subscribe'] },
         couponPercentage: { [Op.ne]: null, [Op.gt]: 0 },
       },
       attributes: ['id', 'img', 'couponPercentage', 'planType'],
