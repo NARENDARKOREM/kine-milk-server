@@ -202,7 +202,7 @@ const subscribeOrder = async (req, res) => {
           o_type,
           start_date: referenceStartDate,
           end_date: referenceEndDate,
-          settingTax,
+          tax:settingTax,
           d_charge: o_type === "Delivery" ? 0 : 0,
           store_charge: 0,
           cou_id: appliedCoupon ? appliedCoupon.id : null,
