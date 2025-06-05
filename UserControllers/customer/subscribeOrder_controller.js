@@ -1096,31 +1096,60 @@ const getOrdersByStatus = async (req, res) => {
   try {
     const orders = await SubscribeOrder.findAll({
       where: { uid },
-      // attributes: ['id', 'uid', 'status', 'createdAt', 'address_id', 'order_id', 'odate', 'subtotal', 'o_total'],
       include: [
         {
           model: SubscribeOrderProduct,
           as: "orderProducts",
-          // attributes: ["id", "timeslot_id", "weight_id", "product_id", "status"],
           include: [
             {
-              model: WeightOption,
-              as: 'subscribeProductWeight',
-              attributes: ['id', 'weight', 'subscribe_price', 'mrp_price', 'normal_price'],
+              model: StoreWeightOption,
+              as: 'soptions',
+              attributes: [
+                'id',
+                'product_inventory_id',
+                'product_id',
+                'weight_id',
+                'quantity',
+                'subscription_quantity',
+                'total',
+              ],
               include: [
                 {
-                  model: Product,
-                  as: "product",
-                  attributes: ['id', 'title', 'img', 'discount', 'description'],
+                  model: WeightOption,
+                  as: "weightOption",
+                  attributes: [
+                    'id',
+                    'product_id',
+                    'weight',
+                    'subscribe_price',
+                    'normal_price',
+                    'mrp_price',
+                  ],
                   include: [
                     {
-                      model: ProductReview,
-                      as: 'ProductReviews',
-                      attributes: ['id', 'rating', 'review'],
-                    }
-                  ]
+                      model: Product,
+                      as: "product",
+                      attributes: ['id', 'title', 'img', 'discount', 'description'],
+                    },
+                  ],
                 },
-              ]
+              ],
+            },
+            {
+              model: Product,
+              as: "subscribeProduct",
+              attributes: ["id", "title", "img", "description"],
+              include: [
+                {
+                  model: ProductReview,
+                  as: "ProductReviews",
+                  attributes: ["id", "rating", "review", "user_id", "order_id"],
+                  where: {
+                    user_id: uid,
+                  },
+                  required: false,
+                },
+              ],
             },
             {
               model: Time,
@@ -1145,25 +1174,19 @@ const getOrdersByStatus = async (req, res) => {
 
     for (let order of orders) {
       // Calculate average rating
-      const averageRating = (() => {
-        const allReviews = order.orderProducts.flatMap(orderProduct => [
-          ...(orderProduct.subscribeProductWeight?.product?.ProductReviews || []),
-          ...(orderProduct.productReviews || [])
-        ]);
-        const totalRating = allReviews.reduce((sum, review) => sum + (review.rating || 0), 0);
-        return allReviews.length > 0 ? totalRating / allReviews.length : 0;
-      })();
+      const allReviews = order.orderProducts.flatMap(orderProduct =>
+        orderProduct.subscribeProduct?.ProductReviews?.filter(r => r.order_id === order.id) || []
+      );
+
+      const totalRating = allReviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+      const averageRating = allReviews.length > 0 ? totalRating / allReviews.length : 0;
+
       order.setDataValue('averageRating', averageRating);
 
-      // Extract product statuses
       const productStatuses = (order.orderProducts || []).map(p => p.status || "");
+      let groupStatus = "Pending";
 
-      // Determine group status by priority
-      let groupStatus = "Pending"; // default fallback (instead of Unknown)
-
-      if (productStatuses.length === 0) {
-        groupStatus = "Pending"; // Treat empty orders as Pending (or you can use "Empty")
-      } else {
+      if (productStatuses.length > 0) {
         for (const status of statusPriority) {
           if (productStatuses.includes(status)) {
             groupStatus = status;
@@ -1196,6 +1219,7 @@ const getOrdersByStatus = async (req, res) => {
 
 
 
+
 const getOrderDetails = async (req, res) => {
   const uid = req.user.userId;
 
@@ -1206,81 +1230,46 @@ const getOrderDetails = async (req, res) => {
       ResponseMsg: "Unauthorized",
     });
   }
+
   const { id } = req.params;
 
   try {
     const orderDetails = await SubscribeOrder.findOne({
-      where: { id },
-      attributes: [
-        'id',
-        'uid',
-        'odate',
-        'o_type',
-        'delivered_dates',
-        'tax',
-        'd_charge',
-        'cou_amt',
-        'o_total',
-        'subtotal',
-        'status',
-        'commission',
-        'store_charge',
-        'order_id',
-      ],
+      where: { id, uid },
       include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: ['name', 'email', 'mobile', 'wallet'],
-        },
         {
           model: SubscribeOrderProduct,
           as: "orderProducts",
-          attributes: [
-            'id',
-            'start_date',
-            'end_date',
-            'start_period',
-            'paused_period',
-            'pause',
-            'status',
-            'price',
-            'repeat_day',
-            'schedule',
-            'price',
-            'store_weight_id',
-            'product_id', // Add product_id for debugging
-          ],
           include: [
             {
               model: StoreWeightOption,
-              as: 'soptions',
+              as: "soptions",
               attributes: [
-                'id',
-                'product_inventory_id',
-                'product_id',
-                'weight_id',
-                'quantity',
-                'subscription_quantity',
-                'total',
+                "id",
+                "product_inventory_id",
+                "product_id",
+                "weight_id",
+                "quantity",
+                "subscription_quantity",
+                "total",
               ],
               include: [
                 {
                   model: WeightOption,
-                  as: 'weightOption',
+                  as: "weightOption",
                   attributes: [
-                    'id',
-                    'product_id',
-                    'weight',
-                    'subscribe_price',
-                    'normal_price',
-                    'mrp_price',
+                    "id",
+                    "product_id",
+                    "weight",
+                    "subscribe_price",
+                    "normal_price",
+                    "mrp_price",
                   ],
                   include: [
                     {
                       model: Product,
                       as: "product",
-                      attributes: ['id', 'title', 'img', 'discount', 'description'],
+                      attributes: ["id", "title", "img", "discount", "description"],
                     },
                   ],
                 },
@@ -1296,8 +1285,8 @@ const getOrderDetails = async (req, res) => {
                   as: "ProductReviews",
                   attributes: ["id", "rating", "review", "user_id", "order_id"],
                   where: {
-                    user_id: uid,
-                    order_id: id,
+                    user_id: uid, // Only filter by user_id
+                    order_id: id, // Ensure we only get reviews for this specific order
                   },
                   required: false,
                 },
@@ -1306,7 +1295,7 @@ const getOrderDetails = async (req, res) => {
             {
               model: Time,
               as: "timeslotss",
-              attributes: ['id', 'mintime', 'maxtime'],
+              attributes: ["id", "mintime", "maxtime"],
             },
           ],
         },
@@ -1319,8 +1308,6 @@ const getOrderDetails = async (req, res) => {
           as: "suborderdeliveryreview",
         },
       ],
-      order: [['createdAt', 'DESC']],
-      logging: console.log, // Debug SQL
     });
 
     if (!orderDetails) {
@@ -1331,27 +1318,20 @@ const getOrderDetails = async (req, res) => {
       });
     }
 
-    // Debug: Log orderProducts to check data
-    console.log(
-      'Order Products:',
-      JSON.stringify(orderDetails.orderProducts, null, 2)
-    );
+    // Calculate average rating only for this order
+    const allReviews = orderDetails.orderProducts.flatMap(orderProduct => {
+      const reviews = orderProduct.subscribeProduct?.ProductReviews || [];
+      return reviews.filter(r => r.order_id === orderDetails.id);
+    });
 
-    const averageRating = (() => {
-      const allReviews = orderDetails.orderProducts.flatMap(orderProduct => {
-        const reviews = orderProduct.subscribeProduct?.ProductReviews || [];
-        return reviews;
-      });
-      const totalRating = allReviews.reduce((sum, review) => sum + (review.rating || 0), 0);
-      const average = allReviews.length > 0 ? totalRating / allReviews.length : 0;
-      return average;
-    })();
+    const totalRating = allReviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+    const averageRating = allReviews.length > 0 ? totalRating / allReviews.length : 0;
 
     return res.status(200).json({
       ResponseCode: "200",
       Result: "true",
       ResponseMsg: "Subscribe Order fetched successfully!",
-      orderDetails: orderDetails.toJSON(), // Ensure proper serialization
+      orderDetails: orderDetails.toJSON(),
       averageRating,
     });
   } catch (error) {
@@ -1361,12 +1341,11 @@ const getOrderDetails = async (req, res) => {
       Result: "false",
       ResponseMsg: "Internal Server Error",
       error: error.message,
-      stack: error.stack,
     });
   }
 };
 
-module.exports = getOrderDetails;
+
 
 // this cancelled for particular order
 const cancelOrder = async (req, res) => {
