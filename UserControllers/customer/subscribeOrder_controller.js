@@ -1480,8 +1480,8 @@ const cancelOrder = async (req, res) => {
 
     await order.update(
       {
-        subtotal: updatedSubtotal,
-        o_total: updatedTotal,
+        // subtotal: updatedSubtotal,
+        // o_total: updatedTotal,
         status: newStatus,
       },
       { transaction: t }
@@ -1650,7 +1650,7 @@ const cancelAllProductsInSubscriptionOrder = async (req, res) => {
     }
 
     // Update SubscribeOrder to Cancelled
-    await order.update({ status: "Cancelled", subtotal: 0, o_total: 0 }, { transaction: t });
+    await order.update({ status: "Cancelled" }, { transaction: t });
 
     // Update user wallet
     const updatedWallet = parseFloat(user.wallet || 0) + totalRefund;
