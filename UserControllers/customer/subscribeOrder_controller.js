@@ -411,6 +411,7 @@ const editSubscribeOrder = async (req, res) => {
           deliveryDays,
           start_date: startDate,
           end_date: endDate,
+          product_total:item.product_total
         };
       })
     );
@@ -433,6 +434,7 @@ const editSubscribeOrder = async (req, res) => {
         transaction_type: "Debited",
         status: 1,
       }, { transaction: t });
+      console.log("debiteddddddddddddddddddddd ")
     } else if (diffType === "credit") {
       const refund = Math.abs(diffAmount);
       await user.update({ wallet: user.wallet + refund }, { transaction: t });
@@ -445,6 +447,8 @@ const editSubscribeOrder = async (req, res) => {
         transaction_type: "Credited",
         status: 1,
       }, { transaction: t });
+
+      console.log("crediteddddddddddddddddddddd ")
     }
 
     // Update main order
@@ -462,10 +466,6 @@ const editSubscribeOrder = async (req, res) => {
       transaction: t,
     });
 
-    const updatedKeys = updatedItems.map(i =>
-      `${i.product_id}-${i.weight_id}-${i.timeslot_id}`
-    );
-
     for (const item of updatedItems) {
       const existing = existingProducts.find(
         (prod) =>
@@ -481,18 +481,11 @@ const editSubscribeOrder = async (req, res) => {
           start_date: item.start_date,
           end_date: item.end_date,
           status: "Pending",
-          price: item.price,
+          price: item.product_total,
         }, { transaction: t });
       }
     }
 
-    // Mark products not present in new list as removed (optional)
-    for (const existing of existingProducts) {
-      const key = `${existing.product_id}-${existing.weight_id}-${existing.timeslot_id}`;
-      if (!updatedKeys.includes(key)) {
-        await existing.update({ status: "Removed" }, { transaction: t });
-      }
-    }
 
     await t.commit();
     return res.status(200).json({

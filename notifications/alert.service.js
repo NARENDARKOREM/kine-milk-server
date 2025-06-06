@@ -7,6 +7,7 @@ const sendPushNotification = async ({ appId,apiKey,playerIds, data,headings,cont
     console.log(data,"4444444444444444444")
     console.log(headings,"5555555555555555555555555",)
     console.log(contents,"666666666666666666666")
+    
     try {
       const response = await axios.post(
         "https://onesignal.com/api/v1/notifications",
