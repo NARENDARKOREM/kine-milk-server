@@ -1,7 +1,7 @@
 const { Server } = require("socket.io");
-const { storeRiderLocation, getRiderLocation } = require("../utils/redisUtils");
+const { storeRiderLocation, getRiderLocation } = require("../utils/redisUtils"); 
 
-module.exports = (server) => {
+module.exports = (server, redisClient) => {
   const io = new Server(server, {
     cors: {
       origin: "*",
@@ -21,7 +21,6 @@ module.exports = (server) => {
 
     socket.on("sendLocation", async ({ riderId, latitude, longitude }) => {
       try {
-        const redisClient = socket.request.app.locals.redisClient;
         await storeRiderLocation(redisClient, riderId, latitude, longitude);
         const locationData = { riderId, latitude, longitude, timestamp: Date.now() };
         io.to(`delivery:${riderId}`).emit("locationUpdate", locationData);
@@ -31,10 +30,8 @@ module.exports = (server) => {
       }
     });
 
-    // ✅ New: Get latest rider location
     socket.on("getLocation", async ({ riderId }, callback) => {
       try {
-        const redisClient = socket.request.app.locals.redisClient;
         const location = await getRiderLocation(redisClient, riderId);
         if (callback) {
           callback({ success: true, data: location });
