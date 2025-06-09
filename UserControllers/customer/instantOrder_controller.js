@@ -1785,7 +1785,7 @@ const addPreviousOrderToCart = async(req,res)=>{
         {
           model:NormalOrderProduct,
           as:"NormalProducts",
-          attributes:["id","product_id","weight_id","pquantity"],
+          attributes:["id","product_id","store_weight_id","pquantity"],
           include:[
             {
               model:WeightOption,
@@ -1810,7 +1810,7 @@ const addPreviousOrderToCart = async(req,res)=>{
     }
     const previousProducts = previousOrder.NormalProducts.map(item => ({
       product_id: item.product_id,
-      weight_id: item.weight_id,
+      store_weight_id: item.store_weight_id,
       quantity: item.pquantity,
       orderType: "Normal"
     }));
@@ -1827,7 +1827,7 @@ const addPreviousOrderToCart = async(req,res)=>{
         uid: uid,
         [Op.or]: previousProducts.map(item => ({
           product_id: item.product_id,
-          weight_id: item.weight_id,
+          store_weight_id: item.store_weight_id,
           orderType: "Normal"
         }))
       }
@@ -1850,7 +1850,7 @@ const addPreviousOrderToCart = async(req,res)=>{
         cartItemsToAdd.push({
           uid: uid,
           product_id: item.product_id,
-          weight_id: item.weight_id,
+          store_weight_id: item.store_weight_id,
           quantity: item.quantity,
           orderType: "Normal"
         });
