@@ -1293,7 +1293,7 @@ const getOrderDetails = async (req, res) => {
         {
           model:Store,
           as:"store",
-          attributes:["id","lats","longs"]
+          attributes:["id","title","lats","longs"]
         }
       ],
       order: [["createdAt", "DESC"]],
@@ -1331,6 +1331,7 @@ const getOrderDetails = async (req, res) => {
         order_id: order.order_id,
         uid: order.uid,
         store_id: order.store_id,
+        store_name:order.store?.title || null,
         store_latitude: order.store?.lats || null,
         store_longitude: order.store?.longs || null,
         address: order.instOrdAddress,
@@ -1605,6 +1606,11 @@ const getMyInstantOrders = async (req, res) => {
     const orders = await NormalOrder.findAll({
       where: { uid: uid },
       include: [
+        {
+          model:Store,
+          as:"store",
+          attributes: ["id", "title", "lats", "longs"],
+        },
         {
           model: NormalOrderProduct,
           as: "NormalProducts",
