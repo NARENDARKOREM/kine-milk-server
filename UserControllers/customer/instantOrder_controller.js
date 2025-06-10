@@ -1290,6 +1290,11 @@ const getOrderDetails = async (req, res) => {
           as: "receiver",
           attributes: ["id", "name", "email", "mobile", "address_id"],
         },
+        {
+          model:Store,
+          as:"store",
+          attributes:["id","title","lats","longs"]
+        }
       ],
       order: [["createdAt", "DESC"]],
     });
@@ -1326,6 +1331,9 @@ const getOrderDetails = async (req, res) => {
         order_id: order.order_id,
         uid: order.uid,
         store_id: order.store_id,
+        store_name:order.store?.title || null,
+        store_latitude: order.store?.lats || null,
+        store_longitude: order.store?.longs || null,
         address: order.instOrdAddress,
         odate: order.odate,
         status: order.status,
@@ -1599,6 +1607,11 @@ const getMyInstantOrders = async (req, res) => {
       where: { uid: uid },
       include: [
         {
+          model:Store,
+          as:"store",
+          attributes: ["id", "title", "lats", "longs"],
+        },
+        {
           model: NormalOrderProduct,
           as: "NormalProducts",
           attributes: [
@@ -1772,7 +1785,7 @@ const addPreviousOrderToCart = async(req,res)=>{
         {
           model:NormalOrderProduct,
           as:"NormalProducts",
-          attributes:["id","product_id","weight_id","pquantity"],
+          attributes:["id","product_id","store_weight_id","pquantity"],
           include:[
             {
               model:WeightOption,
@@ -1797,7 +1810,7 @@ const addPreviousOrderToCart = async(req,res)=>{
     }
     const previousProducts = previousOrder.NormalProducts.map(item => ({
       product_id: item.product_id,
-      weight_id: item.weight_id,
+      store_weight_id: item.store_weight_id,
       quantity: item.pquantity,
       orderType: "Normal"
     }));
@@ -1814,7 +1827,7 @@ const addPreviousOrderToCart = async(req,res)=>{
         uid: uid,
         [Op.or]: previousProducts.map(item => ({
           product_id: item.product_id,
-          weight_id: item.weight_id,
+          store_weight_id: item.store_weight_id,
           orderType: "Normal"
         }))
       }
@@ -1837,7 +1850,7 @@ const addPreviousOrderToCart = async(req,res)=>{
         cartItemsToAdd.push({
           uid: uid,
           product_id: item.product_id,
-          weight_id: item.weight_id,
+          store_weight_id: item.store_weight_id,
           quantity: item.quantity,
           orderType: "Normal"
         });
@@ -1863,6 +1876,40 @@ const addPreviousOrderToCart = async(req,res)=>{
   }
 }
 
+// Most frequent delivery boy tip amount
+const getMostFrequentDeliveryTip = async(req,res)=>{
+  try {
+    const tips = await NormalOrder.findAll({
+      attributes:['delivery_tip',[sequelize.fn('COUNT',sequelize.col('delivery_tip')), 'count']],
+      where:{
+        delivery_tip:{
+          [Op.gt]:0
+        }
+      },
+      group:['delivery_tip'],
+      order:[['count','DESC']],
+      limit: 1
+    })
+     if (tips.length === 0) {
+      return res.status(404).json({ message: "No tips found." });
+    }
+    res.status(200).json({
+      ResponseCode: "200",
+      Result: "true",
+      ResponseMsg: "Most frequent delivery tip fetched successfully",
+      mostFrequentTip: tips[0].delivery_tip,
+      count: tips[0].dataValues.tip_count
+    })
+  } catch (error) {
+    console.error("Error fetching most frequent delivery tip:", error);
+    return res.status(500).json({
+      ResponseCode: "500",
+      Result: "false",
+      ResponseMsg: "Server Error",
+      error: error.message,
+    });
+  }
+}
 
 module.exports = {
   instantOrder,
@@ -1874,5 +1921,6 @@ module.exports = {
   getMyInstantOrders,
   couponList,
   instantOrderAgain,
-  addPreviousOrderToCart
+  addPreviousOrderToCart,
+  getMostFrequentDeliveryTip
 };
