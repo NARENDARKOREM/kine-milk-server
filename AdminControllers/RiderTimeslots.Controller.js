@@ -10,6 +10,7 @@ const upsertRiderTimeSlot = async (req, res) => {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
+    
     // Validate store_id exists
     const store = await Store.findByPk(store_id);
     if (!store) {

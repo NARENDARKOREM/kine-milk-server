@@ -180,6 +180,7 @@ const downloadSingleNormalPaymentByStore = async (req, res) => {
       return res.status(404).json({ message: 'Payment not found or does not belong to this store' });
     }
 
+    
     const formattedPayment = {
       order_id: payment.order_id || 'N/A',
       order_date: payment.odate ? new Date(payment.odate).toLocaleDateString() : 'N/A',

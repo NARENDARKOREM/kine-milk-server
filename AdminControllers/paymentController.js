@@ -52,6 +52,7 @@ const getNormalPayments = async (req, res) => {
       logging: (sql) => console.log('SQL Query:', sql),
     });
 
+    
     const formattedPayments = rows.map(payment => ({
       order_id: payment.order_id,
       order_date: payment.odate,

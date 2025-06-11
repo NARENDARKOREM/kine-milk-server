@@ -5,6 +5,7 @@ const {upload,handleMulterError} = require("../utils/multerConfig");
 const adminMiddleware = require('../middlewares/adminMiddleware');
 const authMiddleware = require('../middlewares/authMiddleware');
 
+
 const allowAdminOrAuthenticated = (req, res, next) => {
     // First check if the user is admin
     adminMiddleware.isAdmin(req, res, (adminErr) => {

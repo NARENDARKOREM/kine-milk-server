@@ -434,6 +434,7 @@ const toggleBannerStatus = asyncHandler(async (req, res) => {
   }
 });
 
+
 module.exports = {
   upsertBanner,
   fetchBannerById,

@@ -185,6 +185,7 @@ const upsertCoupon = asyncHandler(async (req, res) => {
         });
       }
 
+      
       await coupon.update({
         coupon_title,
         coupon_img: imageUrl || coupon.coupon_img,
