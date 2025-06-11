@@ -161,7 +161,7 @@ const subscribeOrder = async (req, res) => {
       const user = await User.findOne({ where: { id: uid }, });
       if (!user) throw new Error("User not found");
 
-      const store = await Store.findOne({ where: { id: store_id },  });
+      const store = await Store.findOne({ where: { id: store_id }, });
       if (!store) throw new Error("Store not found");
 
       if (o_type === "Delivery") {
@@ -175,7 +175,7 @@ const subscribeOrder = async (req, res) => {
       let finalTotal = parseFloat(o_total);
 
       if (coupon_id) {
-        const coupon = await Coupon.findByPk(coupon_id, );
+        const coupon = await Coupon.findByPk(coupon_id,);
         if (!coupon) throw new Error("Coupon not found");
         if (coupon.status !== 1 || new Date(coupon.end_date) < new Date()) throw new Error("Coupon expired");
         if (parseFloat(subtotal) < parseFloat(coupon.min_amt)) {
@@ -202,7 +202,7 @@ const subscribeOrder = async (req, res) => {
           o_type,
           start_date: referenceStartDate,
           end_date: referenceEndDate,
-          tax:settingTax,
+          tax: settingTax,
           d_charge: o_type === "Delivery" ? 0 : 0,
           store_charge: 0,
           cou_id: appliedCoupon ? appliedCoupon.id : null,
@@ -235,8 +235,9 @@ const subscribeOrder = async (req, res) => {
               price: item.product_total || 0, // Use frontend-provided price if available, else 0
               timeslot_id: item.timeslot_id,
               schedule,
-              start_date: referenceStartDate,
-              end_date: referenceEndDate,
+              start_date: new Date(item.start_date),
+              end_date: new Date(item.end_date),
+
               repeat_day: days,
               status: "Pending",
               order_id: orderId,
@@ -411,7 +412,7 @@ const editSubscribeOrder = async (req, res) => {
           deliveryDays,
           start_date: startDate,
           end_date: endDate,
-          product_total:item.product_total
+          product_total: item.product_total
         };
       })
     );
