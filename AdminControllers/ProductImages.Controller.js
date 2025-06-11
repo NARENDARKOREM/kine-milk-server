@@ -70,6 +70,7 @@ const toggleProductImageStatus = asyncHandler(async (req, res) => {
 const upsertProductImages = async (req, res) => {
     const { id, product_id, status, existing_images } = req.body;
 
+    
     try {
         if (!product_id) {
             return res.status(400).json({ error: "Product ID is required." });

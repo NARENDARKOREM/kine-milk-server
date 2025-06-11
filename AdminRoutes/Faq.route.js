@@ -4,6 +4,7 @@ const faqController=require("../AdminControllers/Faq.Controller");
 const adminMiddleware = require('../middlewares/adminMiddleware');
 
 router.post("/upsert", adminMiddleware.isAdmin,faqController.upsertFaq); //1
+
 router.get("/all",adminMiddleware.isAdmin,faqController.getAllFaqs) //1
 router.get("/getbyid/:id",adminMiddleware.isAdmin,faqController.getFaqById) //1
 

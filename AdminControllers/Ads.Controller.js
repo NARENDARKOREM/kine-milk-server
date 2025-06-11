@@ -5,12 +5,14 @@ const uploadToS3 = require("../config/fileUpload.aws");
 const logger = require("../utils/logger");
 const cron = require("node-cron");
 const { Sequelize } = require("sequelize");
-
+const { response } = require("express");
+const { sanitizeFilename } = require("../utils/multerConfig");
 // Verify Ads model is defined
 if (!Ads || typeof Ads.create !== "function") {
   logger.error("Ads model is not properly defined or exported");
   throw new Error("Ads model is not properly defined or exported");
 }
+
 
 // Log server timezone for debugging
 logger.info(`Server timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`);
@@ -68,14 +70,44 @@ cron.schedule("* * * * *", async () => {
   }
 });
 
+
+; // Adjust path to your logge
 const upsertAds = asyncHandler(async (req, res, next) => {
   try {
     const { id, screenName, planType, status, startDateTime, endDateTime, couponPercentage } = req.body;
-    let imageUrl;
+    let imageUrl = null;
 
+    // Log incoming request data for debugging
+    console.log("Request body:", req.body);
+    console.log("Request file:", req.file);
+
+    // Handle file upload
     if (req.file) {
+      // Create a sanitized filename
+      req.file.originalname = sanitizeFilename(req.file.originalname);
+      console.log("Sanitized filename:", req.file.originalname);
       imageUrl = await uploadToS3(req.file, "image");
-    } else if (!id) {
+      if (!imageUrl) {
+        return res.status(404).json({
+          ResponseCode: "404",
+          Result: "false",
+          ResponseMsg: "Image upload failed.",
+        });
+      }
+      console.log("Uploaded image URL:", imageUrl);
+    } else if (id) {
+      // For updates, use existing image if no new file is provided
+      const existingAd = await Ads.findByPk(id);
+      if (!existingAd) {
+        logger.error(`Ad with ID ${id} not found`);
+        return res.status(404).json({
+          ResponseCode: "404",
+          Result: "false",
+          ResponseMsg: "Ad not found.",
+        });
+      }
+      imageUrl = existingAd.img; // Preserve existing image
+    } else {
       logger.error("Image is required for a new ad");
       return res.status(400).json({
         ResponseCode: "400",
@@ -84,12 +116,13 @@ const upsertAds = asyncHandler(async (req, res, next) => {
       });
     }
 
+    // Validate status and planType
     const validStatuses = ["0", "1"];
     const validPlanTypes = ["instant", "subscribe"];
     if (!validStatuses.includes(status)) {
       logger.error("Invalid status value");
       return res.status(400).json({
-        ResponseCode: 400,
+        ResponseCode: "400",
         Result: "false",
         ResponseMsg: "Status must be 0 or 1 (Published).",
       });
@@ -103,6 +136,7 @@ const upsertAds = asyncHandler(async (req, res, next) => {
       });
     }
 
+    // Parse and validate dates
     const parseISTDate = (dateString) => {
       if (!dateString) return null;
       const istDate = new Date(dateString);
@@ -174,7 +208,7 @@ const upsertAds = asyncHandler(async (req, res, next) => {
       await ad.update({
         screenName,
         planType,
-        img: imageUrl || ad.img,
+        img: imageUrl,
         status: effectiveStatus,
         startDateTime: adjustedStartDateTime,
         endDateTime: adjustedEndDateTime,

@@ -23,7 +23,6 @@ const getNormalOrders = async (req, res) => {
       }
     }
 
-    // Build the where clause
     const where = {};
     if (storeId && storeId !== 'undefined' && storeId !== '') {
       where.store_id = storeId;
@@ -37,24 +36,20 @@ const getNormalOrders = async (req, res) => {
 
     console.log('Query where:', where);
 
-    // Get total count
     const totalCount = await NormalOrder.count({
       where,
       include: [
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
-        { model: Time, as: 'timeslot', attributes: ['mintime', 'maxtime'] },
       ],
     });
 
-    // Fetch paginated rows
     const offset = (page - 1) * limit;
     const rows = await NormalOrder.findAll({
       where,
       include: [
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
-        { model: Time, as: 'timeslot', attributes: ['mintime', 'maxtime'] },
       ],
       attributes: ['order_id', 'odate', 'status'],
       limit: parseInt(limit),
@@ -62,7 +57,6 @@ const getNormalOrders = async (req, res) => {
       logging: (sql) => console.log('SQL Query:', sql),
     });
 
-    // Format rows
     const formattedOrders = rows.map(order => ({
       order_id: order.order_id,
       order_date: order.odate,
@@ -70,10 +64,8 @@ const getNormalOrders = async (req, res) => {
       store_name: order.store?.title || 'N/A',
       order_status: order.status || 'N/A',
       user_mobile_no: order.user?.mobile || 'N/A',
-      timeslot: order.timeslot ? `${order.timeslot.mintime} - ${order.timeslot.maxtime}` : 'N/A',
     }));
 
-    // Send response
     res.json({
       orders: formattedOrders,
       total: totalCount,
@@ -91,7 +83,6 @@ const downloadNormalOrders = async (req, res) => {
     const { fromDate, toDate, storeId } = req.query;
     console.log('downloadNormalOrders query:', req.query);
 
-    // Validate storeId
     if (storeId && storeId !== 'undefined' && storeId !== '') {
       const storeExists = await Store.findByPk(storeId);
       if (!storeExists) {
@@ -118,7 +109,6 @@ const downloadNormalOrders = async (req, res) => {
       include: [
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
-        { model: Time, as: 'timeslot', attributes: ['mintime', 'maxtime'] },
       ],
       attributes: ['order_id', 'odate', 'status'],
       logging: (sql) => console.log('SQL Query:', sql),
@@ -131,7 +121,6 @@ const downloadNormalOrders = async (req, res) => {
       store_name: order.store?.title || 'N/A',
       order_status: order.status || 'N/A',
       user_mobile_no: order.user?.mobile || 'N/A',
-      timeslot: order.timeslot ? `${order.timeslot.mintime} - ${order.timeslot.maxtime}` : 'N/A',
     }));
 
     const workbook = new ExcelJS.Workbook();
@@ -144,7 +133,6 @@ const downloadNormalOrders = async (req, res) => {
       { header: 'Store Name', key: 'store_name', width: 25 },
       { header: 'Order Status', key: 'order_status', width: 15 },
       { header: 'Mobile No', key: 'user_mobile_no', width: 15 },
-      { header: 'Timeslot', key: 'timeslot', width: 15 },
     ];
 
     worksheet.addRows(formattedOrders);
@@ -170,7 +158,6 @@ const downloadSingleNormalOrder = async (req, res) => {
       include: [
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
-        { model: Time, as: 'timeslot', attributes: ['mintime', 'maxtime'] },
       ],
       attributes: ['order_id', 'odate', 'status'],
       logging: (sql) => console.log('SQL Query:', sql),
@@ -187,7 +174,6 @@ const downloadSingleNormalOrder = async (req, res) => {
       store_name: order.store?.title || 'N/A',
       order_status: order.status || 'N/A',
       user_mobile_no: order.user?.mobile || 'N/A',
-      timeslot: order.timeslot ? `${order.timeslot.mintime} - ${order.timeslot.maxtime}` : 'N/A',
     };
 
     const workbook = new ExcelJS.Workbook();
@@ -200,7 +186,6 @@ const downloadSingleNormalOrder = async (req, res) => {
       { header: 'Store Name', key: 'store_name', width: 25 },
       { header: 'Order Status', key: 'order_status', width: 15 },
       { header: 'Mobile No', key: 'user_mobile_no', width: 15 },
-      { header: 'Timeslot', key: 'timeslot', width: 15 },
     ];
 
     worksheet.addRow(formattedOrder);
@@ -221,7 +206,6 @@ const getSubscribeOrders = async (req, res) => {
   try {
     const { fromDate, toDate, storeId, page = 1, limit = 10 } = req.query;
 
-    // Validate storeId
     if (storeId && storeId !== 'undefined' && storeId !== '') {
       const storeExists = await Store.findByPk(storeId);
       if (!storeExists) {
@@ -244,14 +228,7 @@ const getSubscribeOrders = async (req, res) => {
       {
         model: SubscribeOrderProduct,
         as: 'orderProducts',
-        attributes: ['timeslot_id', 'weight_id', 'product_id'],
-        include: [
-          {
-            model: Time,
-            as: 'timeslotss',
-            attributes: ['id', 'mintime', 'maxtime'],
-          },
-        ],
+        attributes: ['start_date', 'end_date'],
       },
       {
         model: Store,
@@ -279,15 +256,14 @@ const getSubscribeOrders = async (req, res) => {
     });
 
     const formattedOrders = rows.map((order) => ({
-      order_id: order.order_id,
+      order_id: order.order_id, // Corrected from замовлення.order_id
       order_date: order.odate,
       username: order.user?.name || 'N/A',
       store_name: order.store?.title || 'N/A',
       order_status: order.status || 'N/A',
       user_mobile_no: order.user?.mobile || 'N/A',
-      timeslot: order.orderProducts?.[0]?.timeslotss
-        ? `${order.orderProducts[0].timeslotss.mintime} - ${order.orderProducts[0].timeslotss.maxtime}`
-        : 'N/A',
+      start_date: order.orderProducts?.[0]?.start_date || 'N/A',
+      end_date: order.orderProducts?.[0]?.end_date || 'N/A',
     }));
 
     console.log('Formatted Orders:', formattedOrders);
@@ -309,7 +285,6 @@ const downloadSubscribeOrders = async (req, res) => {
     const { fromDate, toDate, storeId } = req.query;
     console.log('downloadSubscribeOrders query:', req.query);
 
-    // Validate storeId
     if (storeId && storeId !== 'undefined' && storeId !== '') {
       const storeExists = await Store.findByPk(storeId);
       if (!storeExists) {
@@ -337,14 +312,7 @@ const downloadSubscribeOrders = async (req, res) => {
         {
           model: SubscribeOrderProduct,
           as: 'orderProducts',
-          attributes: ['timeslot_id', 'weight_id', 'product_id'],
-          include: [
-            {
-              model: Time,
-              as: 'timeslotss',
-              attributes: ['mintime', 'maxtime'],
-            },
-          ],
+          attributes: ['start_date', 'end_date'],
         },
         { model: Store, as: 'store', attributes: ['title'], required: false },
         { model: User, as: 'user', attributes: ['name', 'mobile'], required: false },
@@ -360,9 +328,8 @@ const downloadSubscribeOrders = async (req, res) => {
       store_name: order.store?.title || 'N/A',
       order_status: order.status || 'N/A',
       user_mobile_no: order.user?.mobile || 'N/A',
-      timeslot: order.orderProducts?.[0]?.timeslotss
-        ? `${order.orderProducts[0].timeslotss.mintime} - ${order.orderProducts[0].timeslotss.maxtime}`
-        : 'N/A',
+      start_date: order.orderProducts?.[0]?.start_date || 'N/A',
+      end_date: order.orderProducts?.[0]?.end_date || 'N/A',
     }));
 
     const workbook = new ExcelJS.Workbook();
@@ -375,7 +342,8 @@ const downloadSubscribeOrders = async (req, res) => {
       { header: 'Store Name', key: 'store_name', width: 25 },
       { header: 'Order Status', key: 'order_status', width: 15 },
       { header: 'Mobile No', key: 'user_mobile_no', width: 15 },
-      { header: 'Timeslot', key: 'timeslot', width: 15 },
+      { header: 'Start Date', key: 'start_date', width: 20 },
+      { header: 'End Date', key: 'end_date', width: 20 },
     ];
 
     worksheet.addRows(formattedOrders);
@@ -399,9 +367,13 @@ const downloadSingleSubscribeOrder = async (req, res) => {
     const order = await SubscribeOrder.findOne({
       where: { order_id: orderId },
       include: [
+        {
+          model: SubscribeOrderProduct,
+          as: 'orderProducts',
+          attributes: ['start_date', 'end_date'],
+        },
         { model: Store, as: 'store', attributes: ['title'] },
         { model: User, as: 'user', attributes: ['name', 'mobile'] },
-        { model: Time, as: 'timeslots', attributes: ['mintime', 'maxtime'] },
       ],
       attributes: ['order_id', 'odate', 'status'],
       logging: (sql) => console.log('SQL Query:', sql),
@@ -418,7 +390,8 @@ const downloadSingleSubscribeOrder = async (req, res) => {
       store_name: order.store?.title || 'N/A',
       order_status: order.status || 'N/A',
       user_mobile_no: order.user?.mobile || 'N/A',
-      timeslot: order.timeslots ? `${order.timeslots.mintime} - ${order.timeslots.maxtime}` : 'N/A',
+      start_date: order.orderProducts?.[0]?.start_date || 'N/A',
+      end_date: order.orderProducts?.[0]?.end_date || 'N/A',
     };
 
     const workbook = new ExcelJS.Workbook();
@@ -431,7 +404,8 @@ const downloadSingleSubscribeOrder = async (req, res) => {
       { header: 'Store Name', key: 'store_name', width: 25 },
       { header: 'Order Status', key: 'order_status', width: 15 },
       { header: 'Mobile No', key: 'user_mobile_no', width: 15 },
-      { header: 'Timeslot', key: 'timeslot', width: 15 },
+      { header: 'Start Date', key: 'start_date', width: 20 },
+      { header: 'End Date', key: 'end_date', width: 20 },
     ];
 
     worksheet.addRow(formattedOrder);
@@ -446,6 +420,7 @@ const downloadSingleSubscribeOrder = async (req, res) => {
     res.status(500).json({ message: 'Error downloading single subscribe order' });
   }
 };
+
 
 module.exports = {
   getNormalOrders,

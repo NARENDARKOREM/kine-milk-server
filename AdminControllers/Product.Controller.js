@@ -22,7 +22,7 @@ const upsertProduct = async (req, res) => {
       weightOptions,
       discount,
       batch_number,
-      package_type // Added package_type
+      package_type
     } = req.body;
 
     console.log("Request body:", req.body);
@@ -36,12 +36,30 @@ const upsertProduct = async (req, res) => {
       !out_of_stock ||
       !subscription_required ||
       !weightOptions ||
-      !package_type // Validate package_type
+      !package_type ||
+      !batch_number // Added batch_number to validation
     ) {
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
-        ResponseMsg: "All fields are required, including package_type.",
+        ResponseMsg: "All fields are required, including batch_number.",
+      });
+    }
+
+    // Validate batch_number format
+    const batchNumberRegex = /^[A-Za-z0-9-]+$/;
+    if (!batchNumberRegex.test(batch_number)) {
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Batch number must be alphanumeric with optional hyphens.",
+      });
+    }
+    if (batch_number.length > 50) {
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Batch number must be 50 characters or less.",
       });
     }
 
@@ -108,8 +126,8 @@ const upsertProduct = async (req, res) => {
         out_of_stock,
         subscription_required,
         discount: discount || product.discount,
-        batch_number,
-        package_type // Added package_type
+        batch_number, // Ensure batch_number is updated
+        package_type
       });
 
       // Fetch existing WeightOption records
@@ -124,7 +142,7 @@ const upsertProduct = async (req, res) => {
       const newWeights = new Set(parsedWeightOptions.map(opt => opt.weight));
       const oldWeights = new Set(oldWeightOptions.map(wo => wo.weight));
 
-      // Helper function to compute Set difference (for Node.js compatibility)
+      // Helper function to compute Set difference
       const setDifference = (setA, setB) => {
         const diff = new Set();
         for (const item of setA) {
@@ -186,11 +204,9 @@ const upsertProduct = async (req, res) => {
       // Update StoreWeightOption records for each inventory
       for (const inventory of inventories) {
         const oldStoreWeightOptions = inventory.storeWeightOptions || [];
-        // Create a map of weight_id to weight for old WeightOptions
         const weightIdToWeightMap = new Map(
           oldWeightOptions.map(wo => [wo.id, wo.weight])
         );
-        // Create a map of weight to StoreWeightOption
         const storeWeightMap = new Map();
         for (const swo of oldStoreWeightOptions) {
           const weight = weightIdToWeightMap.get(swo.weight_id);
@@ -199,10 +215,8 @@ const upsertProduct = async (req, res) => {
           }
         }
 
-        // Track which StoreWeightOption records have been processed
         const processedWeights = new Set();
 
-        // Determine which StoreWeightOption records to update or create
         const storeWeightOptionPromises = parsedWeightOptions.map(async (option) => {
           const newWeightOption = newWeightMap.get(option.weight);
           const existingStoreWeightOption = storeWeightMap.get(option.weight);
@@ -210,7 +224,6 @@ const upsertProduct = async (req, res) => {
           processedWeights.add(option.weight);
 
           if (existingStoreWeightOption) {
-            // Update existing StoreWeightOption
             await existingStoreWeightOption.update({
               weight_id: newWeightOption.id,
               product_id: id,
@@ -220,7 +233,6 @@ const upsertProduct = async (req, res) => {
             });
             return existingStoreWeightOption;
           } else {
-            // Create new StoreWeightOption
             return await StoreWeightOption.create({
               product_inventory_id: inventory.id,
               product_id: id,
@@ -234,7 +246,6 @@ const upsertProduct = async (req, res) => {
 
         await Promise.all(storeWeightOptionPromises);
 
-        // Delete StoreWeightOption records for weights that are no longer needed
         const storeWeightsToDelete = setDifference(oldWeights, newWeights);
         if (storeWeightsToDelete.size > 0) {
           const weightIdsToDelete = oldWeightOptions
@@ -248,7 +259,6 @@ const upsertProduct = async (req, res) => {
           });
         }
 
-        // Delete any duplicate StoreWeightOption records that might exist
         const remainingStoreWeightOptions = await StoreWeightOption.findAll({
           where: { product_inventory_id: inventory.id },
         });
@@ -301,8 +311,8 @@ const upsertProduct = async (req, res) => {
         out_of_stock,
         subscription_required,
         discount: discount || "",
-        batch_number,
-        package_type // Added package_type
+        batch_number, // Ensure batch_number is included
+        package_type
       });
 
       // Create new weight options

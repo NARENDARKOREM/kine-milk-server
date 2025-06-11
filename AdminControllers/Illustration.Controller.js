@@ -21,6 +21,7 @@ const convertUTCToIST = (date) => {
   return new Date(new Date(date).getTime() + istOffset);
 };
 
+
 // Schedule illustration activation and status update
 const cron = require("node-cron");
 cron.schedule("* * * * *", async () => {
@@ -110,15 +111,18 @@ const upsertIllustration = asyncHandler(async (req, res, next) => {
     }
 
     const parseISTDate = (dateString, fieldName) => {
-      if (dateString === undefined || dateString === "") {
-        logger.warn(`Empty or undefined ${fieldName} received for ${id ? `illustration ${id}` : "new illustration"}; preserving existing value`);
-        return undefined; // Signal to preserve existing value
+      if (dateString === "" || dateString === null) {
+        logger.info(`Clearing ${fieldName} for ${id ? `illustration ${id}` : "new illustration"}`);
+        return null; // Explicitly clear the date
       }
-      const istDate = new Date(dateString);
-      if (isNaN(istDate.getTime())) {
-        throw new Error(`Invalid ${fieldName} format`);
+      if (dateString) {
+        const istDate = new Date(dateString);
+        if (isNaN(istDate.getTime())) {
+          throw new Error(`Invalid ${fieldName} format`);
+        }
+        return istDate;
       }
-      return istDate;
+      return undefined; // Preserve existing value if no date provided
     };
 
     const convertISTToUTC = (date) => {
@@ -157,8 +161,8 @@ const upsertIllustration = asyncHandler(async (req, res, next) => {
       });
     }
 
-    const adjustedStartTime = startDate ? convertISTToUTC(startDate) : null;
-    const adjustedEndTime = endDate ? convertISTToUTC(endDate) : null;
+    const adjustedStartTime = startDate !== undefined ? convertISTToUTC(startDate) : null;
+    const adjustedEndTime = endDate !== undefined ? convertISTToUTC(endDate) : null;
 
     let effectiveStatus = statusValue;
     if (startDate && startDate > nowInIST) {

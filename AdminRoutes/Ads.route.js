@@ -12,6 +12,7 @@ router.post(
   adsController.upsertAds
 );
 
+
 router.get(
   "/fetch-ads",
   adminMiddleware.isAdmin,

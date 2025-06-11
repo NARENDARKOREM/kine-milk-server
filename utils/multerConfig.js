@@ -46,4 +46,20 @@ const handleMulterError = (err, req, res, next) => {
   next(err);
 };
 
-module.exports = { upload, handleMulterError };
+// Sanitize filename to create a valid S3 object key
+const sanitizeFilename = (filename) => {
+  // Extract the extension
+  const extension = filename.slice(filename.lastIndexOf(".")).toLowerCase();
+  // Get the name without extension
+  let name = filename.slice(0, filename.lastIndexOf("."));
+  // Replace spaces with hyphens, remove invalid characters, and limit length
+  name = name
+    .replace(/\s+/g, "-") // Spaces to hyphens
+    .replace(/[^a-zA-Z0-9-]/g, "") // Remove special characters
+    .substring(0, 100); // Limit to 100 characters
+  // Add timestamp for uniqueness
+  const timestamp = Date.now();
+  return `${timestamp}-${name}${extension}`;
+};
+
+module.exports = { upload, handleMulterError, sanitizeFilename };
