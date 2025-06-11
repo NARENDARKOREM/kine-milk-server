@@ -18,6 +18,7 @@ const upload = multer({
   },
 });
 
+
 // Routes
 router.post("/upsert", upload.single("bagImage"), upsertCarryBag);
 router.get("/all", getAllCarryBags);

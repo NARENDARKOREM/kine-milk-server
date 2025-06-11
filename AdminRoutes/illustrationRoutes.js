@@ -4,6 +4,7 @@ const { upload, handleMulterError } = require("../utils/multerConfig");
 illustrationController = require("../AdminControllers/Illustration.Controller")
 const adminMiddleware = require('../middlewares/adminMiddleware');
 
+
 router.post(
   "/upsert-illustration",
   upload.single("img"),

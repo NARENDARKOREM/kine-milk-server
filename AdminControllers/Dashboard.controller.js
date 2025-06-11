@@ -9,6 +9,7 @@ const Admin = require('../Models/Admin');
 const User = require('../Models/User');
  // Ensure correct path
 
+ 
 const getDashboardData = async (req, res) => {
     try {
         // Fetch count of records from each model in parallel

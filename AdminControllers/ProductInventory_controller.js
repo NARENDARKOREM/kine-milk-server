@@ -7,6 +7,7 @@ const WeightOption = require("../Models/WeightOption");
 const StoreWeightOption = require("../Models/StoreWeightOption");
 const Categories = require("../Models/Category");
 
+
 const upsertInventory = async (req, res) => {
   const { id, store_id, product_id, date, coupons } = req.body;
   console.log("Inventory request body:", req.body);

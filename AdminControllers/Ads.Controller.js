@@ -13,6 +13,7 @@ if (!Ads || typeof Ads.create !== "function") {
   throw new Error("Ads model is not properly defined or exported");
 }
 
+
 // Log server timezone for debugging
 logger.info(`Server timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`);
 

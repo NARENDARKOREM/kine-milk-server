@@ -21,6 +21,7 @@ const convertUTCToIST = (date) => {
   return new Date(new Date(date).getTime() + istOffset);
 };
 
+
 // Schedule illustration activation and status update
 const cron = require("node-cron");
 cron.schedule("* * * * *", async () => {

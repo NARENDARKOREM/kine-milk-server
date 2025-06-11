@@ -23,6 +23,7 @@ const getAllNorOrders = asynHandler(async (req, res, next) => {
       });
     }
 
+    
     // Validate status
     if (!status || !validStatuses.includes(status)) {
       return res.status(400).json({
