@@ -4,8 +4,6 @@ const uploadToS3 = require("../config/fileUpload.aws");
 const logger = require("../utils/logger");
 const Illustration = require("../Models/Illustration");
 const { Sequelize } = require("sequelize");
-const cron = require("node-cron");
-const { sanitizeFilename } = require("../utils/multerConfig");
 
 // Verify Illustration model is defined
 if (!Illustration || typeof Illustration.create !== "function") {
@@ -16,27 +14,19 @@ if (!Illustration || typeof Illustration.create !== "function") {
 // Log server timezone for debugging
 logger.info(`Server timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`);
 
-// Helper function to convert UTC to IST for response and logging
-const convertUTCToIST = (date) => {
+// Helper function to convert UTC to IST for frontend
+const formatUTCToIST = (date) => {
   if (!date) return null;
   const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
-  return new Date(new Date(date).getTime() + istOffset);
-};
-
-// Helper function to convert IST to UTC for database storage
-const convertISTToUTC = (date) => {
-  if (!date) return null;
-  const istOffset = 5.5 * 60 * 60 * 1000;
-  return new Date(date.getTime() - istOffset);
+  const istDate = new Date(new Date(date).getTime() + istOffset);
+  return istDate.toISOString().slice(0, 16); // Format as YYYY-MM-DDTHH:mm
 };
 
 // Schedule illustration activation and status update
+const cron = require("node-cron");
 cron.schedule("* * * * *", async () => {
   try {
-    const nowInIST = new Date();
-    const nowInUTC = convertISTToUTC(nowInIST);
-
-    logger.info(`Cron job running at ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} (UTC: ${nowInUTC.toISOString()})`);
+    const now = new Date(); // Current time in UTC
 
     // Activate illustrations with startTime
     const illustrationsToActivate = await Illustration.findAll({
@@ -45,17 +35,18 @@ cron.schedule("* * * * *", async () => {
         startTime: {
           [Sequelize.Op.and]: [
             { [Sequelize.Op.ne]: null },
-            { [Sequelize.Op.lte]: nowInUTC },
+            { [Sequelize.Op.lte]: now },
           ],
         },
       },
     });
 
     for (const illustration of illustrationsToActivate) {
-      await illustration.update({ status: 1 }); // Preserve startTime
+      await illustration.update({
+        status: 1,
+      });
       logger.info(
-        `Illustration ID ${illustration.id} published at ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}. ` +
-        `startTime: ${illustration.startTime ? convertUTCToIST(illustration.startTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
+        `Illustration ID ${illustration.id} published at ${formatUTCToIST(now)}.`
       );
     }
 
@@ -66,17 +57,18 @@ cron.schedule("* * * * *", async () => {
         endTime: {
           [Sequelize.Op.and]: [
             { [Sequelize.Op.ne]: null },
-            { [Sequelize.Op.lte]: nowInUTC },
+            { [Sequelize.Op.lte]: now },
           ],
         },
       },
     });
 
     for (const illustration of illustrationsToUnpublish) {
-      await illustration.update({ status: 0 }); // Preserve endTime
+      await illustration.update({
+        status: 0,
+      });
       logger.info(
-        `Illustration ID ${illustration.id} unpublished at ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}. ` +
-        `endTime: ${illustration.endTime ? convertUTCToIST(illustration.endTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
+        `Illustration ID ${illustration.id} unpublished at ${formatUTCToIST(now)}.`
       );
     }
   } catch (error) {
@@ -84,39 +76,15 @@ cron.schedule("* * * * *", async () => {
   }
 });
 
-const upsertIllustration = asyncHandler(async (req, res) => {
+const upsertIllustration = asyncHandler(async (req, res, next) => {
   try {
     const { id, screenName, status, startTime, endTime } = req.body;
-    let imageUrl = null;
+    let imageUrl;
 
-    // Log incoming request data
-    logger.info(`Upsert request for illustration ${id || "new"}: ${JSON.stringify(req.body)}`);
-    if (req.file) logger.info(`File uploaded: ${req.file.originalname}`);
-
-    // Handle file upload
+    // Check if file is provided
     if (req.file) {
-      req.file.originalname = sanitizeFilename(req.file.originalname);
       imageUrl = await uploadToS3(req.file, "image");
-      if (!imageUrl) {
-        logger.error("Image upload failed");
-        return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: "Image upload failed.",
-        });
-      }
-    } else if (id) {
-      const existingIllustration = await Illustration.findByPk(id);
-      if (!existingIllustration) {
-        logger.error(`Illustration with ID ${id} not found`);
-        return res.status(404).json({
-          ResponseCode: "404",
-          Result: "false",
-          ResponseMsg: "Illustration not found.",
-        });
-      }
-      imageUrl = existingIllustration.img; // Preserve existing image
-    } else {
+    } else if (!id) {
       logger.error("Image is required for a new illustration");
       return res.status(400).json({
         ResponseCode: "400",
@@ -125,11 +93,10 @@ const upsertIllustration = asyncHandler(async (req, res) => {
       });
     }
 
-    // Validate status
     const statusValue = parseInt(status, 10);
     const validStatuses = [0, 1];
     if (!validStatuses.includes(statusValue)) {
-      logger.error(`Invalid status value: ${status}`);
+      logger.error("Invalid status value");
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
@@ -137,32 +104,24 @@ const upsertIllustration = asyncHandler(async (req, res) => {
       });
     }
 
-    // Parse and validate dates
-    const parseISTDate = (dateString, fieldName) => {
-      if (dateString === "" || dateString === null) {
-        logger.info(`Clearing ${fieldName} for illustration ${id || "new"}`);
-        return null;
+    const parseDate = (dateString, fieldName) => {
+      if (dateString === undefined || dateString === "") {
+        logger.warn(`Empty or undefined ${fieldName} received for ${id ? `illustration ${id}` : "new illustration"}; preserving existing value`);
+        return undefined; // Signal to preserve existing value
       }
-      if (dateString) {
-        const istDate = new Date(dateString);
-        if (isNaN(istDate.getTime())) {
-          logger.error(`Invalid ${fieldName} format: ${dateString}`);
-          throw new Error(`Invalid ${fieldName} format`);
-        }
-        logger.info(`${fieldName} parsed (IST): ${istDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
-        return istDate;
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        throw new Error(`Invalid ${fieldName} format`);
       }
-      return undefined; // Preserve existing value
+      return date; // Store in UTC
     };
 
-    const startDate = parseISTDate(startTime, "startTime");
-    const endDate = parseISTDate(endTime, "endTime");
+    const startDate = parseDate(startTime, "startTime");
+    const endDate = parseDate(endTime, "endTime");
 
-    const nowInIST = new Date();
-    logger.info(`Current time in IST: ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+    const now = new Date(); // Current time in UTC
 
-    // Validate dates
-    if (endDate && endDate <= nowInIST) {
+    if (endDate && endDate <= now) {
       logger.error("End time must be in the future");
       return res.status(400).json({
         ResponseCode: "400",
@@ -171,25 +130,19 @@ const upsertIllustration = asyncHandler(async (req, res) => {
       });
     }
     if (startDate && endDate && startDate >= endDate) {
-      logger.error("End time must be after start time");
+      logger.error("End time must be greater than start time");
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
-        ResponseMsg: "End time must be after start time.",
+        ResponseMsg: "End time must be greater than start time.",
       });
     }
 
-    const adjustedStartTime = startDate !== undefined ? convertISTToUTC(startDate) : null;
-    const adjustedEndTime = endDate !== undefined ? convertISTToUTC(endDate) : null;
-
-    // Adjust status based on startTime
     let effectiveStatus = statusValue;
-    if (startDate && startDate > nowInIST) {
+    if (startDate && startDate > now) {
       effectiveStatus = 0; // Force unpublished if start date is in the future
-      logger.info(`Forcing status to 0 for future startTime: ${startDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
-    } else if (startDate && startDate <= nowInIST) {
+    } else if (startDate && startDate <= now) {
       effectiveStatus = 1; // Auto-publish if start date has passed
-      logger.info(`Auto-publishing due to past startTime: ${startDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
     }
 
     let illustration;
@@ -206,26 +159,21 @@ const upsertIllustration = asyncHandler(async (req, res) => {
 
       await illustration.update({
         screenName,
-        img: imageUrl,
+        img: imageUrl || illustration.img,
         status: effectiveStatus,
-        startTime: startDate !== undefined ? adjustedStartTime : illustration.startTime,
-        endTime: endDate !== undefined ? adjustedEndTime : illustration.endTime,
+        startTime: startDate !== undefined ? startDate : illustration.startTime,
+        endTime: endDate !== undefined ? endDate : illustration.endTime,
       });
 
-      logger.info(
-        `Illustration ${id} updated successfully. ` +
-        `Status: ${effectiveStatus}, ` +
-        `startTime: ${illustration.startTime ? convertUTCToIST(illustration.startTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
-        `endTime: ${illustration.endTime ? convertUTCToIST(illustration.endTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
-      );
+      logger.info(`Illustration ${id} updated successfully.`);
       return res.status(200).json({
         ResponseCode: "200",
         Result: "true",
         ResponseMsg: "Illustration updated successfully.",
         illustration: {
           ...illustration.toJSON(),
-          startTime: convertUTCToIST(illustration.startTime),
-          endTime: convertUTCToIST(illustration.endTime),
+          startTime: formatUTCToIST(illustration.startTime),
+          endTime: formatUTCToIST(illustration.endTime),
         },
       });
     } else {
@@ -233,24 +181,19 @@ const upsertIllustration = asyncHandler(async (req, res) => {
         screenName,
         img: imageUrl,
         status: effectiveStatus,
-        startTime: adjustedStartTime,
-        endTime: adjustedEndTime,
+        startTime: startDate,
+        endTime: endDate,
       });
 
-      logger.info(
-        `New illustration created with ID ${illustration.id}. ` +
-        `Status: ${effectiveStatus}, ` +
-        `startTime: ${illustration.startTime ? convertUTCToIST(illustration.startTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
-        `endTime: ${illustration.endTime ? convertUTCToIST(illustration.endTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
-      );
+      logger.info(`New illustration created with ID ${illustration.id}.`);
       return res.status(200).json({
         ResponseCode: "200",
         Result: "true",
         ResponseMsg: "Illustration created successfully.",
         illustration: {
           ...illustration.toJSON(),
-          startTime: convertUTCToIST(illustration.startTime),
-          endTime: convertUTCToIST(illustration.endTime),
+          startTime: formatUTCToIST(illustration.startTime),
+          endTime: formatUTCToIST(illustration.endTime),
         },
       });
     }
@@ -279,8 +222,8 @@ const fetchIllustrationById = asyncHandler(async (req, res) => {
     logger.info(`Illustration fetched by ID ${id}`);
     res.status(200).json({
       ...illustration.toJSON(),
-      startTime: convertUTCToIST(illustration.startTime),
-      endTime: convertUTCToIST(illustration.endTime),
+      startTime: formatUTCToIST(illustration.startTime),
+      endTime: formatUTCToIST(illustration.endTime),
     });
   } catch (error) {
     logger.error(`Error fetching illustration by ID ${id}: ${error.message}`);
@@ -296,10 +239,10 @@ const fetchIllustrations = asyncHandler(async (req, res) => {
   try {
     const illustrations = await Illustration.findAll();
     logger.info("Successfully fetched all illustrations");
-    const illustrationsWithIST = illustrations.map((illustration) => ({
+    const illustrationsWithIST = illustrations.map(illustration => ({
       ...illustration.toJSON(),
-      startTime: convertUTCToIST(illustration.startTime),
-      endTime: convertUTCToIST(illustration.endTime),
+      startTime: formatUTCToIST(illustration.startTime),
+      endTime: formatUTCToIST(illustration.endTime),
     }));
     res.status(200).json(illustrationsWithIST);
   } catch (error) {
@@ -365,7 +308,7 @@ const deleteIllustrationById = asyncHandler(async (req, res) => {
 });
 
 const toggleIllustrationStatus = asyncHandler(async (req, res) => {
-  const { id, value } = req.body;
+  const { id, value, startTime, endTime } = req.body;
   try {
     const illustration = await Illustration.findByPk(id);
     if (!illustration) {
@@ -377,14 +320,21 @@ const toggleIllustrationStatus = asyncHandler(async (req, res) => {
       });
     }
 
-    const nowInIST = new Date();
-    const nowInUTC = convertISTToUTC(nowInIST);
+    const now = new Date(); // Current time in UTC
     const startDate = illustration.startTime ? new Date(illustration.startTime) : null;
     const endDate = illustration.endTime ? new Date(illustration.endTime) : null;
 
+    // Log if startTime or endTime were included in the request
+    if (startTime !== undefined) {
+      logger.warn(`startTime (${startTime}) included in toggleIllustrationStatus for illustration ${id}; ignoring to preserve existing value`);
+    }
+    if (endTime !== undefined) {
+      logger.warn(`endTime (${endTime}) included in toggleIllustrationStatus for illustration ${id}; ignoring to preserve existing value`);
+    }
+
     // Prevent toggling to Published if startTime is future or endTime has passed
     if (value === 1) {
-      if (startDate && startDate > nowInUTC) {
+      if (startDate && startDate > now) {
         logger.error(`Cannot toggle status to Published for illustration ID ${id} with future startTime`);
         return res.status(400).json({
           ResponseCode: "400",
@@ -392,7 +342,7 @@ const toggleIllustrationStatus = asyncHandler(async (req, res) => {
           ResponseMsg: "Cannot toggle status to Published for an illustration with a future startTime. It will be published automatically when the startTime is reached.",
         });
       }
-      if (endDate && endDate <= nowInUTC) {
+      if (endDate && endDate <= now) {
         logger.error(`Cannot toggle status to Published for illustration ID ${id} with expired endTime`);
         return res.status(400).json({
           ResponseCode: "400",
@@ -415,18 +365,14 @@ const toggleIllustrationStatus = asyncHandler(async (req, res) => {
 
     illustration.status = statusValue;
     await illustration.save();
-    logger.info(
-      `Illustration status updated for ID ${id} to ${statusValue}. ` +
-      `startTime: ${illustration.startTime ? convertUTCToIST(illustration.startTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
-      `endTime: ${illustration.endTime ? convertUTCToIST(illustration.endTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
-    );
+    logger.info(`Illustration status updated for ID ${illustration.id} to ${statusValue}.`);
     res.status(200).json({
       ResponseCode: "200",
       Result: "true",
       ResponseMsg: "Illustration status updated successfully.",
       updatedStatus: illustration.status,
-      startTime: convertUTCToIST(illustration.startTime),
-      endTime: convertUTCToIST(illustration.endTime),
+      startTime: formatUTCToIST(illustration.startTime),
+      endTime: formatUTCToIST(illustration.endTime),
     });
   } catch (error) {
     logger.error(`Error updating illustration status for ID ${id}: ${error.message}`);
