@@ -323,6 +323,7 @@ const toggleRiderStatus = async (req, res) => {
   }
 };
 
+
 module.exports = {
   getAllRiders,
   upsertRider,

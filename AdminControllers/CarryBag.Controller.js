@@ -158,6 +158,7 @@ const toggleCarryBagStatus = asyncHandler(async (req, res) => {
       });
     }
 
+    
     // Update the specified field with the provided value
     await carryBag.update({ [field]: value });
     logger.info(`Carry bag with ID ${id} ${field} updated to ${value}`);

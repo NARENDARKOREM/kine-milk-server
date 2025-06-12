@@ -159,6 +159,7 @@ const searchFaq=asynHandler(async(req,res)=>{
         res.status(200).json(Faq)
 });
 
+
 // Adjust based on your Sequelize setup
 const toggleFaqStatus = async (req, res) => {
   try {

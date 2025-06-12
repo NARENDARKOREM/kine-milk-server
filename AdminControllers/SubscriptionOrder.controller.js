@@ -62,6 +62,7 @@ const getAllSubscriptionOrdersbystoreid = async (req, res) => {
       ],
     });
 
+    
     logger.info(`Successfully fetched orders for store_id: ${store_id} with status: ${status}`);
     res.status(200).json({
       ResponseCode: "Success",

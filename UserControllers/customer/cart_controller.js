@@ -11,6 +11,9 @@ const StoreWeightOption = require("../../Models/StoreWeightOption");
 
 const upsertCart = async (req, res) => {
   const uid = req.user?.userId;
+  const { product_id, orderType, weights } = req.body;
+
+  // Validate user
   if (!uid) {
     return res.status(401).json({
       ResponseCode: "401",
@@ -18,8 +21,6 @@ const upsertCart = async (req, res) => {
       ResponseMsg: "Unauthorized",
     });
   }
-
-  const { product_id, orderType, weights } = req.body;
 
   // Validate required fields
   if (!product_id || !orderType || !weights || !Array.isArray(weights) || weights.length === 0) {
@@ -55,7 +56,12 @@ const upsertCart = async (req, res) => {
     transaction = await sequelize.transaction();
 
     // Validate product
-    const product = await Product.findByPk(product_id, { transaction });
+    const product = await Product.findOne({
+      where: { id: product_id },
+      attributes: ["id", "title", "img"],
+      transaction,
+    });
+
     if (!product) {
       throw new Error(`Product ID ${product_id} not found`);
     }
@@ -67,17 +73,31 @@ const upsertCart = async (req, res) => {
     }, {});
 
     const cartItems = [];
+    const skippedItems = [];
 
     // Process each unique store_weight_id
     for (const [store_weight_id, quantity] of Object.entries(weightMap)) {
       // Validate store_weight_id
       const storeWeightOption = await StoreWeightOption.findOne({
         where: { id: store_weight_id, product_id },
-        include: [{ model: WeightOption, as: "weightOption", attributes: ["id", "weight", "subscribe_price", "normal_price", "mrp_price"] }],
+        include: [
+          {
+            model: WeightOption,
+            as: "weightOption",
+            attributes: ["id", "weight", "subscribe_price", "normal_price", "mrp_price"],
+          },
+        ],
         transaction,
       });
+
       if (!storeWeightOption) {
-        throw new Error(`Store weight option ID ${store_weight_id} not found or not valid for product ${product_id}`);
+        console.log(`Store weight option ${store_weight_id} not found for product ${product_id}`);
+        skippedItems.push({
+          store_weight_id,
+          quantity,
+          reason: `Store weight option not found for product ${product_id}`,
+        });
+        continue;
       }
 
       // Check for existing cart item
@@ -95,17 +115,60 @@ const upsertCart = async (req, res) => {
           { quantity: newQuantity },
           { where: { id: existingCartItem.id }, transaction }
         );
-        cartItem = await Cart.findByPk(existingCartItem.id, { transaction });
+        cartItem = await Cart.findByPk(existingCartItem.id, {
+          include: [
+            {
+              model: StoreWeightOption,
+              as: "storeWeightOption",
+              attributes: ["id"],
+              include: [
+                {
+                  model: WeightOption,
+                  as: "weightOption",
+                  attributes: ["id", "weight", "subscribe_price", "normal_price", "mrp_price"],
+                },
+              ],
+            },
+            {
+              model: Product,
+              as: "CartproductDetails",
+              attributes: ["id", "title", "img"],
+            },
+          ],
+          transaction,
+        });
       } else {
         cartItem = await Cart.create(
           {
+            id: sequelize.fn("uuid"),
             uid,
             product_id,
             quantity,
             orderType,
             store_weight_id,
           },
-          { transaction }
+          {
+            include: [
+              {
+                model: StoreWeightOption,
+                as: "storeWeightOption",
+                attributes: ["id"],
+                include: [
+                  {
+                    model: WeightOption,
+                    as: "weightOption",
+                    attributes: ["id", "weight", "subscribe_price", "normal_price", "mrp_price"],
+                  },
+                ],
+              },
+              {
+                model: Product,
+                as: "CartproductDetails",
+                attributes: ["id", "title", "img"],
+              },
+            ],
+            transaction,
+          }
         );
         console.log(`Created cart item ${cartItem.id}: quantity=${quantity}`);
       }
@@ -117,6 +180,8 @@ const upsertCart = async (req, res) => {
         quantity: cartItem.quantity,
         orderType: cartItem.orderType,
         store_weight_id: cartItem.store_weight_id,
+        weightOption: cartItem.storeWeightOption?.weightOption,
+        product: cartItem.product,
       });
     }
 
@@ -127,14 +192,15 @@ const upsertCart = async (req, res) => {
       Result: "true",
       ResponseMsg: "Cart items processed successfully!",
       data: cartItems,
+      skippedItems,
     });
   } catch (error) {
     console.error("Error adding/updating cart items:", error);
     if (transaction) await transaction.rollback();
     return res.status(500).json({
-      ResponseCode: "500",
+      code: "50000",
       Result: "false",
-      ResponseMsg: "Server Error",
+      message: "Server error adding/updating cart items",
       error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }

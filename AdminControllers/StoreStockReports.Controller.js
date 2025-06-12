@@ -7,6 +7,7 @@ const StoreWeightOption = require('../Models/StoreWeightOption');
 const WeightOption = require('../Models/WeightOption');
 const { Op } = require('sequelize');
 
+
 // Get stock reports for a single store
 const getStockReportsByStore = async (req, res) => {
   try {

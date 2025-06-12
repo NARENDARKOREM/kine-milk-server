@@ -1,7 +1,7 @@
 const { where } = require("sequelize");
 const Address = require("../../Models/Address");
 const Person = require("../../Models/PersonRecord");
-
+const sequelize = require("../../config/db");
 
 
 
@@ -107,7 +107,7 @@ const upSertAddress = async (req, res) => {
 
     
     try {
-      const addresses = await Address.findAll({where:{uid:uid}});
+      const addresses = await Address.findAll({where:{uid:uid},include:[{model:Person,as:'personaddress'}]});
       res.status(200).json({
         ResponseCode: "200",
         Result: "true",
@@ -120,41 +120,79 @@ const upSertAddress = async (req, res) => {
     }
   }
 
-  const deleteAddress = async (req, res) => {
-    const uid = req.user.userId;
-    const { addressId } = req.params;
-    console.log(uid, "userid", addressId, "address id");
+const deleteAddress = async (req, res) => {
+  const uid = req.user?.userId;
+  const { addressId } = req.params;
+  console.log(uid, "userid", addressId, "address id");
 
-    try {
-        // Find the address before deleting
-        const findAddress = await Address.findOne({ where: { id: addressId, uid: uid } });
+  // Validate user
+  if (!uid) {
+    return res.status(401).json({
+      ResponseCode: "401",
+      Result: "false",
+      ResponseMsg: "Unauthorized: User not found!",
+    });
+  }
 
-        if (!findAddress) {
-            return res.status(404).json({
-                ResponseCode: "404",
-                Result: "false",
-                ResponseMsg: "Address Not Found",
-            });
-        }
+  // Validate addressId
+  if (!addressId) {
+    return res.status(400).json({
+      ResponseCode: "400",
+      Result: "false",
+      ResponseMsg: "Address ID is required!",
+    });
+  }
 
-        // Force delete the address (permanent deletion)
-        await Address.destroy({ where: { id: addressId, uid: uid }, force: true });
+  let transaction;
 
-        return res.status(200).json({
-            ResponseCode: "200",
-            Result: "true",
-            ResponseMsg: "Address Deleted Successfully!",
-        });
+  try {
+    transaction = await sequelize.transaction();
 
-    } catch (error) {
-        console.error("Error deleting address:", error);
-        res.status(500).json({ 
-            ResponseCode: "500",
-            Result: "false",
-            ResponseMsg: "Internal Server Error",
-            error: error.message 
-        });
+    // Find the address
+    const findAddress = await Address.findOne({
+      where: { id: addressId, uid },
+      transaction,
+    });
+
+    if (!findAddress) {
+      await transaction.rollback();
+      return res.status(404).json({
+        ResponseCode: "404",
+        Result: "false",
+        ResponseMsg: "Address Not Found",
+      });
     }
+
+    // Delete associated PersonRecord entries
+    const deletedPersonRecords = await PersonRecord.destroy({
+      where: { address_id: addressId },
+      transaction,
+    });
+    console.log(`Deleted ${deletedPersonRecords} PersonRecord entries for address_id: ${addressId}`);
+
+    // Delete the address
+    await Address.destroy({
+      where: { id: addressId, uid },
+      transaction,
+    });
+
+    await transaction.commit();
+
+    return res.status(200).json({
+      ResponseCode: "200",
+      Result: "true",
+      ResponseMsg: "Address and associated person records deleted successfully!",
+    });
+  } catch (error) {
+    console.error("Error deleting address and person records:", error);
+    if (transaction) await transaction.rollback();
+    return res.status(500).json({
+      ResponseCode: "500",
+      Result: "false",
+      ResponseMsg: "Internal Server Error",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
 };
 
 
