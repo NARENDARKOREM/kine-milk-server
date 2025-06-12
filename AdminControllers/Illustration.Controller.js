@@ -268,11 +268,13 @@ const upsertIllustration = asyncHandler(async (req, res) => {
   try {
     const { id, screenName, status, startTime, endTime } = req.body;
     console.log(req.body, " Request body received for upsertIllustration");
+
     let imageUrl = null;
 
     logger.info(`Upsert request for illustration ${id || "new"}: ${JSON.stringify(req.body)}`);
     if (req.file) logger.info(`File uploaded: ${req.file.originalname}`);
 
+    // Handle image upload
     if (req.file) {
       req.file.originalname = sanitizeFilename(req.file.originalname);
       imageUrl = await uploadToS3(req.file, "image");
@@ -304,6 +306,7 @@ const upsertIllustration = asyncHandler(async (req, res) => {
       });
     }
 
+    // Validate status
     const statusValue = parseInt(status, 10);
     const validStatuses = [0, 1];
     if (!validStatuses.includes(statusValue)) {
@@ -315,29 +318,25 @@ const upsertIllustration = asyncHandler(async (req, res) => {
       });
     }
 
-    // ✅ Updated: Parse local date without UTC conversion
+    // ✅ Parse date as string (no Date object — avoid time zone conversion)
     const parseDateAsLocal = (dateString, fieldName) => {
       if (!dateString) return null;
-      const [datePart, timePart] = dateString.split('T');
-      const [year, month, day] = datePart.split('-').map(Number);
-      const [hour, minute] = timePart.split(':').map(Number);
 
-      const localDate = new Date(year, month - 1, day, hour, minute);
-
-      if (isNaN(localDate.getTime())) {
+      const isValid = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(dateString);
+      if (!isValid) {
         logger.error(`Invalid ${fieldName} format: ${dateString}`);
         throw new Error(`Invalid ${fieldName} format`);
       }
 
-      return localDate;
+      return dateString.replace("T", " ") + ":00"; // Convert to MySQL DATETIME format
     };
 
-    const startDate = parseDateAsLocal(startTime, "startTime");
-    const endDate = parseDateAsLocal(endTime, "endTime");
+    const parsedStartTime = parseDateAsLocal(startTime, "startTime");
+    const parsedEndTime = parseDateAsLocal(endTime, "endTime");
 
     const now = new Date();
 
-    if (endDate && endDate <= now) {
+    if (parsedEndTime && new Date(parsedEndTime) <= now) {
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
@@ -345,7 +344,7 @@ const upsertIllustration = asyncHandler(async (req, res) => {
       });
     }
 
-    if (startDate && endDate && startDate >= endDate) {
+    if (parsedStartTime && parsedEndTime && new Date(parsedStartTime) >= new Date(parsedEndTime)) {
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
@@ -354,13 +353,14 @@ const upsertIllustration = asyncHandler(async (req, res) => {
     }
 
     let effectiveStatus = statusValue;
-    if (startDate && startDate > now) {
-      effectiveStatus = 0;
-    } else if (startDate && startDate <= now) {
-      effectiveStatus = 1;
+    if (parsedStartTime && new Date(parsedStartTime) > now) {
+      effectiveStatus = 0; // Future = unpublished
+    } else if (parsedStartTime && new Date(parsedStartTime) <= now) {
+      effectiveStatus = 1; // Past = published
     }
 
     let illustration;
+
     if (id) {
       illustration = await Illustration.findByPk(id);
       if (!illustration) {
@@ -375,8 +375,8 @@ const upsertIllustration = asyncHandler(async (req, res) => {
         screenName,
         img: imageUrl,
         status: effectiveStatus,
-        startTime: startDate !== undefined ? startDate : illustration.startTime,
-        endTime: endDate !== undefined ? endDate : illustration.endTime,
+        startTime: parsedStartTime !== undefined ? parsedStartTime : illustration.startTime,
+        endTime: parsedEndTime !== undefined ? parsedEndTime : illustration.endTime,
       });
 
       return res.status(200).json({
@@ -390,8 +390,8 @@ const upsertIllustration = asyncHandler(async (req, res) => {
         screenName,
         img: imageUrl,
         status: effectiveStatus,
-        startTime: startDate,
-        endTime: endDate,
+        startTime: parsedStartTime,
+        endTime: parsedEndTime,
       });
 
       return res.status(200).json({
@@ -410,6 +410,7 @@ const upsertIllustration = asyncHandler(async (req, res) => {
     });
   }
 });
+
 
 const fetchIllustrationById = asyncHandler(async (req, res) => {
   const { id } = req.params;
