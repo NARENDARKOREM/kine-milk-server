@@ -5029,3 +5029,435 @@
 {"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:25:00.978Z"}
 {"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:25:00.983Z"}
 {"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:25:01.008Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-12T07:25:48.401Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-12T07:25:48.430Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-12T07:25:48.495Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-12T07:25:48.532Z"}
+{"level":"info","message":"Server timezone: UTC","service":"kine_milk_server","timestamp":"2025-06-12T07:25:48.813Z"}
+{"level":"info","message":"Server timezone: UTC","service":"kine_milk_server","timestamp":"2025-06-12T07:25:48.924Z"}
+{"level":"info","message":"Server timezone: UTC","service":"kine_milk_server","timestamp":"2025-06-12T07:25:49.388Z"}
+{"level":"info","message":"Server timezone: UTC","service":"kine_milk_server","timestamp":"2025-06-12T07:25:49.703Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 12:56:00 pm (UTC: 2025-06-12T01:56:00.227Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:26:00.229Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:26:00.397Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:26:00.400Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:26:00.405Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 12:56:00 pm (UTC: 2025-06-12T01:56:00.553Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:26:00.554Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:26:00.668Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:26:00.676Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:26:00.690Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-12T07:26:14.036Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-12T07:26:14.110Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-12T07:26:14.167Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-12T07:26:14.193Z"}
+{"level":"info","message":"Server timezone: UTC","service":"kine_milk_server","timestamp":"2025-06-12T07:26:15.437Z"}
+{"level":"info","message":"Server timezone: UTC","service":"kine_milk_server","timestamp":"2025-06-12T07:26:15.549Z"}
+{"level":"info","message":"Server timezone: UTC","service":"kine_milk_server","timestamp":"2025-06-12T07:26:16.116Z"}
+{"level":"info","message":"Server timezone: UTC","service":"kine_milk_server","timestamp":"2025-06-12T07:26:16.368Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 12:57:00 pm (UTC: 2025-06-12T01:57:00.213Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:27:00.215Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 12:57:00 pm (UTC: 2025-06-12T01:57:00.508Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:27:00.509Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 6:27:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:27:00.545Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 6:27:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:27:00.634Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 12:57:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:27:00.827Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 12:57:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:27:00.905Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 12:58:00 pm (UTC: 2025-06-12T01:58:00.121Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:28:00.121Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 12:58:00 pm (UTC: 2025-06-12T01:58:00.286Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:28:00.287Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 12:58:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:28:00.443Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:28:00.438Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 12:58:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:28:00.520Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 6:28:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:28:00.597Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 6:28:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:28:00.678Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 12:59:00 pm (UTC: 2025-06-12T01:59:00.353Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:29:00.354Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:29:00.450Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:29:00.479Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:29:00.482Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:29:00.493Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 12:59:00 pm (UTC: 2025-06-12T01:59:00.719Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:29:00.720Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:29:00.838Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:29:00.887Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:29:00.943Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:29:00.950Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:00:00 pm (UTC: 2025-06-12T02:00:00.389Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:30:00.390Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:00:00 pm (UTC: 2025-06-12T02:00:00.423Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:30:00.424Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:30:00.521Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:30:00.533Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:30:00.525Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:30:00.530Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:30:00.541Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:30:00.579Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:30:00.582Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:30:00.587Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:31:00.135Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:31:00.141Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:31:00.146Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:01:00 pm (UTC: 2025-06-12T02:01:00.493Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:31:00.493Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:31:00.622Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:31:00.659Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:31:00.668Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:31:00.680Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:01:00 pm (UTC: 2025-06-12T02:01:00.934Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:31:00.935Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:31:01.042Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:02:00 pm (UTC: 2025-06-12T02:02:00.516Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:32:00.517Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:02:00 pm (UTC: 2025-06-12T02:02:00.560Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:32:00.561Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:32:00.640Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:32:00.675Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:32:00.707Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:32:00.711Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:32:00.717Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:32:00.716Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:32:00.726Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:32:00.742Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:03:00 pm (UTC: 2025-06-12T02:03:00.052Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:33:00.052Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:33:00.163Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:33:00.332Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:33:00.356Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:33:00.362Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:03:00 pm (UTC: 2025-06-12T02:03:00.630Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:33:00.632Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:33:00.726Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:33:00.737Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:33:00.759Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:33:00.767Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:04:00 pm (UTC: 2025-06-12T02:04:00.660Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:34:00.662Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:04:00 pm (UTC: 2025-06-12T02:04:00.699Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:34:00.719Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:34:00.784Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:34:00.819Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:34:00.827Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:34:00.831Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:34:00.869Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:34:00.968Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:34:00.980Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:34:01.011Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:05:00 pm (UTC: 2025-06-12T02:05:00.261Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:35:00.261Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:35:00.373Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:35:00.539Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:35:00.548Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:35:00.568Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:05:00 pm (UTC: 2025-06-12T02:05:00.791Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:35:00.792Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:35:00.905Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:35:00.935Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:35:00.941Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:35:00.947Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:36:00.170Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:36:00.175Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:36:00.183Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:06:00 pm (UTC: 2025-06-12T02:06:00.862Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:36:00.862Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:06:00 pm (UTC: 2025-06-12T02:06:00.879Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:36:00.881Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:36:00.968Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:36:00.975Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:36:00.993Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:36:00.998Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:36:00.998Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:07:00 pm (UTC: 2025-06-12T02:07:00.502Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:37:00.503Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:37:00.611Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:37:00.835Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:37:00.840Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:37:00.855Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:07:00 pm (UTC: 2025-06-12T02:07:00.928Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:37:00.929Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:37:01.111Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:37:01.116Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:37:01.187Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:37:01.192Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:08:00 pm (UTC: 2025-06-12T02:08:00.103Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:38:00.104Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:38:00.462Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:08:00 pm (UTC: 2025-06-12T02:08:00.993Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:38:00.994Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:38:01.116Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-12T07:38:01.120Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:09:00 pm (UTC: 2025-06-12T02:09:00.062Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:39:00.063Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 6:39:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:39:00.355Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 6:39:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:39:00.438Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:09:00 pm (UTC: 2025-06-12T02:09:00.701Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:39:00.702Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 1:09:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:39:01.186Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 1:09:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:39:01.275Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:10:00 pm (UTC: 2025-06-12T02:10:00.135Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:40:00.136Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:10:00 pm (UTC: 2025-06-12T02:10:00.325Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:40:00.326Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 6:40:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:40:00.428Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 6:40:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:40:00.513Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 1:10:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:40:00.755Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 1:10:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:40:00.833Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:11:00 pm (UTC: 2025-06-12T02:11:00.206Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:41:00.207Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 1:11:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:41:00.392Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 1:11:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:41:00.466Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 6:41:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:41:00.556Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:11:00 pm (UTC: 2025-06-12T02:11:00.942Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:41:00.943Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:12:00 pm (UTC: 2025-06-12T02:12:00.272Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:42:00.272Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 6:42:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:42:00.534Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:12:00 pm (UTC: 2025-06-12T02:12:00.605Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:42:00.606Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 6:42:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:42:00.609Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 1:12:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:42:01.008Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 1:12:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:42:01.083Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:13:00 pm (UTC: 2025-06-12T02:13:00.257Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:43:00.257Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:13:00 pm (UTC: 2025-06-12T02:13:00.337Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:43:00.337Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 1:13:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:43:00.632Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 6:43:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:43:00.646Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 1:13:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:43:00.707Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 6:43:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:43:00.728Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:14:00 pm (UTC: 2025-06-12T02:14:00.398Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:44:00.398Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 6:44:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:44:00.701Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 6:44:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:44:00.794Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:14:00 pm (UTC: 2025-06-12T02:14:00.823Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:44:00.824Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 1:14:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:44:01.175Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 1:14:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:44:01.250Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:15:00 pm (UTC: 2025-06-12T02:15:00.389Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:45:00.390Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:15:00 pm (UTC: 2025-06-12T02:15:00.463Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:45:00.464Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 6:45:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:45:00.782Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 1:15:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:45:00.858Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 6:45:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:45:00.875Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:16:00 pm (UTC: 2025-06-12T02:16:00.010Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:46:00.010Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 1:16:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:46:00.441Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:16:00 pm (UTC: 2025-06-12T02:16:00.530Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:46:00.531Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 6:46:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:46:00.876Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 6:46:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:46:00.965Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:17:00 pm (UTC: 2025-06-12T02:17:00.638Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:47:00.638Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:17:00 pm (UTC: 2025-06-12T02:17:00.649Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:47:00.650Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 6:47:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:47:00.916Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 6:47:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:47:00.991Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:18:00 pm (UTC: 2025-06-12T02:18:00.152Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:48:00.153Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:18:00 pm (UTC: 2025-06-12T02:18:00.732Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:48:00.733Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 1:18:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:48:00.848Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 1:18:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:48:00.921Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 6:48:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:48:01.036Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 6:48:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:48:01.115Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 1:19:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:49:00.498Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 1:19:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:49:00.581Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:19:00 pm (UTC: 2025-06-12T02:19:00.758Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:49:00.759Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:19:00 pm (UTC: 2025-06-12T02:19:00.801Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:49:00.802Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 6:49:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:49:01.110Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 6:49:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:49:01.189Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:20:00 pm (UTC: 2025-06-12T02:20:00.345Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:50:00.346Z"}
+{"level":"info","message":"Illustration ID 6c2ff3fa-b964-4cbd-81dd-fafdbbf746ce published at 12/6/2025, 1:20:00 pm. startTime: 12/6/2025, 1:20:00 pm","service":"kine_milk_server","timestamp":"2025-06-12T07:50:00.668Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:20:00 pm (UTC: 2025-06-12T02:20:00.868Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:50:00.869Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 1:20:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:50:01.077Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 6:50:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:50:01.143Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 1:20:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:50:01.149Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 1:21:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:51:00.747Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 1:21:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:51:00.822Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:21:00 pm (UTC: 2025-06-12T02:21:00.932Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:51:00.933Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 1:21:00 pm (UTC: 2025-06-12T02:21:00.978Z)","service":"kine_milk_server","timestamp":"2025-06-12T07:51:00.979Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 6:51:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T07:51:01.228Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 6:51:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T07:51:01.307Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:22:00 pm (UTC: 2025-06-12T03:22:00.651Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:52:00.652Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 7:52:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:52:00.961Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:22:00 pm (UTC: 2025-06-12T03:22:00.979Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:52:00.980Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 7:52:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T08:52:01.039Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:22:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:52:01.193Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:22:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T08:52:01.265Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:23:00 pm (UTC: 2025-06-12T03:23:00.611Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:53:00.612Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:23:00 pm (UTC: 2025-06-12T03:23:00.719Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:53:00.720Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:23:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:53:00.937Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 7:53:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:53:01.003Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:23:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T08:53:01.014Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:24:00 pm (UTC: 2025-06-12T03:24:00.211Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:54:00.212Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:24:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:54:00.483Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:24:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T08:54:00.558Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:24:00 pm (UTC: 2025-06-12T03:24:00.781Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:54:00.781Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 7:54:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:54:01.071Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 7:54:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T08:54:01.160Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:25:00 pm (UTC: 2025-06-12T03:25:00.769Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:55:00.770Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:25:00 pm (UTC: 2025-06-12T03:25:00.852Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:55:00.853Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:25:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:55:01.063Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 7:55:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:55:01.134Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:25:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T08:55:01.139Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:26:00 pm (UTC: 2025-06-12T03:26:00.396Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:56:00.398Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:26:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:56:00.687Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:26:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T08:56:00.763Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:26:00 pm (UTC: 2025-06-12T03:26:00.920Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:56:00.921Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 7:56:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:56:01.209Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 7:56:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T08:56:01.286Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:27:00 pm (UTC: 2025-06-12T03:27:00.042Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:57:00.042Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:27:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:57:00.322Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:27:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T08:57:00.398Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:27:00 pm (UTC: 2025-06-12T03:27:00.981Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:57:00.983Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 7:57:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:57:01.278Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 7:57:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T08:57:01.354Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:28:00 pm (UTC: 2025-06-12T03:28:00.049Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:58:00.049Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 7:58:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:58:00.346Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 7:58:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T08:58:00.423Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:28:00 pm (UTC: 2025-06-12T03:28:00.620Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:58:00.620Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:28:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:58:00.898Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:28:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T08:58:00.970Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:29:00 pm (UTC: 2025-06-12T03:29:00.113Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:59:00.114Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:29:00 pm (UTC: 2025-06-12T03:29:00.216Z)","service":"kine_milk_server","timestamp":"2025-06-12T08:59:00.216Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 7:59:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T08:59:00.415Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 7:59:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T08:59:00.512Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:30:00 pm (UTC: 2025-06-12T03:30:00.173Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:00:00.174Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:00:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:00:00.786Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:30:00 pm (UTC: 2025-06-12T03:30:00.844Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:00:00.844Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:00:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:00:00.870Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:30:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:00:01.176Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:30:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:00:01.251Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:31:00 pm (UTC: 2025-06-12T03:31:00.236Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:01:00.237Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:31:00 pm (UTC: 2025-06-12T03:31:00.445Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:01:00.446Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:01:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:01:00.597Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:01:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:01:00.689Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:32:00 pm (UTC: 2025-06-12T03:32:00.009Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:02:00.010Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:32:00 pm (UTC: 2025-06-12T03:32:00.316Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:02:00.317Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:32:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:02:00.337Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:32:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:02:00.415Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:02:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:02:00.602Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:02:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:02:00.681Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:33:00 pm (UTC: 2025-06-12T03:33:00.382Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:03:00.382Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:33:00 pm (UTC: 2025-06-12T03:33:00.590Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:03:00.592Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:03:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:03:00.676Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:03:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:03:00.753Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:33:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:03:00.911Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:33:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:03:00.988Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:34:00 pm (UTC: 2025-06-12T03:34:00.145Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:04:00.146Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:34:00 pm (UTC: 2025-06-12T03:34:00.446Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:04:00.450Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:34:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:04:00.483Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:34:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:04:00.560Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:04:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:04:00.744Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:04:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:04:00.820Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:35:00 pm (UTC: 2025-06-12T03:35:00.511Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:05:00.511Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:35:00 pm (UTC: 2025-06-12T03:35:00.762Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:05:00.762Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:05:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:05:00.797Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:05:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:05:00.874Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:35:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:05:01.088Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:35:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:05:01.166Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:36:00 pm (UTC: 2025-06-12T03:36:00.303Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:06:00.304Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:36:00 pm (UTC: 2025-06-12T03:36:00.576Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:06:00.577Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:36:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:06:00.627Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:36:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:06:00.702Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:06:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:06:00.862Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:06:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:06:00.942Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:37:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:07:00.518Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:37:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:07:00.595Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:37:00 pm (UTC: 2025-06-12T03:37:00.649Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:07:00.650Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:37:00 pm (UTC: 2025-06-12T03:37:00.885Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:07:00.886Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:07:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:07:01.038Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:07:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:07:01.125Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:38:00 pm (UTC: 2025-06-12T03:38:00.477Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:08:00.478Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:38:00 pm (UTC: 2025-06-12T03:38:00.712Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:08:00.712Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:38:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:08:00.810Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:38:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:08:00.890Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:08:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:08:00.998Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:08:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:08:01.077Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:39:00 pm (UTC: 2025-06-12T03:39:00.022Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:09:00.022Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:39:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:09:00.309Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:39:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:09:00.389Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:39:00 pm (UTC: 2025-06-12T03:39:00.772Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:09:00.773Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:09:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:09:01.071Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:09:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:09:01.150Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:40:00 pm (UTC: 2025-06-12T03:40:00.599Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:10:00.600Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:40:00 pm (UTC: 2025-06-12T03:40:00.836Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:10:00.836Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:40:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:10:00.897Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:40:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:10:00.969Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:10:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:10:01.098Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:10:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:10:01.174Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:41:00 pm (UTC: 2025-06-12T03:41:00.204Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:11:00.205Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:41:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:11:00.567Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:41:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:11:00.640Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:41:00 pm (UTC: 2025-06-12T03:41:00.907Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:11:00.908Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:11:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:11:01.202Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:11:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:11:01.273Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:42:00 pm (UTC: 2025-06-12T03:42:00.826Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:12:00.828Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:42:00 pm (UTC: 2025-06-12T03:42:00.978Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:12:00.979Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:42:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:12:01.576Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:42:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:12:01.874Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:12:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:12:02.217Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:43:00 pm (UTC: 2025-06-12T03:43:00.035Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:13:00.036Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:13:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:13:00.309Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:43:00 pm (UTC: 2025-06-12T03:43:00.370Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:13:00.370Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:13:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:13:00.384Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:43:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:13:00.672Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:43:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:13:00.744Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:44:00 pm (UTC: 2025-06-12T03:44:00.096Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:14:00.097Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:44:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:14:00.250Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:44:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:14:00.323Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:14:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:14:00.393Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:44:00 pm (UTC: 2025-06-12T03:44:00.977Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:14:00.978Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:45:00 pm (UTC: 2025-06-12T03:45:00.157Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:15:00.158Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:15:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:15:00.429Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:15:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:15:00.510Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:45:00 pm (UTC: 2025-06-12T03:45:00.552Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:15:00.552Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:45:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:15:00.874Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:45:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:15:00.950Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:46:00 pm (UTC: 2025-06-12T03:46:00.175Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:16:00.175Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:46:00 pm (UTC: 2025-06-12T03:46:00.207Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:16:00.208Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:16:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:16:00.472Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:46:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:16:00.493Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:16:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:16:00.546Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:46:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:16:00.566Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:47:00 pm (UTC: 2025-06-12T03:47:00.282Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:17:00.283Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:17:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:17:00.557Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:17:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:17:00.637Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:47:00 pm (UTC: 2025-06-12T03:47:00.776Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:17:00.777Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:47:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:17:01.086Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:47:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:17:01.159Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:48:00 pm (UTC: 2025-06-12T03:48:00.338Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:18:00.339Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:48:00 pm (UTC: 2025-06-12T03:48:00.344Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:18:00.345Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:18:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:18:00.602Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:48:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:18:00.622Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:18:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:18:00.677Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:48:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:18:00.696Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:49:00 pm (UTC: 2025-06-12T03:49:00.403Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:19:00.404Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:19:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:19:00.705Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:19:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:19:00.785Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:49:00 pm (UTC: 2025-06-12T03:49:00.874Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:19:00.875Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:49:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:19:01.191Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:49:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:19:01.262Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:50:00 pm (UTC: 2025-06-12T03:50:00.459Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:20:00.460Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:50:00 pm (UTC: 2025-06-12T03:50:00.465Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:20:00.466Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:20:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:20:00.755Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:50:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:20:00.789Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:20:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:20:00.833Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:50:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:20:00.868Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:51:00 pm (UTC: 2025-06-12T03:51:00.054Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:21:00.055Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:51:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:21:00.427Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:51:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:21:00.502Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:51:00 pm (UTC: 2025-06-12T03:51:00.524Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:21:00.526Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:21:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:21:00.806Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:21:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:21:00.882Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:52:00 pm (UTC: 2025-06-12T03:52:00.587Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:22:00.588Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:52:00 pm (UTC: 2025-06-12T03:52:00.631Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:22:00.631Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:22:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:22:00.893Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:52:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:22:00.945Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:22:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:22:00.979Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:53:00 pm (UTC: 2025-06-12T03:53:00.251Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:23:00.251Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:53:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:23:00.534Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:53:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:23:00.614Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:53:00 pm (UTC: 2025-06-12T03:53:00.651Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:23:00.652Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:23:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:23:00.949Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:23:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:23:01.029Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:54:00 pm (UTC: 2025-06-12T03:54:00.709Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:24:00.710Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:54:00 pm (UTC: 2025-06-12T03:54:00.753Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:24:00.754Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:24:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:24:00.992Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:54:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:24:01.047Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:24:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:24:01.071Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:55:00 pm (UTC: 2025-06-12T03:55:00.322Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:25:00.322Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:55:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:25:00.599Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:55:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:25:00.674Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:55:00 pm (UTC: 2025-06-12T03:55:00.781Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:25:00.782Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:25:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:25:01.073Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:25:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:25:01.160Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:56:00 pm (UTC: 2025-06-12T03:56:00.839Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:26:00.840Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:56:00 pm (UTC: 2025-06-12T03:56:00.875Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:26:00.875Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:26:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:26:01.127Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:56:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:26:01.152Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:26:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:26:01.208Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:56:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:26:01.227Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:57:00 pm (UTC: 2025-06-12T03:57:00.424Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:27:00.424Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:57:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:27:00.698Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:57:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:27:00.785Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:57:00 pm (UTC: 2025-06-12T03:57:00.913Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:27:00.913Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:27:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:27:01.192Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:27:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:27:01.268Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:58:00 pm (UTC: 2025-06-12T03:58:00.067Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:28:00.068Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:58:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:28:00.330Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:58:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:28:00.405Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:58:00 pm (UTC: 2025-06-12T03:58:00.975Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:28:00.976Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:28:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:28:01.292Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:28:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:28:01.377Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:59:00 pm (UTC: 2025-06-12T03:59:00.041Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:29:00.042Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:29:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:29:00.363Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:29:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:29:00.443Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 2:59:00 pm (UTC: 2025-06-12T03:59:00.695Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:29:00.696Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 2:59:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:29:00.969Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 2:59:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:29:01.049Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 3:00:00 pm (UTC: 2025-06-12T04:00:00.105Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:30:00.106Z"}
+{"level":"info","message":"Cron job running at 12/6/2025, 3:00:00 pm (UTC: 2025-06-12T04:00:00.257Z)","service":"kine_milk_server","timestamp":"2025-06-12T09:30:00.258Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 8:30:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:30:00.450Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 12/6/2025, 3:00:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-12T09:30:00.524Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 12/6/2025, 8:30:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-12T09:30:00.530Z"}
+{"level":"info","message":"Server timezone: UTC","service":"kine_milk_server","timestamp":"2025-06-12T09:31:02.238Z"}
+{"level":"info","message":"Server timezone: UTC","service":"kine_milk_server","timestamp":"2025-06-12T09:31:02.411Z"}
+{"level":"info","message":"Server timezone: UTC","service":"kine_milk_server","timestamp":"2025-06-12T09:31:03.531Z"}
+{"level":"info","message":"Server timezone: UTC","service":"kine_milk_server","timestamp":"2025-06-12T09:31:04.174Z"}

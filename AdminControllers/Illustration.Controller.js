@@ -267,23 +267,23 @@ cron.schedule("* * * * *", async () => {
 const upsertIllustration = asyncHandler(async (req, res) => {
   try {
     const { id, screenName, status, startTime, endTime } = req.body;
-    console.log(req.body, " Request body received for upsertIllustration");
+    console.log(req.body, ' Request body received for upsertIllustration');
 
     let imageUrl = null;
 
-    logger.info(`Upsert request for illustration ${id || "new"}: ${JSON.stringify(req.body)}`);
+    logger.info(`Upsert request for illustration ${id || 'new'}: ${JSON.stringify(req.body)}`);
     if (req.file) logger.info(`File uploaded: ${req.file.originalname}`);
 
     // Handle image upload
     if (req.file) {
       req.file.originalname = sanitizeFilename(req.file.originalname);
-      imageUrl = await uploadToS3(req.file, "image");
+      imageUrl = await uploadToS3(req.file, 'image');
       if (!imageUrl) {
-        logger.error("Image upload failed");
+        logger.error('Image upload failed');
         return res.status(400).json({
-          ResponseCode: "400",
-          Result: "false",
-          ResponseMsg: "Image upload failed.",
+          ResponseCode: '400',
+          Result: 'false',
+          ResponseMsg: 'Image upload failed.',
         });
       }
     } else if (id) {
@@ -291,34 +291,34 @@ const upsertIllustration = asyncHandler(async (req, res) => {
       if (!existingIllustration) {
         logger.error(`Illustration with ID ${id} not found`);
         return res.status(404).json({
-          ResponseCode: "404",
-          Result: "false",
-          ResponseMsg: "Illustration not found.",
+          ResponseCode: '404',
+          Result: 'false',
+          ResponseMsg: 'Illustration not found.',
         });
       }
       imageUrl = existingIllustration.img;
     } else {
-      logger.error("Image is required for a new illustration");
+      logger.error('Image is required for a new illustration');
       return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "Image is required for a new illustration.",
+        ResponseCode: '400',
+        Result: 'false',
+        ResponseMsg: 'Image is required for a new illustration.',
       });
     }
 
     // Validate status
     const statusValue = parseInt(status, 10);
-    const validStatuses = [0, 1];
+    const validStatuses = [0, 1, 2]; // 0 = unpublished, 1 = published, 2 = scheduled
     if (!validStatuses.includes(statusValue)) {
       logger.error(`Invalid status value: ${status}`);
       return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "Status must be 0 (Unpublished) or 1 (Published).",
+        ResponseCode: '400',
+        Result: 'false',
+        ResponseMsg: 'Status must be 0 (Unpublished), 1 (Published), or 2 (Scheduled).',
       });
     }
 
-    // ✅ Parse date as string (no Date object — avoid time zone conversion)
+    // Parse date as string (no Date object — avoid time zone conversion)
     const parseDateAsLocal = (dateString, fieldName) => {
       if (!dateString) return null;
 
@@ -328,35 +328,65 @@ const upsertIllustration = asyncHandler(async (req, res) => {
         throw new Error(`Invalid ${fieldName} format`);
       }
 
-      return dateString.replace("T", " ") + ":00"; // Convert to MySQL DATETIME format
+      return dateString.replace('T', ' ') + ':00'; // Convert to MySQL DATETIME format (e.g., '2025-06-12 13:30:00')
     };
 
-    const parsedStartTime = parseDateAsLocal(startTime, "startTime");
-    const parsedEndTime = parseDateAsLocal(endTime, "endTime");
+    const parsedStartTime = parseDateAsLocal(startTime, 'startTime');
+    const parsedEndTime = parseDateAsLocal(endTime, 'endTime');
 
-    const now = new Date();
+    // Adjust times for UTC database (subtract 5.5 hours to store IST time as UTC)
+    const adjustForUTC = (dateString) => {
+      if (!dateString) return null;
+      const date = new Date(`${dateString} +05:30`); // Parse as IST
+      date.setHours(date.getHours() - 5); // Subtract 5 hours
+      date.setMinutes(date.getMinutes() - 30); // Subtract 30 minutes
+      return date.toISOString().slice(0, 19).replace('T', ' '); // Convert to MySQL DATETIME format
+    };
 
-    if (parsedEndTime && new Date(parsedEndTime) <= now) {
+    const utcStartTime = adjustForUTC(parsedStartTime);
+    const utcEndTime = adjustForUTC(parsedEndTime);
+
+    // Validate dates (use IST for comparisons)
+    const now = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+      .replace(/,/, '')
+      .replace(/(\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+) (AM|PM)/, 
+        (match, month, day, year, hour, minute, second, period) => {
+          const hour24 = period === 'PM' && hour !== '12' ? parseInt(hour) + 12 : 
+                         period === 'AM' && hour === '12' ? 0 : parseInt(hour);
+          return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} ${hour24.toString().padStart(2, '0')}:${minute}:${second}`;
+        });
+
+    if (parsedEndTime && parsedEndTime <= now) {
       return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "End time must be in the future.",
+        ResponseCode: '400',
+        Result: 'false',
+        ResponseMsg: 'End time must be in the future.',
       });
     }
 
-    if (parsedStartTime && parsedEndTime && new Date(parsedStartTime) >= new Date(parsedEndTime)) {
+    if (parsedStartTime && parsedEndTime && parsedStartTime >= parsedEndTime) {
       return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "End time must be after start time.",
+        ResponseCode: '400',
+        Result: 'false',
+        ResponseMsg: 'End time must be after start time.',
       });
     }
 
     let effectiveStatus = statusValue;
-    if (parsedStartTime && new Date(parsedStartTime) > now) {
-      effectiveStatus = 0; // Future = unpublished
-    } else if (parsedStartTime && new Date(parsedStartTime) <= now) {
-      effectiveStatus = 1; // Past = published
+    if (statusValue === 2) {
+      // For scheduled status (2)
+      if (!parsedStartTime || !parsedEndTime) {
+        return res.status(400).json({
+          ResponseCode: '400',
+          Result: 'false',
+          ResponseMsg: 'Start time and end time are required for scheduled status.',
+        });
+      }
+      if (parsedStartTime > now) {
+        effectiveStatus = 0; // Future = unpublished
+      } else if (parsedStartTime <= now) {
+        effectiveStatus = 1; // Past or current = published
+      }
     }
 
     let illustration;
@@ -365,9 +395,9 @@ const upsertIllustration = asyncHandler(async (req, res) => {
       illustration = await Illustration.findByPk(id);
       if (!illustration) {
         return res.status(404).json({
-          ResponseCode: "404",
-          Result: "false",
-          ResponseMsg: "Illustration not found.",
+          ResponseCode: '404',
+          Result: 'false',
+          ResponseMsg: 'Illustration not found.',
         });
       }
 
@@ -375,38 +405,50 @@ const upsertIllustration = asyncHandler(async (req, res) => {
         screenName,
         img: imageUrl,
         status: effectiveStatus,
-        startTime: parsedStartTime !== undefined ? parsedStartTime : illustration.startTime,
-        endTime: parsedEndTime !== undefined ? parsedEndTime : illustration.endTime,
+        startTime: utcStartTime !== undefined ? utcStartTime : illustration.startTime,
+        endTime: utcEndTime !== undefined ? utcEndTime : illustration.endTime,
       });
 
-      return res.status(200).json({
-        ResponseCode: "200",
-        Result: "true",
-        ResponseMsg: "Illustration updated successfully.",
-        illustration: illustration.toJSON(),
-      });
+      logger.info(`Updated illustration: ${JSON.stringify(illustration.toJSON())}`);
     } else {
       illustration = await Illustration.create({
         screenName,
         img: imageUrl,
         status: effectiveStatus,
-        startTime: parsedStartTime,
-        endTime: parsedEndTime,
+        startTime: utcStartTime,
+        endTime: utcEndTime,
       });
 
-      return res.status(200).json({
-        ResponseCode: "200",
-        Result: "true",
-        ResponseMsg: "Illustration created successfully.",
-        illustration: illustration.toJSON(),
-      });
+      logger.info(`Created illustration: ${JSON.stringify(illustration.toJSON())}`);
     }
+
+    // Convert stored UTC times back to IST for response
+    const illustrationData = illustration.toJSON();
+    if (illustrationData.startTime) {
+      const startDate = new Date(illustrationData.startTime);
+      startDate.setHours(startDate.getHours() + 5);
+      startDate.setMinutes(startDate.getMinutes() + 30);
+      illustrationData.startTime = startDate.toISOString().slice(0, 16).replace('T', ' ');
+    }
+    if (illustrationData.endTime) {
+      const endDate = new Date(illustrationData.endTime);
+      endDate.setHours(endDate.getHours() + 5);
+      endDate.setMinutes(endDate.getMinutes() + 30);
+      illustrationData.endTime = endDate.toISOString().slice(0, 16).replace('T', ' ');
+    }
+
+    return res.status(200).json({
+      ResponseCode: '200',
+      Result: 'true',
+      ResponseMsg: id ? 'Illustration updated successfully.' : 'Illustration created successfully.',
+      illustration: illustrationData,
+    });
   } catch (error) {
     logger.error(`Error processing illustration: ${error.message}`);
     return res.status(500).json({
-      ResponseCode: "500",
-      Result: "false",
-      ResponseMsg: "Internal Server Error",
+      ResponseCode: '500',
+      Result: 'false',
+      ResponseMsg: 'Internal Server Error',
     });
   }
 });
