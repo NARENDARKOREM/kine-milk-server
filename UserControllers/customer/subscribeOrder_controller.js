@@ -1236,6 +1236,11 @@ const getOrderDetails = async (req, res) => {
       where: { id, uid },
       include: [
         {
+          model:User,
+          as: "user",
+          attributes:["name","email","mobile","wallet"]
+        },
+        {
           model: SubscribeOrderProduct,
           as: "orderProducts",
           include: [
