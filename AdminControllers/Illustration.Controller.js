@@ -264,6 +264,36 @@ const upsertIllustration = asyncHandler(async (req, res) => {
   }
 });
 
+// const fetchIllustrationById = asyncHandler(async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const illustration = await Illustration.findByPk(id);
+//     if (!illustration) {
+//       logger.error(`Illustration with ID ${id} not found`);
+//       return res.status(404).json({
+//         ResponseCode: "404",
+//         Result: "false",
+//         ResponseMsg: "Illustration not found",
+//       });
+//     }
+//     logger.info(`Illustration fetched by ID ${id}`);
+//     const illustrationWithIST = {
+//       ...illustration.toJSON(),
+//       startTime: convertUTCToIST(illustration.startTime),
+//       endTime: convertUTCToIST(illustration.endTime),
+//     };
+//     res.status(200).json(illustrationWithIST);
+//   } catch (error) {
+//     logger.error(`Error fetching illustration by ID ${id}: ${error.message}`);
+//     res.status(500).json({
+//       ResponseCode: "500",
+//       Result: "false",
+//       ResponseMsg: "Server error at fetch illustration",
+//     });
+//   }
+// });
+
+
 const fetchIllustrationById = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
@@ -277,10 +307,22 @@ const fetchIllustrationById = asyncHandler(async (req, res) => {
       });
     }
     logger.info(`Illustration fetched by ID ${id}`);
+    const formatISTDate = (date) => {
+      if (!date) return null;
+      const istOffset = 5.5 * 60 * 60 * 1000;
+      const istDate = new Date(new Date(date).getTime() + istOffset);
+      const year = istDate.getFullYear();
+      const month = String(istDate.getMonth() + 1).padStart(2, '0');
+      const day = String(istDate.getDate()).padStart(2, '0');
+      const hours = String(istDate.getHours()).padStart(2, '0');
+      const minutes = String(istDate.getMinutes()).padStart(2, '0');
+      const seconds = String(istDate.getSeconds()).padStart(2, '0');
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    };
     const illustrationWithIST = {
       ...illustration.toJSON(),
-      startTime: convertUTCToIST(illustration.startTime),
-      endTime: convertUTCToIST(illustration.endTime),
+      startTime: formatISTDate(illustration.startTime),
+      endTime: formatISTDate(illustration.endTime),
     };
     res.status(200).json(illustrationWithIST);
   } catch (error) {
@@ -292,7 +334,6 @@ const fetchIllustrationById = asyncHandler(async (req, res) => {
     });
   }
 });
-
 const fetchIllustrations = asyncHandler(async (req, res) => {
   try {
     const illustrations = await Illustration.findAll();
