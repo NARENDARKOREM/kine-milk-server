@@ -300,7 +300,7 @@ const instantOrder = async (req, res) => {
           uid,
           store_id,
           address_id: orderAddressId,
-          odate: parsedOdate,
+          odate: new Date(),
           timeslot_id,
           o_type,
           cou_id: appliedCoupon ? appliedCoupon.id : null,

@@ -1,12 +1,13 @@
 const { where } = require("sequelize");
 const Address = require("../../Models/Address");
+const Person = require("../../Models/PersonRecord");
 
 
 
 
 const upSertAddress = async (req, res) => {
     try {
-      const { id,  lats, longs, address, landmark, r_instruction, a_type } = req.body;
+      const { id,  lats, longs, address, landmark, r_instruction, a_type,mobile,name } = req.body;
       const uid = req.user.userId;
 
       console.log(uid)
@@ -45,6 +46,16 @@ const upSertAddress = async (req, res) => {
           },
           { where: { id } }
         );
+
+        await Person.update(
+        {
+          name,
+          mobile,
+          
+        },
+        { where: {address_id:id } }
+      );
+
   
         return res.status(200).json({
           ResponseCode: "200",
@@ -62,6 +73,12 @@ const upSertAddress = async (req, res) => {
           landmark,
           r_instruction,
           a_type,
+        });
+
+        await Person.create({
+          name: name,
+          mobile: mobile,
+          address_id: newAddress.id,
         });
   
         return res.status(200).json({
