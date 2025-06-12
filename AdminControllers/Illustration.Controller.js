@@ -84,16 +84,195 @@ cron.schedule("* * * * *", async () => {
   }
 });
 
+// const upsertIllustration = asyncHandler(async (req, res) => {
+//   try {
+//     const { id, screenName, status, startTime, endTime } = req.body;
+//     let imageUrl = null;
+
+//     // Log incoming request data
+//     logger.info(`Upsert request for illustration ${id || "new"}: ${JSON.stringify(req.body)}`);
+//     if (req.file) logger.info(`File uploaded: ${req.file.originalname}`);
+
+//     // Handle file upload
+//     if (req.file) {
+//       req.file.originalname = sanitizeFilename(req.file.originalname);
+//       imageUrl = await uploadToS3(req.file, "image");
+//       if (!imageUrl) {
+//         logger.error("Image upload failed");
+//         return res.status(400).json({
+//           ResponseCode: "400",
+//           Result: "false",
+//           ResponseMsg: "Image upload failed.",
+//         });
+//       }
+//     } else if (id) {
+//       const existingIllustration = await Illustration.findByPk(id);
+//       if (!existingIllustration) {
+//         logger.error(`Illustration with ID ${id} not found`);
+//         return res.status(404).json({
+//           ResponseCode: "404",
+//           Result: "false",
+//           ResponseMsg: "Illustration not found.",
+//         });
+//       }
+//       imageUrl = existingIllustration.img; // Preserve existing image
+//     } else {
+//       logger.error("Image is required for a new illustration");
+//       return res.status(400).json({
+//         ResponseCode: "400",
+//         Result: "false",
+//         ResponseMsg: "Image is required for a new illustration.",
+//       });
+//     }
+
+//     // Validate status
+//     const statusValue = parseInt(status, 10);
+//     const validStatuses = [0, 1];
+//     if (!validStatuses.includes(statusValue)) {
+//       logger.error(`Invalid status value: ${status}`);
+//       return res.status(400).json({
+//         ResponseCode: "400",
+//         Result: "false",
+//         ResponseMsg: "Status must be 0 (Unpublished) or 1 (Published).",
+//       });
+//     }
+
+//     // Parse and validate dates
+//     const parseISTDate = (dateString, fieldName) => {
+//       if (dateString === "" || dateString === null) {
+//         logger.info(`Clearing ${fieldName} for illustration ${id || "new"}`);
+//         return null;
+//       }
+//       if (dateString) {
+//         const istDate = new Date(dateString);
+//         if (isNaN(istDate.getTime())) {
+//           logger.error(`Invalid ${fieldName} format: ${dateString}`);
+//           throw new Error(`Invalid ${fieldName} format`);
+//         }
+//         logger.info(`${fieldName} parsed (IST): ${istDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+//         return istDate;
+//       }
+//       return undefined; // Preserve existing value
+//     };
+
+//     const startDate = parseISTDate(startTime, "startTime");
+//     const endDate = parseISTDate(endTime, "endTime");
+
+//     const nowInIST = new Date();
+//     logger.info(`Current time in IST: ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+
+//     // Validate dates
+//     if (endDate && endDate <= nowInIST) {
+//       logger.error("End time must be in the future");
+//       return res.status(400).json({
+//         ResponseCode: "400",
+//         Result: "false",
+//         ResponseMsg: "End time must be in the future.",
+//       });
+//     }
+//     if (startDate && endDate && startDate >= endDate) {
+//       logger.error("End time must be after start time");
+//       return res.status(400).json({
+//         ResponseCode: "400",
+//         Result: "false",
+//         ResponseMsg: "End time must be after start time.",
+//       });
+//     }
+
+//     const adjustedStartTime = startDate !== undefined ? convertISTToUTC(startDate) : null;
+//     const adjustedEndTime = endDate !== undefined ? convertISTToUTC(endDate) : null;
+
+//     // Adjust status based on startTime
+//     let effectiveStatus = statusValue;
+//     if (startDate && startDate > nowInIST) {
+//       effectiveStatus = 0; // Force unpublished if start date is in the future
+//       logger.info(`Forcing status to 0 for future startTime: ${startDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+//     } else if (startDate && startDate <= nowInIST) {
+//       effectiveStatus = 1; // Auto-publish if start date has passed
+//       logger.info(`Auto-publishing due to past startTime: ${startDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+//     }
+
+//     let illustration;
+//     if (id) {
+//       illustration = await Illustration.findByPk(id);
+//       if (!illustration) {
+//         logger.error(`Illustration with ID ${id} not found`);
+//         return res.status(404).json({
+//           ResponseCode: "404",
+//           Result: "false",
+//           ResponseMsg: "Illustration not found.",
+//         });
+//       }
+
+//       await illustration.update({
+//         screenName,
+//         img: imageUrl,
+//         status: effectiveStatus,
+//         startTime: startDate !== undefined ? adjustedStartTime : illustration.startTime,
+//         endTime: endDate !== undefined ? adjustedEndTime : illustration.endTime,
+//       });
+
+//       logger.info(
+//         `Illustration ${id} updated successfully. ` +
+//         `Status: ${effectiveStatus}, ` +
+//         `startTime: ${illustration.startTime ? convertUTCToIST(illustration.startTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
+//         `endTime: ${illustration.endTime ? convertUTCToIST(illustration.endTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
+//       );
+//       return res.status(200).json({
+//         ResponseCode: "200",
+//         Result: "true",
+//         ResponseMsg: "Illustration updated successfully.",
+//         illustration: {
+//           ...illustration.toJSON(),
+//           startTime: convertUTCToIST(illustration.startTime),
+//           endTime: convertUTCToIST(illustration.endTime),
+//         },
+//       });
+//     } else {
+//       illustration = await Illustration.create({
+//         screenName,
+//         img: imageUrl,
+//         status: effectiveStatus,
+//         startTime: adjustedStartTime,
+//         endTime: adjustedEndTime,
+//       });
+
+//       logger.info(
+//         `New illustration created with ID ${illustration.id}. ` +
+//         `Status: ${effectiveStatus}, ` +
+//         `startTime: ${illustration.startTime ? convertUTCToIST(illustration.startTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
+//         `endTime: ${illustration.endTime ? convertUTCToIST(illustration.endTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
+//       );
+//       return res.status(200).json({
+//         ResponseCode: "200",
+//         Result: "true",
+//         ResponseMsg: "Illustration created successfully.",
+//         illustration: {
+//           ...illustration.toJSON(),
+//           startTime: convertUTCToIST(illustration.startTime),
+//           endTime: convertUTCToIST(illustration.endTime),
+//         },
+//       });
+//     }
+//   } catch (error) {
+//     logger.error(`Error processing illustration: ${error.message}`);
+//     res.status(500).json({
+//       ResponseCode: "500",
+//       Result: "false",
+//       ResponseMsg: "Internal Server Error",
+//     });
+//   }
+// });
+
 const upsertIllustration = asyncHandler(async (req, res) => {
   try {
     const { id, screenName, status, startTime, endTime } = req.body;
+    console.log(req.body, " Request body received for upsertIllustration");
     let imageUrl = null;
 
-    // Log incoming request data
     logger.info(`Upsert request for illustration ${id || "new"}: ${JSON.stringify(req.body)}`);
     if (req.file) logger.info(`File uploaded: ${req.file.originalname}`);
 
-    // Handle file upload
     if (req.file) {
       req.file.originalname = sanitizeFilename(req.file.originalname);
       imageUrl = await uploadToS3(req.file, "image");
@@ -115,7 +294,7 @@ const upsertIllustration = asyncHandler(async (req, res) => {
           ResponseMsg: "Illustration not found.",
         });
       }
-      imageUrl = existingIllustration.img; // Preserve existing image
+      imageUrl = existingIllustration.img;
     } else {
       logger.error("Image is required for a new illustration");
       return res.status(400).json({
@@ -125,7 +304,6 @@ const upsertIllustration = asyncHandler(async (req, res) => {
       });
     }
 
-    // Validate status
     const statusValue = parseInt(status, 10);
     const validStatuses = [0, 1];
     if (!validStatuses.includes(statusValue)) {
@@ -137,41 +315,37 @@ const upsertIllustration = asyncHandler(async (req, res) => {
       });
     }
 
-    // Parse and validate dates
-    const parseISTDate = (dateString, fieldName) => {
-      if (dateString === "" || dateString === null) {
-        logger.info(`Clearing ${fieldName} for illustration ${id || "new"}`);
-        return null;
+    // ✅ Updated: Parse local date without UTC conversion
+    const parseDateAsLocal = (dateString, fieldName) => {
+      if (!dateString) return null;
+      const [datePart, timePart] = dateString.split('T');
+      const [year, month, day] = datePart.split('-').map(Number);
+      const [hour, minute] = timePart.split(':').map(Number);
+
+      const localDate = new Date(year, month - 1, day, hour, minute);
+
+      if (isNaN(localDate.getTime())) {
+        logger.error(`Invalid ${fieldName} format: ${dateString}`);
+        throw new Error(`Invalid ${fieldName} format`);
       }
-      if (dateString) {
-        const istDate = new Date(dateString);
-        if (isNaN(istDate.getTime())) {
-          logger.error(`Invalid ${fieldName} format: ${dateString}`);
-          throw new Error(`Invalid ${fieldName} format`);
-        }
-        logger.info(`${fieldName} parsed (IST): ${istDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
-        return istDate;
-      }
-      return undefined; // Preserve existing value
+
+      return localDate;
     };
 
-    const startDate = parseISTDate(startTime, "startTime");
-    const endDate = parseISTDate(endTime, "endTime");
+    const startDate = parseDateAsLocal(startTime, "startTime");
+    const endDate = parseDateAsLocal(endTime, "endTime");
 
-    const nowInIST = new Date();
-    logger.info(`Current time in IST: ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+    const now = new Date();
 
-    // Validate dates
-    if (endDate && endDate <= nowInIST) {
-      logger.error("End time must be in the future");
+    if (endDate && endDate <= now) {
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
         ResponseMsg: "End time must be in the future.",
       });
     }
+
     if (startDate && endDate && startDate >= endDate) {
-      logger.error("End time must be after start time");
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
@@ -179,24 +353,17 @@ const upsertIllustration = asyncHandler(async (req, res) => {
       });
     }
 
-    const adjustedStartTime = startDate !== undefined ? convertISTToUTC(startDate) : null;
-    const adjustedEndTime = endDate !== undefined ? convertISTToUTC(endDate) : null;
-
-    // Adjust status based on startTime
     let effectiveStatus = statusValue;
-    if (startDate && startDate > nowInIST) {
-      effectiveStatus = 0; // Force unpublished if start date is in the future
-      logger.info(`Forcing status to 0 for future startTime: ${startDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
-    } else if (startDate && startDate <= nowInIST) {
-      effectiveStatus = 1; // Auto-publish if start date has passed
-      logger.info(`Auto-publishing due to past startTime: ${startDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+    if (startDate && startDate > now) {
+      effectiveStatus = 0;
+    } else if (startDate && startDate <= now) {
+      effectiveStatus = 1;
     }
 
     let illustration;
     if (id) {
       illustration = await Illustration.findByPk(id);
       if (!illustration) {
-        logger.error(`Illustration with ID ${id} not found`);
         return res.status(404).json({
           ResponseCode: "404",
           Result: "false",
@@ -208,55 +375,35 @@ const upsertIllustration = asyncHandler(async (req, res) => {
         screenName,
         img: imageUrl,
         status: effectiveStatus,
-        startTime: startDate !== undefined ? adjustedStartTime : illustration.startTime,
-        endTime: endDate !== undefined ? adjustedEndTime : illustration.endTime,
+        startTime: startDate !== undefined ? startDate : illustration.startTime,
+        endTime: endDate !== undefined ? endDate : illustration.endTime,
       });
 
-      logger.info(
-        `Illustration ${id} updated successfully. ` +
-        `Status: ${effectiveStatus}, ` +
-        `startTime: ${illustration.startTime ? convertUTCToIST(illustration.startTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
-        `endTime: ${illustration.endTime ? convertUTCToIST(illustration.endTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
-      );
       return res.status(200).json({
         ResponseCode: "200",
         Result: "true",
         ResponseMsg: "Illustration updated successfully.",
-        illustration: {
-          ...illustration.toJSON(),
-          startTime: convertUTCToIST(illustration.startTime),
-          endTime: convertUTCToIST(illustration.endTime),
-        },
+        illustration: illustration.toJSON(),
       });
     } else {
       illustration = await Illustration.create({
         screenName,
         img: imageUrl,
         status: effectiveStatus,
-        startTime: adjustedStartTime,
-        endTime: adjustedEndTime,
+        startTime: startDate,
+        endTime: endDate,
       });
 
-      logger.info(
-        `New illustration created with ID ${illustration.id}. ` +
-        `Status: ${effectiveStatus}, ` +
-        `startTime: ${illustration.startTime ? convertUTCToIST(illustration.startTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
-        `endTime: ${illustration.endTime ? convertUTCToIST(illustration.endTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
-      );
       return res.status(200).json({
         ResponseCode: "200",
         Result: "true",
         ResponseMsg: "Illustration created successfully.",
-        illustration: {
-          ...illustration.toJSON(),
-          startTime: convertUTCToIST(illustration.startTime),
-          endTime: convertUTCToIST(illustration.endTime),
-        },
+        illustration: illustration.toJSON(),
       });
     }
   } catch (error) {
     logger.error(`Error processing illustration: ${error.message}`);
-    res.status(500).json({
+    return res.status(500).json({
       ResponseCode: "500",
       Result: "false",
       ResponseMsg: "Internal Server Error",
