@@ -25,6 +25,7 @@ const { sendInAppNotification } = require("../../notifications/notification.serv
 const { calculateDeliveryDays2, generateOrderId } = require("../helper/orderUtils");
 const asyncLib = require("async");
 const StoreWeightOption = require("../../Models/StoreWeightOption");
+const PersonRecord = require("../../Models/PersonRecord");
 
 const MAX_RETRIES = 3;
 
@@ -46,6 +47,9 @@ const subscribeOrder = async (req, res) => {
 
   const uid = req.user.userId;
 
+
+  console.log("subscribeOrder called with data:", req.body);
+
   // Basic validations
   if (!uid || !Array.isArray(products) || products.length === 0 || !o_type || !store_id || !subtotal || !o_total) {
     return res.status(400).json({
@@ -55,11 +59,11 @@ const subscribeOrder = async (req, res) => {
     });
   }
 
-  if (o_type === "Delivery" && !address_id) {
+  if ( !address_id) {
     return res.status(400).json({
       ResponseCode: "400",
       Result: "false",
-      ResponseMsg: "Address ID is required for Delivery orders!",
+      ResponseMsg: "Address ID is required for  orders!",
     });
   }
 
@@ -164,10 +168,10 @@ const subscribeOrder = async (req, res) => {
       const store = await Store.findOne({ where: { id: store_id }, });
       if (!store) throw new Error("Store not found");
 
-      if (o_type === "Delivery") {
-        const address = await Address.findOne({ where: { id: address_id }, });
-        if (!address) throw new Error("Address not found");
-      }
+      // if (o_type === "Delivery") {
+      //   const address = await Address.findOne({ where: { id: address_id }, });
+      //   if (!address) throw new Error("Address not found");
+      // }
 
       // Coupon validation
       let appliedCoupon = null;
@@ -197,13 +201,13 @@ const subscribeOrder = async (req, res) => {
         {
           uid,
           store_id,
-          address_id: o_type === "Delivery" ? address_id : null,
+          address_id:  address_id ,
           odate: new Date(),
           o_type,
           start_date: referenceStartDate,
           end_date: referenceEndDate,
           tax: settingTax,
-          d_charge: o_type === "Delivery" ? 0 : 0,
+          d_charge:  0,
           store_charge: 0,
           cou_id: appliedCoupon ? appliedCoupon.id : null,
           cou_amt: couponAmount,
@@ -1232,6 +1236,11 @@ const getOrderDetails = async (req, res) => {
       where: { id, uid },
       include: [
         {
+          model:User,
+          as: "user",
+          attributes:["name","email","mobile","wallet"]
+        },
+        {
           model: SubscribeOrderProduct,
           as: "orderProducts",
           include: [
@@ -1296,6 +1305,13 @@ const getOrderDetails = async (req, res) => {
         {
           model: Address,
           as: "subOrdAddress",
+          include:[
+            {
+              model:PersonRecord,
+              as: "personaddress",
+              attributes: [ 'name', 'mobile'],
+            }
+          ]
         },
         {
           model: Review,

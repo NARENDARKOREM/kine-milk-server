@@ -1,7 +1,6 @@
 const { where } = require("sequelize");
 const Address = require("../../Models/Address");
 const Person = require("../../Models/PersonRecord");
-const PersonRecord = require("../../Models/PersonRecord");
 const sequelize = require("../../config/db");
 
 
