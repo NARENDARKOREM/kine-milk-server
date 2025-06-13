@@ -4,6 +4,8 @@ const uploadToS3 = require("../config/fileUpload.aws");
 const logger = require("../utils/logger");
 const Banner = require("../Models/Banner");
 const { Sequelize } = require("sequelize");
+const cron = require("node-cron");
+const { formatDate } = require("../helper/UTCIST");
 
 // Verify Banner model is defined
 if (!Banner || typeof Banner.create !== "function") {
@@ -29,7 +31,7 @@ const convertISTToUTC = (date) => {
 };
 
 // Schedule banner activation and status update
-const cron = require("node-cron");
+
 cron.schedule("* * * * *", async () => {
   try {
     const nowInIST = new Date();
@@ -265,8 +267,8 @@ const fetchBannerById = asyncHandler(async (req, res) => {
     logger.info(`Banner fetched by ID ${id}`);
     res.status(200).json({
       ...banner.toJSON(),
-      startTime: convertUTCToIST(banner.startTime),
-      endTime: convertUTCToIST(banner.endTime),
+      startTime: formatDate(banner.startTime),
+      endTime: formatDate(banner.endTime),
     });
   } catch (error) {
     logger.error(`Error fetching banner by ID ${id}: ${error.message}`);
@@ -278,14 +280,35 @@ const fetchBannerById = asyncHandler(async (req, res) => {
   }
 });
 
+// const fetchBanners = asyncHandler(async (req, res) => {
+//   try {
+//     const banners = await Banner.findAll();
+//     logger.info("Successfully fetched all banners");
+//     const bannersWithIST = banners.map(banner => ({
+//       ...banner.toJSON(),
+//       startTime: convertUTCToIST(banner.startTime),
+//       endTime: convertUTCToIST(banner.endTime),
+//     }));
+//     res.status(200).json(bannersWithIST);
+//   } catch (error) {
+//     logger.error(`Error fetching banners: ${error.message}`);
+//     res.status(400).json({
+//       ResponseCode: "400",
+//       Result: "false",
+//       ResponseMsg: "Failed to fetch banners",
+//     });
+//   }
+// });
+
 const fetchBanners = asyncHandler(async (req, res) => {
   try {
     const banners = await Banner.findAll();
     logger.info("Successfully fetched all banners");
+
     const bannersWithIST = banners.map(banner => ({
       ...banner.toJSON(),
-      startTime: convertUTCToIST(banner.startTime),
-      endTime: convertUTCToIST(banner.endTime),
+      startTime: formatDate(banner.startTime),
+      endTime: formatDate(banner.endTime),
     }));
     res.status(200).json(bannersWithIST);
   } catch (error) {
@@ -433,6 +456,7 @@ const toggleBannerStatus = asyncHandler(async (req, res) => {
     });
   }
 });
+
 
 module.exports = {
   upsertBanner,

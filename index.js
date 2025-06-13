@@ -25,6 +25,9 @@ const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10000,
   message: "Too many requests from this IP, please try again later.",
+  standardHeaders:true,
+  keyGenerator: (req) => req.ip,
+  legacyHeaders: false,
 });
 
 app.use(morgan("dev"));
@@ -163,26 +166,27 @@ app.get("/", (req, res) => {
   res.send("Server is Running");
 });
 
-// Initialize Socket.IO and make it accessible
-const io = socketSetup(server);
-app.set("io", io);
+
 
 const startServer = async () => {
   let redisClient;
   try {
     redisClient = await radisConnect();
+    
+    // Test Redis endpoint
     app.get('/test-redis', async (req, res) => {
       try {
-        // Set a key
         await redisClient.set('greeting', 'Hello from Upstash Redis!');
-        // Get the key
         const val = await redisClient.get('greeting');
         res.send({ message: val });
       } catch (err) {
         res.status(500).send({ error: 'Redis error', details: err.message });
       }
     });
+    // Attach Redis client to app.locals if needed elsewhere in Express
     app.locals.redisClient = redisClient;
+    const io = socketSetup(server, redisClient);
+    app.set("io", io);
 
     server.listen(PORT, () => {
       console.log(`🚀 Server is Running on PORT http://localhost:${PORT}`);

@@ -1,6 +1,7 @@
 const User = require("../Models/User");
 const logger = require("../utils/logger"); // Ensure logger is properly imported
 
+
 const getUsers = async (req, res) => {
     try {
         const users = await User.findAll();

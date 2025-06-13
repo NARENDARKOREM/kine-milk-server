@@ -6,6 +6,7 @@ const { DeliverySearchSchema, CouponDeleteSchema, getCouponByIdSchema } = requir
 const uploadToS3 = require("../config/fileUpload.aws");
 const cron = require("node-cron");
 const { Sequelize } = require("sequelize");
+const { formatDate } = require("../helper/UTCIST");
 
 // Verify Coupon model
 if (!Coupon || typeof Coupon.create !== "function") {
@@ -185,6 +186,7 @@ const upsertCoupon = asyncHandler(async (req, res) => {
         });
       }
 
+      
       await coupon.update({
         coupon_title,
         coupon_img: imageUrl || coupon.coupon_img,
@@ -259,8 +261,13 @@ const getAllCoupon = asyncHandler(async (req, res) => {
   try {
     const coupons = await Coupon.findAll();
     logger.info("Successfully retrieved all coupons");
-    // Dates are already in IST, no conversion needed
-    res.status(200).json(coupons);
+    
+    const couponsFormated = coupons.map((coupon)=>({
+      ...coupon.toJSON(),
+      start_date: formatDate(coupon.start_date),
+      end_date: formatDate(coupon.end_date),
+    }))
+    res.status(200).json(couponsFormated);
   } catch (error) {
     logger.error(`Error retrieving coupons: ${error.message}`);
     res.status(500).json({ message: "Failed to retrieve coupons", error });
@@ -311,8 +318,12 @@ const getCouponById = asyncHandler(async (req, res) => {
       return res.status(404).json({ error: "Coupon not found" });
     }
     logger.info(`Coupon with ID ${id} found`);
-    // Dates are already in IST, no conversion needed
-    res.status(200).json(coupon);
+    const couponWithFormatedDates ={
+      ...coupon.toJSON(),
+      start_date: formatDate(coupon.start_date),
+      end_date: formatDate(coupon.end_date),
+    }
+    res.status(200).json(couponWithFormatedDates);
   } catch (error) {
     logger.error(`Error retrieving coupon by ID ${id}: ${error.message}`);
     res.status(500).json({ error: "Internal Server Error" });

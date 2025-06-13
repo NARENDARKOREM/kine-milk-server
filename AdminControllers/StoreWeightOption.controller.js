@@ -4,6 +4,7 @@ const WeightOption = require("../Models/WeightOption");
 const ProductInventory = require("../Models/ProductInventory");
 const StoreWeightOptionHistory = require("../Models/StoreWeightOptionHistory");
 
+
 const getStoreWeightOptionList = async (req, res) => {
   try {
     const { store_id, product_inventory_id } = req.query;

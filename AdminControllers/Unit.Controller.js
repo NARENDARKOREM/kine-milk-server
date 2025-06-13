@@ -2,6 +2,7 @@ const Unit = require('../Models/Unit');
 const { Op } = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
 
+
 const getAllUnits = async (req, res) => {
   try {
     const units = await Unit.findAll({

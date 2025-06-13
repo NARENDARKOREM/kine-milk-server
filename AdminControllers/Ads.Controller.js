@@ -5,6 +5,7 @@ const uploadToS3 = require("../config/fileUpload.aws");
 const logger = require("../utils/logger");
 const cron = require("node-cron");
 const { Sequelize } = require("sequelize");
+const { sanitizeFilename } = require("../utils/multerConfig");
 
 // Verify Ads model is defined
 if (!Ads || typeof Ads.create !== "function") {
@@ -15,12 +16,18 @@ if (!Ads || typeof Ads.create !== "function") {
 // Log server timezone for debugging
 logger.info(`Server timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`);
 
+// Helper function to format UTC to IST for frontend
+const formatUTCToIST = (date) => {
+  if (!date) return null;
+  const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
+  const istDate = new Date(new Date(date).getTime() + istOffset);
+  return istDate.toISOString().slice(0, 16); // Format as YYYY-MM-DDTHH:mm
+};
+
 // Schedule ads activation and status update
 cron.schedule("* * * * *", async () => {
   try {
-    const nowInIST = new Date();
-    const istOffset = 5.5 * 60 * 60 * 1000;
-    const nowInUTC = new Date(nowInIST.getTime() - istOffset);
+    const now = new Date(); // Current time in UTC
 
     // Activate ads with startDateTime
     const adsToActivate = await Ads.findAll({
@@ -29,7 +36,7 @@ cron.schedule("* * * * *", async () => {
         startDateTime: {
           [Sequelize.Op.and]: [
             { [Sequelize.Op.ne]: null },
-            { [Sequelize.Op.lte]: nowInUTC },
+            { [Sequelize.Op.lte]: now },
           ],
         },
       },
@@ -38,9 +45,8 @@ cron.schedule("* * * * *", async () => {
     for (const ad of adsToActivate) {
       await ad.update({ 
         status: 1,
-        // Do not clear startDateTime
       });
-      logger.info(`Ad ID ${ad.id} published at ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+      logger.info(`Ad ID ${ad.id} published at ${formatUTCToIST(now)}`);
     }
 
     // Unpublish ads that have reached endDateTime
@@ -50,7 +56,7 @@ cron.schedule("* * * * *", async () => {
         endDateTime: {
           [Sequelize.Op.and]: [
             { [Sequelize.Op.ne]: null },
-            { [Sequelize.Op.lte]: nowInUTC },
+            { [Sequelize.Op.lte]: now },
           ],
         },
       },
@@ -59,9 +65,8 @@ cron.schedule("* * * * *", async () => {
     for (const ad of adsToUnpublish) {
       await ad.update({
         status: 0,
-        // Do not clear endDateTime
       });
-      logger.info(`Ad ID ${ad.id} unpublished at ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+      logger.info(`Ad ID ${ad.id} unpublished at ${formatUTCToIST(now)}`);
     }
   } catch (error) {
     logger.error(`Error in ad scheduling job: ${error.message}`);
@@ -71,11 +76,37 @@ cron.schedule("* * * * *", async () => {
 const upsertAds = asyncHandler(async (req, res, next) => {
   try {
     const { id, screenName, planType, status, startDateTime, endDateTime, couponPercentage } = req.body;
-    let imageUrl;
+    let imageUrl = null;
 
+    // Log incoming request data for debugging
+    console.log("Request body:", req.body);
+    console.log("Request file:", req.file);
+
+    // Handle file upload
     if (req.file) {
+      req.file.originalname = sanitizeFilename(req.file.originalname);
+      console.log("Sanitized filename:", req.file.originalname);
       imageUrl = await uploadToS3(req.file, "image");
-    } else if (!id) {
+      if (!imageUrl) {
+        return res.status(500).json({
+          ResponseCode: "500",
+          Result: "false",
+          ResponseMsg: "Image upload failed.",
+        });
+      }
+      console.log("Uploaded image URL:", imageUrl);
+    } else if (id) {
+      const existingAd = await Ads.findByPk(id);
+      if (!existingAd) {
+        logger.error(`Ad with ID ${id} not found`);
+        return res.status(404).json({
+          ResponseCode: "404",
+          Result: "false",
+          ResponseMsg: "Ad not found.",
+        });
+      }
+      imageUrl = existingAd.img; // Preserve existing image
+    } else {
       logger.error("Image is required for a new ad");
       return res.status(400).json({
         ResponseCode: "400",
@@ -84,14 +115,15 @@ const upsertAds = asyncHandler(async (req, res, next) => {
       });
     }
 
+    // Validate status and planType
     const validStatuses = ["0", "1"];
     const validPlanTypes = ["instant", "subscribe"];
     if (!validStatuses.includes(status)) {
       logger.error("Invalid status value");
       return res.status(400).json({
-        ResponseCode: 400,
+        ResponseCode: "400",
         Result: "false",
-        ResponseMsg: "Status must be 0 or 1 (Published).",
+        ResponseMsg: "Status must be 0 or 1.",
       });
     }
     if (!validPlanTypes.includes(planType)) {
@@ -103,35 +135,22 @@ const upsertAds = asyncHandler(async (req, res, next) => {
       });
     }
 
-    const parseISTDate = (dateString) => {
+    // Parse and validate dates
+    const parseDate = (dateString) => {
       if (!dateString) return null;
-      const istDate = new Date(dateString);
-      if (isNaN(istDate.getTime())) {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
         throw new Error("Invalid date format");
       }
-      return istDate;
+      return date; // Store in UTC
     };
 
-    const convertISTToUTC = (date) => {
-      if (!date) return null;
-      const istOffset = 5.5 * 60 * 60 * 1000;
-      return new Date(date.getTime() - istOffset);
-    };
+    const startDate = parseDate(startDateTime);
+    const endDate = parseDate(endDateTime);
 
-    const startDate = parseISTDate(startDateTime);
-    const endDate = parseISTDate(endDateTime);
+    const now = new Date(); // Current time in UTC
 
-    const nowInIST = new Date();
-
-    logger.info(`Current time in IST: ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
-    if (startDate) {
-      logger.info(`Parsed startDateTime (IST): ${startDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
-    }
-    if (endDate) {
-      logger.info(`Parsed endDateTime (IST): ${endDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
-    }
-
-    if (endDate && endDate <= nowInIST) {
+    if (endDate && endDate <= now) {
       logger.error("End date/time must be in the future");
       return res.status(400).json({
         ResponseCode: "400",
@@ -148,14 +167,11 @@ const upsertAds = asyncHandler(async (req, res, next) => {
       });
     }
 
-    const adjustedStartDateTime = startDate ? convertISTToUTC(startDate) : null;
-    const adjustedEndDateTime = endDate ? convertISTToUTC(endDate) : null;
-
     // Adjust status based on startDateTime
     let effectiveStatus = status;
-    if (startDate && startDate > nowInIST) {
+    if (startDate && startDate > now) {
       effectiveStatus = "0"; // Force unpublished if start date is in the future
-    } else if (startDate && startDate <= nowInIST) {
+    } else if (startDate && startDate <= now) {
       effectiveStatus = "1"; // Auto-publish if start date has passed
     }
 
@@ -174,10 +190,10 @@ const upsertAds = asyncHandler(async (req, res, next) => {
       await ad.update({
         screenName,
         planType,
-        img: imageUrl || ad.img,
+        img: imageUrl,
         status: effectiveStatus,
-        startDateTime: adjustedStartDateTime,
-        endDateTime: adjustedEndDateTime,
+        startDateTime: startDate,
+        endDateTime: endDate,
         couponPercentage: couponPercentage || null,
       });
 
@@ -186,7 +202,11 @@ const upsertAds = asyncHandler(async (req, res, next) => {
         ResponseCode: "200",
         Result: "true",
         ResponseMsg: "Ad updated successfully.",
-        ad,
+        ad: {
+          ...ad.toJSON(),
+          startDateTime: formatUTCToIST(ad.startDateTime),
+          endDateTime: formatUTCToIST(ad.endDateTime),
+        },
       });
     } else {
       ad = await Ads.create({
@@ -194,8 +214,8 @@ const upsertAds = asyncHandler(async (req, res, next) => {
         planType,
         img: imageUrl,
         status: effectiveStatus,
-        startDateTime: adjustedStartDateTime,
-        endDateTime: adjustedEndDateTime,
+        startDateTime: startDate,
+        endDateTime: endDate,
         couponPercentage: couponPercentage || null,
       });
 
@@ -204,7 +224,11 @@ const upsertAds = asyncHandler(async (req, res, next) => {
         ResponseCode: "200",
         Result: "true",
         ResponseMsg: "Ad created successfully.",
-        ad,
+        ad: {
+          ...ad.toJSON(),
+          startDateTime: formatUTCToIST(ad.startDateTime),
+          endDateTime: formatUTCToIST(ad.endDateTime),
+        },
       });
     }
   } catch (error) {
@@ -230,13 +254,17 @@ const fetchAdsById = asyncHandler(async (req, res) => {
       });
     }
     logger.info(`Ad fetched by ID ${id}`);
-    res.status(200).json(ad);
+    res.status(200).json({
+      ...ad.toJSON(),
+      startDateTime: formatUTCToIST(ad.startDateTime),
+      endDateTime: formatUTCToIST(ad.endDateTime),
+    });
   } catch (error) {
-    logger.error(`Error fetching ad by ID: ${id} - ${error.message}`);
+    logger.error(`Error fetching ad by ID ${id}: ${error.message}`);
     res.status(500).json({
       ResponseCode: "500",
       Result: "false",
-      ResponseMsg: "Server error at fetch ad",
+      ResponseMsg: "Server error at fetch ad by id",
     });
   }
 });
@@ -244,14 +272,19 @@ const fetchAdsById = asyncHandler(async (req, res) => {
 const fetchAds = asyncHandler(async (req, res) => {
   try {
     const ads = await Ads.findAll();
-    logger.info("Successfully fetched all ads");
-    res.status(200).json(ads);
+    logger.info("Successfully fetched ads");
+    const adsWithIST = ads.map((ad) => ({
+      ...ad.toJSON(),
+      startDateTime: formatUTCToIST(ad.startDateTime),
+      endDateTime: formatUTCToIST(ad.endDateTime),
+    }));
+    res.status(200).json(adsWithIST);
   } catch (error) {
-    logger.error(`Error fetching ads: ${error.message}`);
-    res.status(400).json({
-      ResponseCode: "400",
+    logger.error(`Error fetching all ads: ${error.message}`);
+    res.status(500).json({
+      ResponseCode: "500",
       Result: "false",
-      ResponseMsg: "Failed to fetch ads",
+      ResponseMsg: "Server error fetching all ads",
     });
   }
 });
@@ -273,11 +306,11 @@ const deleteAdsById = asyncHandler(async (req, res) => {
     }
 
     if (ad.deletedAt && forceDelete !== "true") {
-      logger.error(`Ad ID ${id} is already soft-deleted`);
+      logger.error(`Ad with ID ${id} is already soft-deleted`);
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
-        ResponseMsg: "Ad is already soft-deleted. Use forceDelete=true to permanently delete it.",
+        ResponseMsg: "Ad is already soft-deleted. Use forceDelete=true to permanently delete it",
       });
     }
 
@@ -287,23 +320,23 @@ const deleteAdsById = asyncHandler(async (req, res) => {
       return res.status(200).json({
         ResponseCode: "200",
         Result: "true",
-        ResponseMsg: "Ad permanently deleted successfully",
+        ResponseMsg: "Ad deleted successfully",
       });
     }
 
-    await Ads.destroy({ where: { id } });
-    logger.info(`Ad ID ${id} soft-deleted`);
+    await ad.destroy({ where: { id } });
+    logger.info(`Ad with ID ${id} soft-deleted`);
     return res.status(200).json({
       ResponseCode: "200",
       Result: "true",
-      ResponseMsg: "Ad soft deleted successfully",
+      ResponseMsg: "Ad soft-deleted successfully",
     });
   } catch (error) {
     logger.error(`Error deleting ad with ID ${id}: ${error.message}`);
     res.status(500).json({
       ResponseCode: "500",
       Result: "false",
-      ResponseMsg: "Internal Server Error",
+      ResponseMsg: "Server error deleting ad by id",
     });
   }
 });
@@ -317,62 +350,61 @@ const toggleAdsStatus = asyncHandler(async (req, res) => {
       return res.status(404).json({
         ResponseCode: "404",
         Result: "false",
-        ResponseMsg: "Ad not found!",
+        ResponseMsg: "Ad not found",
       });
     }
 
-    const nowInIST = new Date();
-    const istOffset = 5.5 * 60 * 60 * 1000;
-    const nowInUTC = new Date(nowInIST.getTime() - istOffset);
-    const startDate = ad.startDateTime ? new Date(ad.startDateTime) : null;
-    const endDate = ad.endDateTime ? new Date(ad.endDateTime) : null;
+    const now = new Date(); // Current time in UTC
+    const startDateTime = ad.startDateTime ? new Date(ad.startDateTime) : null;
+    const endDateTime = ad.endDateTime ? new Date(ad.endDateTime) : null;
 
-    // Prevent toggling to Published if startDate is in the future or endDate has passed
+    // Prevent toggling to Published if startDateTime is future or endDateTime has passed
     if (value === 1) {
-      if (startDate && startDate > nowInUTC) {
-        logger.error(`Cannot toggle status to Published for ad ID ${id} with future start date`);
+      if (startDateTime && startDateTime > now) {
+        logger.error(`Cannot toggle status to Published for ad ID ${id} with future startDateTime`);
         return res.status(400).json({
           ResponseCode: "400",
           Result: "false",
-          ResponseMsg: "Cannot toggle status to Published for an ad with a future start date. It will be published automatically when the start time is reached.",
+          ResponseMsg: "Cannot toggle to Published for an ad with a future start date",
         });
       }
-      if (endDate && endDate <= nowInUTC) {
-        logger.error(`Cannot toggle status to Published for ad ID ${id} with expired end date`);
+      if (endDateTime && endDateTime <= now) {
+        logger.error(`Cannot toggle status to Published for ad ID ${id} with expired endDateTime`);
         return res.status(400).json({
           ResponseCode: "400",
           Result: "false",
-          ResponseMsg: "Cannot toggle status to Published for an ad with an expired end date. Please edit the ad to update the end date.",
+          ResponseMsg: "Cannot toggle to Published for an ad with an expired end date",
         });
       }
     }
 
     const validStatuses = [0, 1];
-    if (!validStatuses.includes(value)) {
+    if (!validStatuses.includes(Number(value))) {
       logger.error(`Invalid status value: ${value}`);
       return res.status(400).json({
         ResponseCode: "400",
         Result: "false",
-        ResponseMsg: "Status must be 0 (Unpublished) or 1 (Published).",
+        ResponseMsg: "Status must be 0 (Unpublished) or 1 (Published)",
       });
     }
 
     ad.status = value;
-    // Do not clear endDateTime when manually unpublishing
     await ad.save();
     logger.info(`Ad status updated for ID ${id} to ${value}`);
     res.status(200).json({
       ResponseCode: "200",
       Result: "true",
-      ResponseMsg: "Ad status updated successfully.",
-      updatedStatus: ad.status,
+      ResponseMsg: "Status updated successfully",
+      adStatus: ad.status,
+      startDateTime: formatUTCToIST(ad.startDateTime),
+      endDateTime: formatUTCToIST(ad.endDateTime),
     });
   } catch (error) {
     logger.error(`Error updating ad status for ID ${id}: ${error.message}`);
     res.status(500).json({
       ResponseCode: "500",
       Result: "false",
-      ResponseMsg: "Internal server error.",
+      ResponseMsg: "Server error updating ad status",
     });
   }
 });
