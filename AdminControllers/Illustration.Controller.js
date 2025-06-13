@@ -6,6 +6,7 @@ const Illustration = require("../Models/Illustration");
 const { Sequelize } = require("sequelize");
 const cron = require("node-cron");
 const { sanitizeFilename } = require("../utils/multerConfig");
+const {formatDate}= require("../helper/UTCIST")
 
 // Verify Illustration model is defined
 if (!Illustration || typeof Illustration.create !== "function") {
@@ -310,17 +311,17 @@ const fetchIllustrationById = asyncHandler(async (req, res) => {
     logger.info(`Illustration fetched by ID ${id}`);
 
     // ✅ Format date without time shifting
-    const formatDate = (date) => {
-      if (!date) return null;
-      const d = new Date(date);
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      const hours = String(d.getHours()).padStart(2, '0');
-      const minutes = String(d.getMinutes()).padStart(2, '0');
-      const seconds = String(d.getSeconds()).padStart(2, '0');
-      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    };
+    // const formatDate = (date) => {
+    //   if (!date) return null;
+    //   const d = new Date(date);
+    //   const year = d.getFullYear();
+    //   const month = String(d.getMonth() + 1).padStart(2, '0');
+    //   const day = String(d.getDate()).padStart(2, '0');
+    //   const hours = String(d.getHours()).padStart(2, '0');
+    //   const minutes = String(d.getMinutes()).padStart(2, '0');
+    //   const seconds = String(d.getSeconds()).padStart(2, '0');
+    //   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    // };
 
     const illustrationWithFormattedDates = {
       ...illustration.toJSON(),
@@ -366,17 +367,17 @@ const fetchIllustrations = asyncHandler(async (req, res) => {
     logger.info("Successfully fetched all illustrations");
 
     // Optional: format for consistent string output (no time shift!)
-    const formatDate = (date) => {
-      if (!date) return null;
-      const d = new Date(date);
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      const hours = String(d.getHours()).padStart(2, '0');
-      const minutes = String(d.getMinutes()).padStart(2, '0');
-      const seconds = String(d.getSeconds()).padStart(2, '0');
-      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    };
+    // const formatDate = (date) => {
+    //   if (!date) return null;
+    //   const d = new Date(date);
+    //   const year = d.getFullYear();
+    //   const month = String(d.getMonth() + 1).padStart(2, '0');
+    //   const day = String(d.getDate()).padStart(2, '0');
+    //   const hours = String(d.getHours()).padStart(2, '0');
+    //   const minutes = String(d.getMinutes()).padStart(2, '0');
+    //   const seconds = String(d.getSeconds()).padStart(2, '0');
+    //   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    // };
 
     const illustrationsFormatted = illustrations.map((illustration) => ({
       ...illustration.toJSON(),
