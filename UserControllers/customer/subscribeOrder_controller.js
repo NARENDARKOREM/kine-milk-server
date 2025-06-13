@@ -373,6 +373,8 @@ const editSubscribeOrder = async (req, res) => {
   const { order_id, products, address_id, a_note, tax, o_total, subtotal, diffAmount, diffType } = req.body;
   const uid = req.user.userId;
 
+  console.log(products,"clggggggggggggggggggggg")
+
   if (!order_id || !Array.isArray(products) || products.length === 0) {
     return res.status(400).json({
       ResponseCode: "400",
@@ -420,6 +422,9 @@ const editSubscribeOrder = async (req, res) => {
         };
       })
     );
+
+
+    console.log(updatedItems,"hiiiiiiiiiiiiiiiiiiii")
 
 
 
@@ -471,13 +476,19 @@ const editSubscribeOrder = async (req, res) => {
       transaction: t,
     });
 
+    console.log(existingProducts,"wwwwwwwwwwwwwwwwwwwwwww")
+
     for (const item of updatedItems) {
       const existing = existingProducts.find(
         (prod) =>
           prod.product_id === item.product_id &&
-          prod.weight_id === item.weight_id &&
+          prod.store_weight_id === item.weight_id &&
           prod.timeslot_id === item.timeslot_id
       );
+
+      
+
+      
 
       if (existing) {
         await existing.update({
@@ -488,6 +499,15 @@ const editSubscribeOrder = async (req, res) => {
           status: "Pending",
           price: item.product_total,
         }, { transaction: t });
+      }
+      else{
+        
+        return res.status(404).json({
+      ResponseCode: "404",
+      Result: "true",
+      ResponseMsg: "No Existing Products matched",
+      })
+    
       }
     }
 
