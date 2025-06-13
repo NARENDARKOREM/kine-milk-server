@@ -90,167 +90,167 @@ cron.schedule("* * * * *", async () => {
   }
 });
 
-const upsertBanner = asyncHandler(async (req, res, next) => {
-  try {
-    const { id, planType, status, startTime, endTime } = req.body;
-    let imageUrl;
+// const upsertBanner = asyncHandler(async (req, res, next) => {
+//   try {
+//     const { id, planType, status, startTime, endTime } = req.body;
+//     let imageUrl;
 
-    // Check if file is provided
-    if (req.file) {
-      imageUrl = await uploadToS3(req.file, "image");
-    } else if (!id) {
-      logger.error("Image is required for a new banner");
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "Image is required for a new banner.",
-      });
-    }
+//     // Check if file is provided
+//     if (req.file) {
+//       imageUrl = await uploadToS3(req.file, "image");
+//     } else if (!id) {
+//       logger.error("Image is required for a new banner");
+//       return res.status(400).json({
+//         ResponseCode: "400",
+//         Result: "false",
+//         ResponseMsg: "Image is required for a new banner.",
+//       });
+//     }
 
-    const validPlanTypes = ["instant", "subscribe"];
-    if (!validPlanTypes.includes(planType)) {
-      logger.error("Invalid plan type value");
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "Plan type must be 'instant' or 'subscribe'.",
-      });
-    }
+//     const validPlanTypes = ["instant", "subscribe"];
+//     if (!validPlanTypes.includes(planType)) {
+//       logger.error("Invalid plan type value");
+//       return res.status(400).json({
+//         ResponseCode: "400",
+//         Result: "false",
+//         ResponseMsg: "Plan type must be 'instant' or 'subscribe'.",
+//       });
+//     }
 
-    const statusValue = parseInt(status, 10);
-    const validStatuses = [0, 1];
-    if (!validStatuses.includes(statusValue)) {
-      logger.error("Invalid status value");
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "Status must be 0 (Unpublished) or 1 (Published).",
-      });
-    }
+//     const statusValue = parseInt(status, 10);
+//     const validStatuses = [0, 1];
+//     if (!validStatuses.includes(statusValue)) {
+//       logger.error("Invalid status value");
+//       return res.status(400).json({
+//         ResponseCode: "400",
+//         Result: "false",
+//         ResponseMsg: "Status must be 0 (Unpublished) or 1 (Published).",
+//       });
+//     }
 
-    const parseISTDate = (dateString, fieldName) => {
-      if (dateString === undefined || dateString === "") {
-        logger.warn(`Empty or undefined ${fieldName} received for ${id ? `banner ${id}` : "new banner"}; preserving existing value`);
-        return undefined; // Signal to preserve existing value
-      }
-      const istDate = new Date(dateString);
-      if (isNaN(istDate.getTime())) {
-        throw new Error(`Invalid ${fieldName} format`);
-      }
-      return istDate;
-    };
+//     const parseISTDate = (dateString, fieldName) => {
+//       if (dateString === undefined || dateString === "") {
+//         logger.warn(`Empty or undefined ${fieldName} received for ${id ? `banner ${id}` : "new banner"}; preserving existing value`);
+//         return undefined; // Signal to preserve existing value
+//       }
+//       const istDate = new Date(dateString);
+//       if (isNaN(istDate.getTime())) {
+//         throw new Error(`Invalid ${fieldName} format`);
+//       }
+//       return istDate;
+//     };
 
-    const startDate = parseISTDate(startTime, "startTime");
-    const endDate = parseISTDate(endTime, "endTime");
+//     const startDate = parseISTDate(startTime, "startTime");
+//     const endDate = parseISTDate(endTime, "endTime");
 
-    const nowInIST = new Date();
+//     const nowInIST = new Date();
 
-    logger.info(`Current time in IST: ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
-    if (startDate) {
-      logger.info(`Parsed startTime (IST): ${startDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
-    }
-    if (endDate) {
-      logger.info(`Parsed endTime (IST): ${endDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
-    }
+//     logger.info(`Current time in IST: ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+//     if (startDate) {
+//       logger.info(`Parsed startTime (IST): ${startDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+//     }
+//     if (endDate) {
+//       logger.info(`Parsed endTime (IST): ${endDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+//     }
 
-    if (endDate && endDate <= nowInIST) {
-      logger.error("End time must be in the future");
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "End time must be in the future.",
-      });
-    }
-    if (startDate && endDate && startDate >= endDate) {
-      logger.error("End time must be greater than start time");
-      return res.status(400).json({
-        ResponseCode: "400",
-        Result: "false",
-        ResponseMsg: "End time must be greater than start time.",
-      });
-    }
+//     if (endDate && endDate <= nowInIST) {
+//       logger.error("End time must be in the future");
+//       return res.status(400).json({
+//         ResponseCode: "400",
+//         Result: "false",
+//         ResponseMsg: "End time must be in the future.",
+//       });
+//     }
+//     if (startDate && endDate && startDate >= endDate) {
+//       logger.error("End time must be greater than start time");
+//       return res.status(400).json({
+//         ResponseCode: "400",
+//         Result: "false",
+//         ResponseMsg: "End time must be greater than start time.",
+//       });
+//     }
 
-    const adjustedStartTime = startDate ? convertISTToUTC(startDate) : null;
-    const adjustedEndTime = endDate ? convertISTToUTC(endDate) : null;
+//     const adjustedStartTime = startDate ? convertISTToUTC(startDate) : null;
+//     const adjustedEndTime = endDate ? convertISTToUTC(endDate) : null;
 
-    let effectiveStatus = statusValue;
-    if (startDate && startDate > nowInIST) {
-      effectiveStatus = 0; // Force unpublished if start date is in the future
-    } else if (startDate && startDate <= nowInIST) {
-      effectiveStatus = 1; // Auto-publish if start date has passed
-    }
+//     let effectiveStatus = statusValue;
+//     if (startDate && startDate > nowInIST) {
+//       effectiveStatus = 0; // Force unpublished if start date is in the future
+//     } else if (startDate && startDate <= nowInIST) {
+//       effectiveStatus = 1; // Auto-publish if start date has passed
+//     }
 
-    let banner;
-    if (id) {
-      banner = await Banner.findByPk(id);
-      if (!banner) {
-        logger.error(`Banner with ID ${id} not found`);
-        return res.status(404).json({
-          ResponseCode: "404",
-          Result: "false",
-          ResponseMsg: "Banner not found.",
-        });
-      }
+//     let banner;
+//     if (id) {
+//       banner = await Banner.findByPk(id);
+//       if (!banner) {
+//         logger.error(`Banner with ID ${id} not found`);
+//         return res.status(404).json({
+//           ResponseCode: "404",
+//           Result: "false",
+//           ResponseMsg: "Banner not found.",
+//         });
+//       }
 
-      await banner.update({
-        planType,
-        img: imageUrl || banner.img,
-        status: effectiveStatus,
-        startTime: startDate !== undefined ? adjustedStartTime : banner.startTime,
-        endTime: endDate !== undefined ? adjustedEndTime : banner.endTime,
-      });
+//       await banner.update({
+//         planType,
+//         img: imageUrl || banner.img,
+//         status: effectiveStatus,
+//         startTime: startDate !== undefined ? adjustedStartTime : banner.startTime,
+//         endTime: endDate !== undefined ? adjustedEndTime : banner.endTime,
+//       });
 
-      logger.info(
-        `Banner ${id} updated successfully. ` +
-        `Status: ${effectiveStatus}, ` +
-        `startTime: ${banner.startTime ? convertUTCToIST(banner.startTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
-        `endTime: ${banner.endTime ? convertUTCToIST(banner.endTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
-      );
-      return res.status(200).json({
-        ResponseCode: "200",
-        Result: "true",
-        ResponseMsg: "Banner updated successfully.",
-        banner: {
-          ...banner.toJSON(),
-          startTime: convertUTCToIST(banner.startTime),
-          endTime: convertUTCToIST(banner.endTime),
-        },
-      });
-    } else {
-      banner = await Banner.create({
-        planType,
-        img: imageUrl,
-        status: effectiveStatus,
-        startTime: adjustedStartTime,
-        endTime: adjustedEndTime,
-      });
+//       logger.info(
+//         `Banner ${id} updated successfully. ` +
+//         `Status: ${effectiveStatus}, ` +
+//         `startTime: ${banner.startTime ? convertUTCToIST(banner.startTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
+//         `endTime: ${banner.endTime ? convertUTCToIST(banner.endTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
+//       );
+//       return res.status(200).json({
+//         ResponseCode: "200",
+//         Result: "true",
+//         ResponseMsg: "Banner updated successfully.",
+//         banner: {
+//           ...banner.toJSON(),
+//           startTime: convertUTCToIST(banner.startTime),
+//           endTime: convertUTCToIST(banner.endTime),
+//         },
+//       });
+//     } else {
+//       banner = await Banner.create({
+//         planType,
+//         img: imageUrl,
+//         status: effectiveStatus,
+//         startTime: adjustedStartTime,
+//         endTime: adjustedEndTime,
+//       });
 
-      logger.info(
-        `New banner created with ID ${banner.id}. ` +
-        `Status: ${effectiveStatus}, ` +
-        `startTime: ${banner.startTime ? convertUTCToIST(banner.startTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
-        `endTime: ${banner.endTime ? convertUTCToIST(banner.endTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
-      );
-      return res.status(200).json({
-        ResponseCode: "200",
-        Result: "true",
-        ResponseMsg: "Banner created successfully.",
-        banner: {
-          ...banner.toJSON(),
-          startTime: convertUTCToIST(banner.startTime),
-          endTime: convertUTCToIST(banner.endTime),
-        },
-      });
-    }
-  } catch (error) {
-    logger.error(`Error processing banner: ${error.message}`);
-    res.status(500).json({
-      ResponseCode: "500",
-      Result: "false",
-      ResponseMsg: "Internal Server Error",
-    });
-  }
-});
+//       logger.info(
+//         `New banner created with ID ${banner.id}. ` +
+//         `Status: ${effectiveStatus}, ` +
+//         `startTime: ${banner.startTime ? convertUTCToIST(banner.startTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
+//         `endTime: ${banner.endTime ? convertUTCToIST(banner.endTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
+//       );
+//       return res.status(200).json({
+//         ResponseCode: "200",
+//         Result: "true",
+//         ResponseMsg: "Banner created successfully.",
+//         banner: {
+//           ...banner.toJSON(),
+//           startTime: convertUTCToIST(banner.startTime),
+//           endTime: convertUTCToIST(banner.endTime),
+//         },
+//       });
+//     }
+//   } catch (error) {
+//     logger.error(`Error processing banner: ${error.message}`);
+//     res.status(500).json({
+//       ResponseCode: "500",
+//       Result: "false",
+//       ResponseMsg: "Internal Server Error",
+//     });
+//   }
+// });
 
 const fetchBannerById = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -457,7 +457,169 @@ const toggleBannerStatus = asyncHandler(async (req, res) => {
   }
 });
 
+const upsertBanner = asyncHandler(async (req, res, next) => {
+  try {
+    const { id, planType, status, startTime, endTime } = req.body;
+    let imageUrl;
 
+    if (req.file) {
+      imageUrl = await uploadToS3(req.file, "image");
+    } else if (!id) {
+      logger.error("Image is required for a new banner");
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Image is required for a new banner.",
+      });
+    }
+
+    const validPlanTypes = ["instant", "subscribe"];
+    if (!validPlanTypes.includes(planType)) {
+      logger.error("Invalid plan type value");
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Plan type must be 'instant' or 'subscribe'.",
+      });
+    }
+
+    const statusValue = parseInt(status, 10);
+    const validStatuses = [0, 1];
+    if (!validStatuses.includes(statusValue)) {
+      logger.error("Invalid status value");
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "Status must be 0 (Unpublished) or 1 (Published).",
+      });
+    }
+
+    const parseISTDate = (dateString, fieldName) => {
+      if (dateString === undefined || dateString === "") {
+        logger.warn(`Empty or undefined ${fieldName} received for ${id ? `banner ${id}` : "new banner"}; preserving existing value`);
+        return undefined; // Signal to preserve existing value
+      }
+      const istDate = new Date(dateString);
+      if (isNaN(istDate.getTime())) {
+        throw new Error(`Invalid ${fieldName} format`);
+      }
+      logger.info(`${fieldName} parsed (IST): ${istDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+      return istDate;
+    };
+
+    const startDate = parseISTDate(startTime, "startTime");
+    const endDate = parseISTDate(endTime, "endTime");
+
+    const nowInIST = new Date();
+
+    logger.info(`Current time in IST: ${nowInIST.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+    if (startDate) {
+      logger.info(`Parsed startTime (IST): ${startDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+    }
+    if (endDate) {
+      logger.info(`Parsed endTime (IST): ${endDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+    }
+
+    if (endDate && endDate <= nowInIST) {
+      logger.error("End time must be in the future");
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "End time must be in the future.",
+      });
+    }
+    if (startDate && endDate && startDate >= endDate) {
+      logger.error("End time must be greater than start time");
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "false",
+        ResponseMsg: "End time must be greater than start time.",
+      });
+    }
+
+// -   const adjustedStartTime = startDate ? convertISTToUTC(startDate) : null;
+// -   const adjustedEndTime = endDate ? convertISTToUTC(endDate) : null;
+// +   const adjustedStartTime = startDate !== undefined ? convertISTToUTC(startDate) : null;
+// +   const adjustedEndTime = endDate !== undefined ? convertISTToUTC(endDate) : null;
+
+    let effectiveStatus = statusValue;
+    if (startDate && startDate > nowInIST) {
+      effectiveStatus = 0; // Force unpublished if start date is in the future
+    } else if (startDate && startDate <= nowInIST) {
+      effectiveStatus = 1; // Auto-publish if start date has passed
+    }
+
+    let banner;
+    if (id) {
+      banner = await Banner.findByPk(id);
+      if (!banner) {
+        logger.error(`Banner with ID ${id} not found`);
+        return res.status(404).json({
+          ResponseCode: "404",
+          Result: "false",
+          ResponseMsg: "Banner not found.",
+        });
+      }
+
+      await banner.update({
+        planType,
+        img: imageUrl || banner.img,
+        status: effectiveStatus,
+        startTime: startDate !== undefined ? adjustedStartTime : banner.startTime,
+        endTime: endDate !== undefined ? adjustedEndTime : banner.endTime,
+      });
+
+      logger.info(
+        `Banner ${id} updated successfully. ` +
+        `Status: ${effectiveStatus}, ` +
+        `startTime: ${banner.startTime ? convertUTCToIST(banner.startTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
+        `endTime: ${banner.endTime ? convertUTCToIST(banner.endTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
+      );
+      return res.status(200).json({
+        ResponseCode: "200",
+        Result: "true",
+        ResponseMsg: "Banner updated successfully.",
+        banner: {
+          ...banner.toJSON(),
+          startTime: convertUTCToIST(banner.startTime),
+          endTime: convertUTCToIST(banner.endTime),
+        },
+      });
+    } else {
+      banner = await Banner.create({
+        planType,
+        img: imageUrl,
+        status: effectiveStatus,
+        startTime: adjustedStartTime,
+        endTime: adjustedEndTime,
+      });
+
+      logger.info(
+        `New banner created with ID ${banner.id}. ` +
+        `Status: ${effectiveStatus}, ` +
+        `startTime: ${banner.startTime ? convertUTCToIST(banner.startTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}, ` +
+        `endTime: ${banner.endTime ? convertUTCToIST(banner.endTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`
+      );
+      return res.status(200).json({
+        ResponseCode: "200",
+        Result: "true",
+        ResponseMsg: "Banner created successfully.",
+        banner: {
+          ...banner.toJSON(),
+          startTime: convertUTCToIST(banner.startTime),
+          endTime: convertUTCToIST(banner.endTime),
+        },
+      });
+    }
+  } catch (error) {
+    logger.error(`Error processing banner: ${error.message}`);
+    res.status(500).json({
+      ResponseCode: "500",
+      Result: "false",
+      ResponseMsg: "Internal Server Error",
+    });
+  }
+});
 module.exports = {
   upsertBanner,
   fetchBannerById,
