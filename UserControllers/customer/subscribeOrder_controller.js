@@ -158,14 +158,14 @@ const subscribeOrder = async (req, res) => {
       console.log(`Attempt ${attempt} of ${MAX_RETRIES}`);
 
       // Validate user and store
-      const user = await User.findOne({ where: { id: uid }, transaction: t });
+      const user = await User.findOne({ where: { id: uid }, });
       if (!user) throw new Error("User not found");
 
-      const store = await Store.findOne({ where: { id: store_id }, transaction: t });
+      const store = await Store.findOne({ where: { id: store_id },  });
       if (!store) throw new Error("Store not found");
 
       if (o_type === "Delivery") {
-        const address = await Address.findOne({ where: { id: address_id }, transaction: t });
+        const address = await Address.findOne({ where: { id: address_id }, });
         if (!address) throw new Error("Address not found");
       }
 
@@ -175,7 +175,7 @@ const subscribeOrder = async (req, res) => {
       let finalTotal = parseFloat(o_total);
 
       if (coupon_id) {
-        const coupon = await Coupon.findByPk(coupon_id, { transaction: t });
+        const coupon = await Coupon.findByPk(coupon_id, );
         if (!coupon) throw new Error("Coupon not found");
         if (coupon.status !== 1 || new Date(coupon.end_date) < new Date()) throw new Error("Coupon expired");
         if (parseFloat(subtotal) < parseFloat(coupon.min_amt)) {
@@ -202,7 +202,7 @@ const subscribeOrder = async (req, res) => {
           o_type,
           start_date: referenceStartDate,
           end_date: referenceEndDate,
-          settingTax,
+          tax:settingTax,
           d_charge: o_type === "Delivery" ? 0 : 0,
           store_charge: 0,
           cou_id: appliedCoupon ? appliedCoupon.id : null,
@@ -1473,8 +1473,8 @@ const cancelOrder = async (req, res) => {
 
     await order.update(
       {
-        subtotal: updatedSubtotal,
-        o_total: updatedTotal,
+        // subtotal: updatedSubtotal,
+        // o_total: updatedTotal,
         status: newStatus,
       },
       { transaction: t }
