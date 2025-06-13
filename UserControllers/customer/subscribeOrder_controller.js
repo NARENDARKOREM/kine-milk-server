@@ -25,6 +25,7 @@ const { sendInAppNotification } = require("../../notifications/notification.serv
 const { calculateDeliveryDays2, generateOrderId } = require("../helper/orderUtils");
 const asyncLib = require("async");
 const StoreWeightOption = require("../../Models/StoreWeightOption");
+const PersonRecord = require("../../Models/PersonRecord");
 
 const MAX_RETRIES = 3;
 
@@ -1235,6 +1236,11 @@ const getOrderDetails = async (req, res) => {
       where: { id, uid },
       include: [
         {
+          model:User,
+          as: "user",
+          attributes:["name","email","mobile","wallet"]
+        },
+        {
           model: SubscribeOrderProduct,
           as: "orderProducts",
           include: [
@@ -1299,6 +1305,13 @@ const getOrderDetails = async (req, res) => {
         {
           model: Address,
           as: "subOrdAddress",
+          include:[
+            {
+              model:PersonRecord,
+              as: "personaddress",
+              attributes: [ 'name', 'mobile'],
+            }
+          ]
         },
         {
           model: Review,

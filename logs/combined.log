@@ -1,0 +1,3 @@
+{"level":"info","message":"Cron job running at 13/6/2025, 12:22:00 pm (UTC: 2025-06-13T01:22:00.043Z)","service":"kine_milk_server","timestamp":"2025-06-13T06:52:00.043Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 published at 13/6/2025, 12:22:00 pm. start_date preserved: 2025-06-12 02:10:00","service":"kine_milk_server","timestamp":"2025-06-13T06:52:00.405Z"}
+{"level":"info","message":"Coupon ID 6c7eb5e9-22a3-4aeb-8275-2aad2dee4c54 unpublished at 13/6/2025, 12:22:00 pm. end_date preserved: 2025-06-12 02:12:00","service":"kine_milk_server","timestamp":"2025-06-13T06:52:00.491Z"}
