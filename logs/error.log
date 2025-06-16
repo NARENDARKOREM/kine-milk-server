@@ -69,3 +69,16 @@
 {"level":"error","message":"Error in ad scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-16T04:05:00.965Z"}
 {"level":"error","message":"Error in coupon scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-16T04:05:01.060Z"}
 {"level":"error","message":"Error in banner scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-16T04:05:01.095Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-16T04:31:00.705Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-16T04:31:00.798Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-16T04:33:01.041Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-16T05:17:01.051Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-16T05:18:00.712Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-16T05:18:00.730Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-16T05:18:00.743Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-16T05:20:00.444Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-16T05:20:00.447Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-16T05:20:00.592Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-16T05:21:00.526Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-16T05:21:00.530Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-16T05:21:00.532Z"}
