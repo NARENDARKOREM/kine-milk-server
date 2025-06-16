@@ -43,3 +43,29 @@
 {"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-13T10:42:01.018Z"}
 {"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-13T10:42:01.035Z"}
 {"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-13T10:42:01.064Z"}
+{"level":"error","message":"Error in coupon scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-13T15:04:00.100Z"}
+{"level":"error","message":"Error in banner scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-13T15:04:00.105Z"}
+{"level":"error","message":"Error in illustration scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-13T15:04:00.248Z"}
+{"level":"error","message":"Error in ad scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-13T15:04:00.252Z"}
+{"level":"error","message":"\"first_name\" is not allowed","service":"kine_milk_server","timestamp":"2025-06-14T08:39:34.114Z"}
+{"level":"error","message":"\"first_name\" is not allowed","service":"kine_milk_server","timestamp":"2025-06-14T08:40:21.040Z"}
+{"level":"error","message":"\"first_name\" is not allowed","service":"kine_milk_server","timestamp":"2025-06-14T08:40:33.924Z"}
+{"level":"error","message":"\"first_name\" is not allowed","service":"kine_milk_server","timestamp":"2025-06-14T08:43:10.297Z"}
+{"level":"error","message":"\"first_name\" is not allowed","service":"kine_milk_server","timestamp":"2025-06-14T08:44:06.030Z"}
+{"level":"error","message":"\"firstname\" is not allowed","service":"kine_milk_server","timestamp":"2025-06-14T08:50:37.452Z"}
+{"level":"error","message":"\"firstname\" is not allowed","service":"kine_milk_server","timestamp":"2025-06-14T08:52:52.205Z"}
+{"level":"error","message":"\"firstname\" is not allowed","service":"kine_milk_server","timestamp":"2025-06-14T08:54:23.417Z"}
+{"level":"error","message":"\"firstname\" is not allowed","service":"kine_milk_server","timestamp":"2025-06-14T08:54:40.107Z"}
+{"level":"error","message":"\"email\" is required","service":"kine_milk_server","timestamp":"2025-06-14T08:55:35.472Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-14T13:31:01.575Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-14T13:31:01.856Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-14T13:32:00.625Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-14T13:32:00.772Z"}
+{"level":"error","message":"Error in illustration scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-15T11:24:00.919Z"}
+{"level":"error","message":"Error in ad scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-15T11:24:00.923Z"}
+{"level":"error","message":"Error in coupon scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-15T11:24:00.927Z"}
+{"level":"error","message":"Error in banner scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-15T11:24:00.931Z"}
+{"level":"error","message":"Error in illustration scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-16T04:05:00.922Z"}
+{"level":"error","message":"Error in ad scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-16T04:05:00.965Z"}
+{"level":"error","message":"Error in coupon scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-16T04:05:01.060Z"}
+{"level":"error","message":"Error in banner scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-16T04:05:01.095Z"}

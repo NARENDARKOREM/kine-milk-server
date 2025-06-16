@@ -108,7 +108,7 @@ const upSertAddress = async (req, res) => {
 
     
     try {
-      const addresses = await Address.findAll({where:{uid:uid},include:[{model:Person,as:'personaddress'}]});
+      const addresses = await Address.findAll({where:{uid:uid},include:[{model:Person,as:'personaddress'}],order:[['createdAt','desc']]});
       res.status(200).json({
         ResponseCode: "200",
         Result: "true",
