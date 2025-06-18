@@ -6,6 +6,7 @@ const logger = require("../utils/logger");
 const cron = require("node-cron");
 const { Sequelize } = require("sequelize");
 const { sanitizeFilename } = require("../utils/multerConfig");
+const { formatDate } = require("../helper/UTCIST");
 
 // Verify Ads model is defined
 if (!Ads || typeof Ads.create !== "function") {
@@ -15,7 +16,18 @@ if (!Ads || typeof Ads.create !== "function") {
 
 // Log server timezone for debugging
 logger.info(`Server timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`);
+const convertUTCToIST = (date) => {
+  if (!date) return null;
+  const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
+  return new Date(new Date(date).getTime() + istOffset);
+};
 
+// Helper function to convert IST to UTC for database storage
+const convertISTToUTC = (date) => {
+  if (!date) return null;
+  const istOffset = 5.5 * 60 * 60 * 1000;
+  return new Date(date.getTime() - istOffset);
+};
 // Helper function to format UTC to IST for frontend
 const formatUTCToIST = (date) => {
   if (!date) return null;
@@ -135,18 +147,36 @@ const upsertAds = asyncHandler(async (req, res, next) => {
       });
     }
 
-    // Parse and validate dates
-    const parseDate = (dateString) => {
-      if (!dateString) return null;
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) {
-        throw new Error("Invalid date format");
-      }
-      return date; // Store in UTC
-    };
+    // // Parse and validate dates
+    // const parseDate = (dateString) => {
+    //   if (!dateString) return null;
+    //   const date = new Date(dateString);
+    //   if (isNaN(date.getTime())) {
+    //     throw new Error("Invalid date format");
+    //   }
+    //   return date; // Store in UTC
+    // };
 
-    const startDate = parseDate(startDateTime);
-    const endDate = parseDate(endDateTime);
+    // Parse and validate dates
+            const parseISTDate = (dateString, fieldName) => {
+              if (dateString === "" || dateString === null) {
+                logger.info(`Clearing ${fieldName} for coupon ${id || "new"}`);
+                return null;
+              }
+              if (dateString) {
+                const istDate = new Date(dateString);
+                if (isNaN(istDate.getTime())) {
+                  logger.error(`Invalid ${fieldName} format: ${dateString}`);
+                  throw new Error(`Invalid ${fieldName} format`);
+                }
+                logger.info(`${fieldName} parsed (IST): ${istDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+                return istDate;
+              }
+              return undefined; // Preserve existing value
+            };
+
+    const startDate = parseISTDate(startDateTime,"startDateTime");
+    const endDate = parseISTDate(endDateTime,"endDateTime");
 
     const now = new Date(); // Current time in UTC
 
@@ -167,6 +197,8 @@ const upsertAds = asyncHandler(async (req, res, next) => {
       });
     }
 
+    const adjustedStartTime=startDate !== undefined ? convertISTToUTC(startDate) : null;
+    const adjustedEndTime =endDate !== undefined ? convertISTToUTC(endDate) : null;
     // Adjust status based on startDateTime
     let effectiveStatus = status;
     if (startDate && startDate > now) {
@@ -192,8 +224,8 @@ const upsertAds = asyncHandler(async (req, res, next) => {
         planType,
         img: imageUrl,
         status: effectiveStatus,
-        startDateTime: startDate,
-        endDateTime: endDate,
+        startDateTime: startDate !== undefined ? adjustedStartTime: ad.startDateTime,
+        endDateTime: endDate !== undefined ? adjustedEndTime : ad.endDateTime,
         couponPercentage: couponPercentage || null,
       });
 
@@ -214,8 +246,8 @@ const upsertAds = asyncHandler(async (req, res, next) => {
         planType,
         img: imageUrl,
         status: effectiveStatus,
-        startDateTime: startDate,
-        endDateTime: endDate,
+        startDateTime: adjustedStartTime,
+        endDateTime: adjustedEndTime,
         couponPercentage: couponPercentage || null,
       });
 
@@ -226,8 +258,8 @@ const upsertAds = asyncHandler(async (req, res, next) => {
         ResponseMsg: "Ad created successfully.",
         ad: {
           ...ad.toJSON(),
-          startDateTime: formatUTCToIST(ad.startDateTime),
-          endDateTime: formatUTCToIST(ad.endDateTime),
+          startDateTime: `${ad.startDateTime ? convertUTCToIST(ad.startDateTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}` ,
+          endDateTime: `${ad.endDateTime ? convertUTCToIST(ad.endDateTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : "null"}`,
         },
       });
     }
@@ -256,8 +288,8 @@ const fetchAdsById = asyncHandler(async (req, res) => {
     logger.info(`Ad fetched by ID ${id}`);
     res.status(200).json({
       ...ad.toJSON(),
-      startDateTime: formatUTCToIST(ad.startDateTime),
-      endDateTime: formatUTCToIST(ad.endDateTime),
+      startDateTime: formatDate(ad.startDateTime),
+      endDateTime: formatDate(ad.endDateTime),
     });
   } catch (error) {
     logger.error(`Error fetching ad by ID ${id}: ${error.message}`);
@@ -275,8 +307,8 @@ const fetchAds = asyncHandler(async (req, res) => {
     logger.info("Successfully fetched ads");
     const adsWithIST = ads.map((ad) => ({
       ...ad.toJSON(),
-      startDateTime: formatUTCToIST(ad.startDateTime),
-      endDateTime: formatUTCToIST(ad.endDateTime),
+      startDateTime: formatDate(ad.startDateTime),
+      endDateTime: formatDate(ad.endDateTime),
     }));
     res.status(200).json(adsWithIST);
   } catch (error) {

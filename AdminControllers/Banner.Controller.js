@@ -131,13 +131,18 @@ const upsertBanner = asyncHandler(async (req, res, next) => {
     const parseISTDate = (dateString, fieldName) => {
       if (dateString === undefined || dateString === "") {
         logger.warn(`Empty or undefined ${fieldName} received for ${id ? `banner ${id}` : "new banner"}; preserving existing value`);
-        return undefined; // Signal to preserve existing value
+        return null; // Signal to preserve existing value
       }
-      const istDate = new Date(dateString);
-      if (isNaN(istDate.getTime())) {
-        throw new Error(`Invalid ${fieldName} format`);
+      if (dateString) {
+        const istDate = new Date(dateString);
+        if (isNaN(istDate.getTime())) {
+          logger.error(`Invalid ${fieldName} format: ${dateString}`);
+          throw new Error(`Invalid ${fieldName} format`);
+        }
+        logger.info(`${fieldName} parsed (IST): ${istDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
+        return istDate;
       }
-      return istDate;
+      return undefined;
     };
 
     const startDate = parseISTDate(startTime, "startTime");

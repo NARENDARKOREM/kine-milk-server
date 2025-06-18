@@ -373,7 +373,7 @@ const editSubscribeOrder = async (req, res) => {
   const { order_id, products, address_id, a_note, tax, o_total, subtotal, diffAmount, diffType } = req.body;
   const uid = req.user.userId;
 
-  console.log(products,"clggggggggggggggggggggg")
+ 
 
   if (!order_id || !Array.isArray(products) || products.length === 0) {
     return res.status(400).json({
