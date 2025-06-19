@@ -373,7 +373,7 @@ const editSubscribeOrder = async (req, res) => {
   const { order_id, products, address_id, a_note, tax, o_total, subtotal, diffAmount, diffType } = req.body;
   const uid = req.user.userId;
 
- 
+  console.log(products,"clggggggggggggggggggggg")
 
   if (!order_id || !Array.isArray(products) || products.length === 0) {
     return res.status(400).json({
@@ -1254,6 +1254,7 @@ const getOrderDetails = async (req, res) => {
   try {
     const orderDetails = await SubscribeOrder.findOne({
       where: { id, uid },
+      attributes:["id","store_id","uid","odate","address_id","o_type","delivered_dates","tax","d_charge","cou_id","cou_amt","o_total","subtotal","trans_id","a_note","rid","wall_amt","is_rate","review_date","total_rate","rate_text","feedback","delivery_images","commission","store_charge","order_status","sign","comment_reject","order_id","is_paper_bag"],
       include: [
         {
           model:User,
@@ -1348,6 +1349,20 @@ const getOrderDetails = async (req, res) => {
       });
     }
 
+    const statusPriority = ["Active", "Processing", "Paused", "Pending", "Completed", "Cancelled"];
+    const productStatuses=(orderDetails.orderProducts || []).map(p=>p.status || "");
+    let groupStatus = "Pending";
+
+    if(productStatuses.length > 0){
+      for(const status of statusPriority){
+        if(productStatuses.includes(status)){
+          groupStatus = status
+          break;
+        }
+      }
+    }
+
+    orderDetails.setDataValue("group_status", groupStatus);
     // Calculate average rating only for this order
     const allReviews = orderDetails.orderProducts.flatMap(orderProduct => {
       const reviews = orderProduct.subscribeProduct?.ProductReviews || [];
@@ -1361,7 +1376,7 @@ const getOrderDetails = async (req, res) => {
       ResponseCode: "200",
       Result: "true",
       ResponseMsg: "Subscribe Order fetched successfully!",
-      orderDetails: orderDetails.toJSON(),
+      orderDetails: {...orderDetails.get({plain:true})},
       averageRating,
     });
   } catch (error) {
