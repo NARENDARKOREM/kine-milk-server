@@ -603,7 +603,13 @@ const pauseSubscriptionOrder = async (req, res) => {
     })
     const allPaused = allProducts.length > 0 && allProducts.every(p => p.status === "Paused")
     if (allPaused) {
-      await SubscribeOrder.update({ status: "Paused" }, { transaction: t })
+      await SubscribeOrder.update(
+  { status: "Paused" },
+  {
+    where: { id: orderId },
+    transaction: t,
+  }
+);
     }
     const user = await User.findByPk(uid, { transaction: t });
 
