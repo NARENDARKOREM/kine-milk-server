@@ -1338,6 +1338,7 @@ const getOrderDetails = async (req, res) => {
         odate: order.odate,
         status: order.status,
         timeslot: order.timeslot,
+        trans_id:order?.trans_id,
         o_type: order.o_type,
         cou_id: order.cou_id,
         cou_amt: order.cou_amt,
