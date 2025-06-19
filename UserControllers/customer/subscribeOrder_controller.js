@@ -26,7 +26,10 @@ const { calculateDeliveryDays2, generateOrderId } = require("../helper/orderUtil
 const asyncLib = require("async");
 const StoreWeightOption = require("../../Models/StoreWeightOption");
 const PersonRecord = require("../../Models/PersonRecord");
+const runPauseResumeCron = require("../helper/subscriptionPauseResume");
 
+//this is helpful track pause order
+runPauseResumeCron()
 const MAX_RETRIES = 3;
 
 const subscribeOrder = async (req, res) => {
@@ -577,10 +580,10 @@ const pauseSubscriptionOrder = async (req, res) => {
       throw new Error("Pause period must be within order period and valid");
     }
 
+
     await subscribeOrderProduct.update(
       {
-        pause: true,
-        status: "Paused",
+      
         start_period: new Date(start_date),
         paused_period: new Date(end_date),
       },
