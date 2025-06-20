@@ -153,6 +153,10 @@ const NormalOrder = sequelize.define(
       type: DataTypes.FLOAT,
       allowNull: true,
       defaultValue: 0,
+    },
+    is_paper_bag_price:{
+      type: DataTypes.FLOAT,
+      allowNull: true,
     }
   },
   { tableName: "tbl_normal_order", timestamps: true, paranoid: true }
