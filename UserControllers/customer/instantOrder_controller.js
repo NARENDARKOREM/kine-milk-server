@@ -1360,6 +1360,7 @@ const getOrderDetails = async (req, res) => {
         rider: order.riders,
         hasReviews: hasReviews,
         averageRating: averageRating,
+        is_paper_bag_price:order.is_paper_bag_price,
       },
     });
   } catch (error) {
