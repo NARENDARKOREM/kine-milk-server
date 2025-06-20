@@ -46,6 +46,7 @@ const subscribeOrder = async (req, res) => {
     subtotal,
     o_total,
     is_paper_bag,
+    is_paper_bag_price,
   } = req.body;
 
   const uid = req.user.userId;
@@ -219,7 +220,8 @@ const subscribeOrder = async (req, res) => {
           a_note,
           order_id: orderId,
           status: "Pending",
-          is_paper_bag
+          is_paper_bag,
+          is_paper_bag_price: isNaN(parseFloat(is_paper_bag_price)) ? 0 : parseFloat(is_paper_bag_price),
         },
         { transaction: t }
       );
@@ -1263,7 +1265,7 @@ const getOrderDetails = async (req, res) => {
   try {
     const orderDetails = await SubscribeOrder.findOne({
       where: { id, uid },
-      attributes:["id","store_id","uid","odate","address_id","o_type","delivered_dates","tax","d_charge","cou_id","cou_amt","o_total","subtotal","trans_id","a_note","rid","wall_amt","is_rate","review_date","total_rate","rate_text","feedback","delivery_images","commission","store_charge","order_status","sign","comment_reject","order_id","is_paper_bag"],
+      attributes:["id","store_id","uid","odate","address_id","o_type","delivered_dates","tax","d_charge","cou_id","cou_amt","o_total","subtotal","trans_id","a_note","rid","wall_amt","is_rate","review_date","total_rate","rate_text","feedback","delivery_images","commission","store_charge","order_status","sign","comment_reject","order_id","is_paper_bag","is_paper_bag_price"],
       include: [
         {
           model:User,

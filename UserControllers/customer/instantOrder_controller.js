@@ -93,6 +93,7 @@ const instantOrder = async (req, res) => {
     receiver,
     is_paper_bag,
     delivery_tip,
+    is_paper_bag_price,
   } = req.body;
 
   console.log("Request body:", JSON.stringify(req.body, null, 2));
@@ -315,6 +316,7 @@ const instantOrder = async (req, res) => {
           trans_id,
           is_paper_bag: !!is_paper_bag,
           delivery_tip: parseFloat(delivery_tip) || 0,
+          is_paper_bag_price: isNaN(parseFloat(is_paper_bag_price)) ? 0 : parseFloat(is_paper_bag_price),
         },
         { transaction }
       );
