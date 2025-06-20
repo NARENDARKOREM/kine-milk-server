@@ -368,3 +368,27 @@
 {"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-20T10:08:00.640Z"}
 {"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-20T10:08:00.670Z"}
 {"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-20T10:08:00.682Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-20T10:24:00.828Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-20T10:24:00.866Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-20T10:24:00.869Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-20T10:24:00.871Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-20T10:25:00.679Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-20T10:25:00.686Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-20T10:25:00.691Z"}
+{"level":"error","message":"Error in illustration scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-20T10:26:00.871Z"}
+{"level":"error","message":"Error in ad scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-20T10:26:01.032Z"}
+{"level":"error","message":"Error in coupon scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-20T10:26:01.064Z"}
+{"level":"error","message":"Error in banner scheduling job: Too many connections","service":"kine_milk_server","timestamp":"2025-06-20T10:26:01.069Z"}
+{"level":"error","message":"Error in coupon scheduling job: read ECONNRESET","service":"kine_milk_server","timestamp":"2025-06-20T10:55:26.157Z"}
+{"level":"error","message":"Error in illustration scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-20T11:09:00.082Z"}
+{"level":"error","message":"Error in ad scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-20T11:09:00.092Z"}
+{"level":"error","message":"Error in coupon scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-20T11:09:00.118Z"}
+{"level":"error","message":"Error in banner scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-20T11:09:00.121Z"}
+{"level":"error","message":"Error in coupon scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-20T11:21:00.681Z"}
+{"level":"error","message":"Error in banner scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-20T11:21:00.714Z"}
+{"level":"error","message":"Error in illustration scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-20T11:21:00.729Z"}
+{"level":"error","message":"Error in ad scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-20T11:21:00.734Z"}
+{"level":"error","message":"Error in banner scheduling job: connect ETIMEDOUT","service":"kine_milk_server","timestamp":"2025-06-20T11:43:10.661Z"}
+{"level":"error","message":"Error in illustration scheduling job: connect ETIMEDOUT","service":"kine_milk_server","timestamp":"2025-06-20T11:43:10.669Z"}
+{"level":"error","message":"Error in ad scheduling job: connect ETIMEDOUT","service":"kine_milk_server","timestamp":"2025-06-20T11:43:10.760Z"}
+{"level":"error","message":"Error in coupon scheduling job: connect ETIMEDOUT","service":"kine_milk_server","timestamp":"2025-06-20T11:43:10.762Z"}

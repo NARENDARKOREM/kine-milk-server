@@ -1393,6 +1393,10 @@ const getOrderDetails = async (req, res) => {
               model: PersonRecord,
               as: "personaddress",
               attributes: ['name', 'mobile'],
+              where:{
+                order_id:id,
+              },
+              required:false
             }
           ]
         },
