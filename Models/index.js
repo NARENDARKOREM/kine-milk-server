@@ -414,4 +414,4 @@ NormalOrderProduct.belongsTo(StoreWeightOption, { foreignKey: "store_weight_id",
 StoreWeightOption.hasMany(NormalOrderProduct, { foreignKey: "store_weight_id", as: "normalOrderProducts" });
 
 PersonRecord.belongsTo(Address, { foreignKey: "address_id", as: "personaddress" });
-Address.hasMany(PersonRecord, { foreignKey: "address_id", as: "personaddress" });
+Address.hasOne(PersonRecord, { foreignKey: "address_id", as: "personaddress" });
