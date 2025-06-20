@@ -466,7 +466,7 @@ const editSubscribeOrder = async (req, res) => {
 
     // Update main order
     await order.update({
-      address_id: order.o_type === "Delivery" ? address_id : null,
+      address_id:address_id,
       o_total: o_total,
       subtotal,
       tax,
