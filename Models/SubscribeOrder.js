@@ -148,6 +148,10 @@ const SubscribeOrder = sequelize.define(
     is_paper_bag:{
       type:DataTypes.BOOLEAN,
       defaultValue:false
+    },
+    is_paper_bag_price:{
+      type: DataTypes.FLOAT,
+      allowNull: true,
     }
   },
   { tableName: "tbl_subscribe_order", timestamps: true, paranoid: true }
