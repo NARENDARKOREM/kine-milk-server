@@ -843,7 +843,7 @@ const resumeSubscriptionOrder = async (req, res) => {
         pause: false,
         status: "Active",
         paused_period: null, // clear paused period
-        start_period: resumeDate, // reset start_period to resume date
+        start_period: null, // reset start_period to resume date
       },
       { transaction: t }
     );
