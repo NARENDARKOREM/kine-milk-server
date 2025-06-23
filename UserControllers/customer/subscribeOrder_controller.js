@@ -187,12 +187,12 @@ const subscribeOrder = async (req, res) => {
       let orderAddressId = address_id;
       if (receiver && receiver.address_id) {
         orderAddressId = receiver.address_id;
-        const receiverAddress = await Address.findByPk(receiver.address_id, { transaction:t });
+        const receiverAddress = await Address.findByPk(receiver.address_id, { transaction: t });
         if (!receiverAddress || receiverAddress.uid !== uid) {
           throw new Error("Receiver address does not exist or does not belong to you");
         }
       } else if (address_id) {
-        const orderAddress = await Address.findByPk(address_id, { transaction:t });
+        const orderAddress = await Address.findByPk(address_id, { transaction: t });
         if (!orderAddress || orderAddress.uid !== uid) {
           throw new Error("Order address does not exist or does not belong to you");
         }
@@ -266,7 +266,7 @@ const subscribeOrder = async (req, res) => {
             address_id: receiver.address_id || null,
             order_id: order.id,
           },
-          { transaction:t }
+          { transaction: t }
         );
       }
 
@@ -747,10 +747,16 @@ const resumeSubscriptionOrder = async (req, res) => {
       },
       transaction: t,
     });
+    if (!pausedOrder) {
+      await t.rollback();
+      return res.status(404).json({
+        ResponseCode: "404",
+        Result: "false",
+        ResponseMsg: "Subscription product not found",
+      });
+    }
 
     if (
-      !pausedOrder ||
-      pausedOrder.pause !== true ||
       !pausedOrder.start_period ||
       !pausedOrder.paused_period
     ) {
@@ -1393,10 +1399,10 @@ const getOrderDetails = async (req, res) => {
               model: PersonRecord,
               as: "personaddress",
               attributes: ['name', 'mobile'],
-              where:{
-                order_id:id,
+              where: {
+                order_id: id,
               },
-              required:false
+              required: false
             }
           ]
         },

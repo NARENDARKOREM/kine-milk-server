@@ -392,3 +392,11 @@
 {"level":"error","message":"Error in illustration scheduling job: connect ETIMEDOUT","service":"kine_milk_server","timestamp":"2025-06-20T11:43:10.669Z"}
 {"level":"error","message":"Error in ad scheduling job: connect ETIMEDOUT","service":"kine_milk_server","timestamp":"2025-06-20T11:43:10.760Z"}
 {"level":"error","message":"Error in coupon scheduling job: connect ETIMEDOUT","service":"kine_milk_server","timestamp":"2025-06-20T11:43:10.762Z"}
+{"level":"error","message":"Error in illustration scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-20T13:26:00.587Z"}
+{"level":"error","message":"Error in ad scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-20T13:26:00.593Z"}
+{"level":"error","message":"Error in coupon scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-20T13:26:00.606Z"}
+{"level":"error","message":"Error in banner scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-20T13:26:00.623Z"}
+{"level":"error","message":"Error in illustration scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-21T13:05:00.816Z"}
+{"level":"error","message":"Error in ad scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-21T13:05:00.825Z"}
+{"level":"error","message":"Error in coupon scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-21T13:05:00.833Z"}
+{"level":"error","message":"Error in banner scheduling job: getaddrinfo ENOTFOUND kinemilk-db.cf6kk2eaeait.ap-south-1.rds.amazonaws.com","service":"kine_milk_server","timestamp":"2025-06-21T13:05:00.856Z"}
