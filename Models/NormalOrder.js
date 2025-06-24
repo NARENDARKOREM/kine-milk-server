@@ -157,6 +157,10 @@ const NormalOrder = sequelize.define(
     is_paper_bag_price:{
       type: DataTypes.FLOAT,
       allowNull: true,
+    },
+    payment_Status:{
+  type:DataTypes.ENUM("Paid", "Un Paid"),
+  allowNull: true,
     }
   },
   { tableName: "tbl_normal_order", timestamps: true, paranoid: true }
