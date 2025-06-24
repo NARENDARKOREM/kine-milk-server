@@ -90,9 +90,11 @@ const instantOrder = async (req, res) => {
     address_id,
     a_note,
     trans_id,
+    payment_type,
     receiver,
     is_paper_bag,
     delivery_tip,
+    is_paper_bag_price,
   } = req.body;
 
   console.log("Request body:", JSON.stringify(req.body, null, 2));
@@ -315,6 +317,8 @@ const instantOrder = async (req, res) => {
           trans_id,
           is_paper_bag: !!is_paper_bag,
           delivery_tip: parseFloat(delivery_tip) || 0,
+          is_paper_bag_price: isNaN(parseFloat(is_paper_bag_price)) ? 0 : parseFloat(is_paper_bag_price),
+          payment_Status: payment_type === "wallet" ? "Paid" : "Un Paid"
         },
         { transaction }
       );
@@ -400,7 +404,7 @@ const instantOrder = async (req, res) => {
       console.log(`Deleted ${deletedCartItems} cart items for uid: ${uid}`);
 
       // Wallet Payment
-      if (trans_id === undefined || trans_id === null) {
+      if (payment_type === "wallet") {
         console.log(`Processing wallet payment for uid: ${uid}, finalTotal: ${finalTotal}`);
         if (user.wallet === null || user.wallet === undefined || isNaN(user.wallet)) {
           console.error(`Invalid wallet balance for uid: ${uid}, wallet: ${user.wallet}`);
@@ -1120,8 +1124,9 @@ const getOrdersByStatus = async (req, res) => {
         .json({ success: false, message: "Invalid order status" });
     }
     console.log(1);
+    const payment_Status = "Paid"
     const orders = await NormalOrder.findAll({
-      where: { uid, status },
+      where: { uid, status, payment_Status },
       include: [
         {
           model: NormalOrderProduct,
@@ -1338,6 +1343,7 @@ const getOrderDetails = async (req, res) => {
         odate: order.odate,
         status: order.status,
         timeslot: order.timeslot,
+        trans_id:order?.trans_id,
         o_type: order.o_type,
         cou_id: order.cou_id,
         cou_amt: order.cou_amt,
@@ -1357,6 +1363,7 @@ const getOrderDetails = async (req, res) => {
         rider: order.riders,
         hasReviews: hasReviews,
         averageRating: averageRating,
+        is_paper_bag_price:order.is_paper_bag_price,
       },
     });
   } catch (error) {
@@ -1911,6 +1918,39 @@ const getMostFrequentDeliveryTip = async(req,res)=>{
   }
 }
 
+// update payment status
+
+const UpdatePaymentStatus = async (req, res) => {
+  const { order_id, paymentStatus, trans_id } = req.body;
+
+  const uid = req.user.userId;
+
+  if (!order_id || !paymentStatus || !trans_id) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  try {
+    // Find the order by order_id
+    const order = await NormalOrder.findOne({ where: { id: order_id , uid:uid } });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Update the order fields
+    order.payment_status = "Paid";
+    order.trans_id = trans_id;
+
+    await order.save();
+
+    return res.status(200).json({ message: "Payment status updated successfully", order });
+  } catch (error) {
+    console.error("Error updating payment status:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
 module.exports = {
   instantOrder,
   getOrdersByStatus,
@@ -1922,5 +1962,7 @@ module.exports = {
   couponList,
   instantOrderAgain,
   addPreviousOrderToCart,
-  getMostFrequentDeliveryTip
+  getMostFrequentDeliveryTip,
+  UpdatePaymentStatus
+
 };

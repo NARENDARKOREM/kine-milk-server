@@ -26,7 +26,11 @@ const { calculateDeliveryDays2, generateOrderId } = require("../helper/orderUtil
 const asyncLib = require("async");
 const StoreWeightOption = require("../../Models/StoreWeightOption");
 const PersonRecord = require("../../Models/PersonRecord");
+const { v4: uuidv4 } = require("uuid");
+const runPauseResumeCron = require("../helper/subscriptionPauseResume");
 
+//this is helpful track pause order
+runPauseResumeCron()
 const MAX_RETRIES = 3;
 
 const subscribeOrder = async (req, res) => {
@@ -43,6 +47,8 @@ const subscribeOrder = async (req, res) => {
     subtotal,
     o_total,
     is_paper_bag,
+    is_paper_bag_price,
+    receiver,
   } = req.body;
 
   const uid = req.user.userId;
@@ -59,7 +65,7 @@ const subscribeOrder = async (req, res) => {
     });
   }
 
-  if ( !address_id) {
+  if (!address_id) {
     return res.status(400).json({
       ResponseCode: "400",
       Result: "false",
@@ -89,6 +95,15 @@ const subscribeOrder = async (req, res) => {
         ResponseCode: "400",
         Result: "false",
         ResponseMsg: "Invalid product structure, quantities, or missing start_date/end_date.",
+      });
+    }
+
+    // Validate receiver
+    if (receiver && (!receiver.name || !receiver.mobile)) {
+      return res.status(400).json({
+        ResponseCode: "400",
+        Result: "error",
+        ResponseMsg: "Receiver name and mobile are required if provided!",
       });
     }
 
@@ -168,6 +183,23 @@ const subscribeOrder = async (req, res) => {
       const store = await Store.findOne({ where: { id: store_id }, });
       if (!store) throw new Error("Store not found");
 
+      // Validate address
+      let orderAddressId = address_id;
+      if (receiver && receiver.address_id) {
+        orderAddressId = receiver.address_id;
+        const receiverAddress = await Address.findByPk(receiver.address_id, { transaction: t });
+        if (!receiverAddress || receiverAddress.uid !== uid) {
+          throw new Error("Receiver address does not exist or does not belong to you");
+        }
+      } else if (address_id) {
+        const orderAddress = await Address.findByPk(address_id, { transaction: t });
+        if (!orderAddress || orderAddress.uid !== uid) {
+          throw new Error("Order address does not exist or does not belong to you");
+        }
+      } else {
+        throw new Error("Order address is required");
+      }
+
       // if (o_type === "Delivery") {
       //   const address = await Address.findOne({ where: { id: address_id }, });
       //   if (!address) throw new Error("Address not found");
@@ -201,13 +233,13 @@ const subscribeOrder = async (req, res) => {
         {
           uid,
           store_id,
-          address_id:  address_id ,
+          address_id: address_id,
           odate: new Date(),
           o_type,
           start_date: referenceStartDate,
           end_date: referenceEndDate,
           tax: settingTax,
-          d_charge:  0,
+          d_charge: 0,
           store_charge: 0,
           cou_id: appliedCoupon ? appliedCoupon.id : null,
           cou_amt: couponAmount,
@@ -216,10 +248,27 @@ const subscribeOrder = async (req, res) => {
           a_note,
           order_id: orderId,
           status: "Pending",
-          is_paper_bag
+          is_paper_bag,
+          is_paper_bag_price: isNaN(parseFloat(is_paper_bag_price)) ? 0 : parseFloat(is_paper_bag_price),
         },
         { transaction: t }
       );
+
+      // Create Receiver
+      let receiverRecord;
+      if (receiver) {
+        receiverRecord = await PersonRecord.create(
+          {
+            id: uuidv4(),
+            name: receiver.name,
+            email: receiver.email || null,
+            mobile: receiver.mobile,
+            address_id: receiver.address_id || null,
+            order_id: order.id,
+          },
+          { transaction: t }
+        );
+      }
 
       // Create order items
       const orderItems = await Promise.all(
@@ -373,7 +422,7 @@ const editSubscribeOrder = async (req, res) => {
   const { order_id, products, address_id, a_note, tax, o_total, subtotal, diffAmount, diffType } = req.body;
   const uid = req.user.userId;
 
-  console.log(products,"clggggggggggggggggggggg")
+  console.log(products, "clggggggggggggggggggggg")
 
   if (!order_id || !Array.isArray(products) || products.length === 0) {
     return res.status(400).json({
@@ -424,7 +473,7 @@ const editSubscribeOrder = async (req, res) => {
     );
 
 
-    console.log(updatedItems,"hiiiiiiiiiiiiiiiiiiii")
+    console.log(updatedItems, "hiiiiiiiiiiiiiiiiiiii")
 
 
 
@@ -463,7 +512,7 @@ const editSubscribeOrder = async (req, res) => {
 
     // Update main order
     await order.update({
-      address_id: order.o_type === "Delivery" ? address_id : null,
+      address_id: address_id,
       o_total: o_total,
       subtotal,
       tax,
@@ -476,7 +525,7 @@ const editSubscribeOrder = async (req, res) => {
       transaction: t,
     });
 
-    console.log(existingProducts,"wwwwwwwwwwwwwwwwwwwwwww")
+    console.log(existingProducts, "wwwwwwwwwwwwwwwwwwwwwww")
 
     for (const item of updatedItems) {
       const existing = existingProducts.find(
@@ -486,9 +535,9 @@ const editSubscribeOrder = async (req, res) => {
           prod.timeslot_id === item.timeslot_id
       );
 
-      
 
-      
+
+
 
       if (existing) {
         await existing.update({
@@ -500,14 +549,14 @@ const editSubscribeOrder = async (req, res) => {
           price: item.product_total,
         }, { transaction: t });
       }
-      else{
-        
+      else {
+
         return res.status(404).json({
-      ResponseCode: "404",
-      Result: "true",
-      ResponseMsg: "No Existing Products matched",
-      })
-    
+          ResponseCode: "404",
+          Result: "true",
+          ResponseMsg: "No Existing Products matched",
+        })
+
       }
     }
 
@@ -577,10 +626,10 @@ const pauseSubscriptionOrder = async (req, res) => {
       throw new Error("Pause period must be within order period and valid");
     }
 
+
     await subscribeOrderProduct.update(
       {
-        pause: true,
-        status: "Paused",
+
         start_period: new Date(start_date),
         paused_period: new Date(end_date),
       },
@@ -601,12 +650,14 @@ const pauseSubscriptionOrder = async (req, res) => {
     const allPaused = allProducts.length > 0 && allProducts.every(p => p.status === "Paused")
     if (allPaused) {
       await SubscribeOrder.update(
-  { status: "Paused" },
-  {
-    where: { id: orderId },
-    transaction: t,
-  }
-);
+
+        { status: "Paused" },
+        {
+          where: { id: orderId },
+          transaction: t,
+        }
+      );
+
     }
     const user = await User.findByPk(uid, { transaction: t });
 
@@ -698,10 +749,16 @@ const resumeSubscriptionOrder = async (req, res) => {
       },
       transaction: t,
     });
+    if (!pausedOrder) {
+      await t.rollback();
+      return res.status(404).json({
+        ResponseCode: "404",
+        Result: "false",
+        ResponseMsg: "Subscription product not found",
+      });
+    }
 
     if (
-      !pausedOrder ||
-      pausedOrder.pause !== true ||
       !pausedOrder.start_period ||
       !pausedOrder.paused_period
     ) {
@@ -788,7 +845,7 @@ const resumeSubscriptionOrder = async (req, res) => {
         pause: false,
         status: "Active",
         paused_period: null, // clear paused period
-        start_period: resumeDate, // reset start_period to resume date
+        start_period: null, // reset start_period to resume date
       },
       { transaction: t }
     );
@@ -1185,6 +1242,13 @@ const getOrdersByStatus = async (req, res) => {
         {
           model: Address,
           as: "subOrdAddress",
+          include: [
+            {
+              model: PersonRecord,
+              as: "personaddress",
+              attributes: ['name', 'mobile'],
+            }
+          ]
         },
         {
           model: Review,
@@ -1260,12 +1324,12 @@ const getOrderDetails = async (req, res) => {
   try {
     const orderDetails = await SubscribeOrder.findOne({
       where: { id, uid },
-      attributes:["id","store_id","uid","odate","address_id","o_type","delivered_dates","tax","d_charge","cou_id","cou_amt","o_total","subtotal","trans_id","a_note","rid","wall_amt","is_rate","review_date","total_rate","rate_text","feedback","delivery_images","commission","store_charge","order_status","sign","comment_reject","order_id","is_paper_bag"],
+      attributes: ["id", "store_id", "uid", "odate", "address_id", "o_type", "delivered_dates", "tax", "d_charge", "cou_id", "cou_amt", "o_total", "subtotal", "trans_id", "a_note", "rid", "wall_amt", "is_rate", "review_date", "total_rate", "rate_text", "feedback", "delivery_images", "commission", "store_charge", "order_status", "sign", "comment_reject", "order_id", "is_paper_bag", "is_paper_bag_price"],
       include: [
         {
-          model:User,
+          model: User,
           as: "user",
-          attributes:["name","email","mobile","wallet"]
+          attributes: ["name", "email", "mobile", "wallet"]
         },
         {
           model: SubscribeOrderProduct,
@@ -1332,11 +1396,15 @@ const getOrderDetails = async (req, res) => {
         {
           model: Address,
           as: "subOrdAddress",
-          include:[
+          include: [
             {
-              model:PersonRecord,
+              model: PersonRecord,
               as: "personaddress",
-              attributes: [ 'name', 'mobile'],
+              attributes: ['name', 'mobile'],
+              where: {
+                order_id: id,
+              },
+              required: false
             }
           ]
         },
@@ -1356,12 +1424,12 @@ const getOrderDetails = async (req, res) => {
     }
 
     const statusPriority = ["Active", "Processing", "Paused", "Pending", "Completed", "Cancelled"];
-    const productStatuses=(orderDetails.orderProducts || []).map(p=>p.status || "");
+    const productStatuses = (orderDetails.orderProducts || []).map(p => p.status || "");
     let groupStatus = "Pending";
 
-    if(productStatuses.length > 0){
-      for(const status of statusPriority){
-        if(productStatuses.includes(status)){
+    if (productStatuses.length > 0) {
+      for (const status of statusPriority) {
+        if (productStatuses.includes(status)) {
           groupStatus = status
           break;
         }
@@ -1382,7 +1450,7 @@ const getOrderDetails = async (req, res) => {
       ResponseCode: "200",
       Result: "true",
       ResponseMsg: "Subscribe Order fetched successfully!",
-      orderDetails: {...orderDetails.get({plain:true})},
+      orderDetails: { ...orderDetails.get({ plain: true }) },
       averageRating,
     });
   } catch (error) {
