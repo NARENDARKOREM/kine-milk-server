@@ -881,13 +881,38 @@ const getOfferProducts = async (req, res) => {
         
         "$inventoryProducts.discount$": banner_percentage
       },
+      attributes: ["id", "product_id"],
       include: [
         {
           model: Product,
           as: "inventoryProducts",
-          required: true // ensures INNER JOIN to apply filtering
-        }
-      ]
+          attributes: ["id", "cat_id", "title", "img", "description"],
+          include: [
+            {
+              model: ProductImage,
+              as: "extraImages",
+              attributes: ["id", "product_id", "img"],
+            },
+            {
+              model: Category,
+              as: "category",
+              attributes: ["id", "title"],
+            },
+          ],
+        },
+        {
+          model: StoreWeightOption,
+          as: "storeWeightOptions",
+          include: [
+            {
+              model: WeightOption,
+              as: "weightOption",
+              required: false,
+              attributes: ["id", "weight", "normal_price", "subscribe_price", "mrp_price"],
+            },
+          ],
+        },
+      ],
     });
 
     return res.status(200).json({
