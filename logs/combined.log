@@ -2356,3 +2356,872 @@
 {"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T06:52:02.887Z"}
 {"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T06:52:02.901Z"}
 {"level":"info","message":"Cron job running at 25/6/2025, 12:23:00 pm (UTC: 2025-06-25T01:23:00.313Z)","service":"kine_milk_server","timestamp":"2025-06-25T06:53:00.315Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T09:43:52.570Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T09:43:52.681Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T09:43:53.129Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T09:43:53.518Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:15:00 pm (UTC: 2025-06-25T04:15:00.569Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:45:00.571Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:15:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:45:00.890Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:15","service":"kine_milk_server","timestamp":"2025-06-25T09:45:00.895Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:15","service":"kine_milk_server","timestamp":"2025-06-25T09:45:00.963Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:16:00 pm (UTC: 2025-06-25T04:16:00.022Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:46:00.024Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:16:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:46:00.262Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:16","service":"kine_milk_server","timestamp":"2025-06-25T09:46:00.272Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:16:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:46:00.293Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:16","service":"kine_milk_server","timestamp":"2025-06-25T09:46:00.334Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:16:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:46:00.356Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:16:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:46:00.391Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:17:00 pm (UTC: 2025-06-25T04:17:00.476Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:47:00.478Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:17:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:47:00.696Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:17","service":"kine_milk_server","timestamp":"2025-06-25T09:47:00.703Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:17:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:47:00.728Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:17","service":"kine_milk_server","timestamp":"2025-06-25T09:47:00.763Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:17:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:47:00.784Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:17:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:47:00.815Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:18:00 pm (UTC: 2025-06-25T04:18:00.948Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:48:00.948Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:18:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:48:01.161Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:18","service":"kine_milk_server","timestamp":"2025-06-25T09:48:01.167Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:18:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:48:01.195Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:18","service":"kine_milk_server","timestamp":"2025-06-25T09:48:01.228Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:18:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:48:01.253Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:18:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:48:01.294Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:19:00 pm (UTC: 2025-06-25T04:19:00.413Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:49:00.415Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:19:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:49:00.653Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:19","service":"kine_milk_server","timestamp":"2025-06-25T09:49:00.657Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:19:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:49:00.691Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:19","service":"kine_milk_server","timestamp":"2025-06-25T09:49:00.716Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:19:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:49:00.758Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:19:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:49:00.792Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:20:00 pm (UTC: 2025-06-25T04:20:00.816Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:50:00.818Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:20","service":"kine_milk_server","timestamp":"2025-06-25T09:50:01.060Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:20:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:50:01.066Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:20:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:50:01.099Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:20","service":"kine_milk_server","timestamp":"2025-06-25T09:50:01.112Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:20:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:50:01.161Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:20:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:50:01.195Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:21:00 pm (UTC: 2025-06-25T04:21:00.264Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:51:00.266Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:21:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:51:00.472Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:21","service":"kine_milk_server","timestamp":"2025-06-25T09:51:00.486Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:21:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:51:00.532Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:21","service":"kine_milk_server","timestamp":"2025-06-25T09:51:00.539Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:21:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:51:00.595Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:21:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:51:00.628Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:22:00 pm (UTC: 2025-06-25T04:22:00.924Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:52:00.925Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:22","service":"kine_milk_server","timestamp":"2025-06-25T09:52:01.029Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:22:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:52:01.040Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:22","service":"kine_milk_server","timestamp":"2025-06-25T09:52:01.080Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:22:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:52:01.101Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:23:00 pm (UTC: 2025-06-25T04:23:00.551Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:53:00.553Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:23","service":"kine_milk_server","timestamp":"2025-06-25T09:53:00.795Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:23","service":"kine_milk_server","timestamp":"2025-06-25T09:53:00.847Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:23:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:53:00.853Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:24:00 pm (UTC: 2025-06-25T04:24:00.190Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:54:00.191Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:24:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:54:00.409Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:24","service":"kine_milk_server","timestamp":"2025-06-25T09:54:00.424Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:24:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:54:00.478Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:24","service":"kine_milk_server","timestamp":"2025-06-25T09:54:00.511Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:24:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:54:00.536Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:24:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:54:00.567Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:25:00 pm (UTC: 2025-06-25T04:25:00.773Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:55:00.774Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:25:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:55:01.451Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:25","service":"kine_milk_server","timestamp":"2025-06-25T09:55:01.454Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:25:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:55:01.520Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:25","service":"kine_milk_server","timestamp":"2025-06-25T09:55:01.661Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:25:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:55:01.727Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:25:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:55:01.794Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:26:00 pm (UTC: 2025-06-25T04:26:00.419Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:56:00.420Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:26:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:56:00.643Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:26","service":"kine_milk_server","timestamp":"2025-06-25T09:56:00.660Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:26:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:56:00.714Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:26","service":"kine_milk_server","timestamp":"2025-06-25T09:56:00.744Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:26:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:56:00.768Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:26:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:56:00.796Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:27:00 pm (UTC: 2025-06-25T04:27:00.026Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:57:00.029Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:27:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:57:00.359Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:27","service":"kine_milk_server","timestamp":"2025-06-25T09:57:00.370Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:27:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:57:00.404Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:27","service":"kine_milk_server","timestamp":"2025-06-25T09:57:00.420Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:27:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:57:00.458Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:27:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:57:00.489Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:28:00 pm (UTC: 2025-06-25T04:28:00.647Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:58:00.648Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:28:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:58:00.897Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:28","service":"kine_milk_server","timestamp":"2025-06-25T09:58:00.908Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:28:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:58:00.960Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:29:00 pm (UTC: 2025-06-25T04:29:00.246Z)","service":"kine_milk_server","timestamp":"2025-06-25T09:59:00.247Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:29:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:59:00.481Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:29","service":"kine_milk_server","timestamp":"2025-06-25T09:59:00.493Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:29:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:59:00.550Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:29","service":"kine_milk_server","timestamp":"2025-06-25T09:59:00.583Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:29:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:59:00.602Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:29:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T09:59:00.632Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:30:00 pm (UTC: 2025-06-25T04:30:00.889Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:00:00.890Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:30:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:00:01.089Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:30","service":"kine_milk_server","timestamp":"2025-06-25T10:00:01.159Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:30:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:00:01.163Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:30:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:00:01.271Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:30","service":"kine_milk_server","timestamp":"2025-06-25T10:00:01.287Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:30:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:00:01.342Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:31:00 pm (UTC: 2025-06-25T04:31:00.472Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:01:00.473Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:31","service":"kine_milk_server","timestamp":"2025-06-25T10:01:00.814Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:31:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:01:00.825Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:31:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:01:00.859Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:32:00 pm (UTC: 2025-06-25T04:32:00.054Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:02:00.055Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:32","service":"kine_milk_server","timestamp":"2025-06-25T10:02:00.451Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:32:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:02:00.458Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:32:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:02:00.498Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:32","service":"kine_milk_server","timestamp":"2025-06-25T10:02:00.524Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:32:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:02:00.559Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:32:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:02:00.644Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:33:00 pm (UTC: 2025-06-25T04:33:00.639Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:03:00.639Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:33:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:03:00.851Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:33:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:03:00.917Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:33","service":"kine_milk_server","timestamp":"2025-06-25T10:03:00.980Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:33:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:03:01.019Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:33","service":"kine_milk_server","timestamp":"2025-06-25T10:03:01.061Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:34:00 pm (UTC: 2025-06-25T04:34:00.273Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:04:00.275Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:34:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:04:00.501Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:34:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:04:00.557Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:34","service":"kine_milk_server","timestamp":"2025-06-25T10:04:00.580Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:34:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:04:00.627Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:34","service":"kine_milk_server","timestamp":"2025-06-25T10:04:00.638Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:34:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:04:00.657Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:35:00 pm (UTC: 2025-06-25T04:35:00.876Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:05:00.877Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:35:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:05:00.968Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:35:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:05:01.001Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:35","service":"kine_milk_server","timestamp":"2025-06-25T10:05:01.064Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:35:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:05:01.068Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:35:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:05:01.111Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:35","service":"kine_milk_server","timestamp":"2025-06-25T10:05:01.120Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:36:00 pm (UTC: 2025-06-25T04:36:00.350Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:06:00.352Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:36:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:06:01.057Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:36","service":"kine_milk_server","timestamp":"2025-06-25T10:06:01.063Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:36:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:06:01.089Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:36:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:06:01.145Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:37:00 pm (UTC: 2025-06-25T04:37:00.747Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:07:00.749Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:37:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:07:00.922Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:37:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:07:00.993Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:37","service":"kine_milk_server","timestamp":"2025-06-25T10:07:01.044Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:37:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:07:01.093Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:37","service":"kine_milk_server","timestamp":"2025-06-25T10:07:01.102Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:37:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:07:01.125Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:38:00 pm (UTC: 2025-06-25T04:38:00.229Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:08:00.231Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:38:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:08:00.491Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:38","service":"kine_milk_server","timestamp":"2025-06-25T10:08:00.497Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:38:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:08:00.528Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:38","service":"kine_milk_server","timestamp":"2025-06-25T10:08:00.551Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:38:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:08:00.596Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:38:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:08:00.627Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:39:00 pm (UTC: 2025-06-25T04:39:00.705Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:09:00.706Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:39:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:09:00.978Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:39","service":"kine_milk_server","timestamp":"2025-06-25T10:09:00.984Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:39:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:09:01.009Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:39","service":"kine_milk_server","timestamp":"2025-06-25T10:09:01.039Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:39:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:09:01.060Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:39:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:09:01.091Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:40:00 pm (UTC: 2025-06-25T04:40:00.252Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:10:00.253Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:40:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:10:00.489Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:40","service":"kine_milk_server","timestamp":"2025-06-25T10:10:00.495Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:40:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:10:00.547Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:40","service":"kine_milk_server","timestamp":"2025-06-25T10:10:00.570Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:40:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:10:00.604Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:40:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:10:00.635Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:41:00 pm (UTC: 2025-06-25T04:41:00.834Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:11:00.835Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:41:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:11:01.107Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:41","service":"kine_milk_server","timestamp":"2025-06-25T10:11:01.113Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:41:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:11:01.141Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:41","service":"kine_milk_server","timestamp":"2025-06-25T10:11:01.176Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:41:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:11:01.203Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:41:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:11:01.235Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:42:00 pm (UTC: 2025-06-25T04:42:00.302Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:12:00.304Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:42:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:12:00.536Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:42","service":"kine_milk_server","timestamp":"2025-06-25T10:12:00.543Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:42:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:12:00.571Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:42","service":"kine_milk_server","timestamp":"2025-06-25T10:12:00.606Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:42:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:12:00.628Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:42:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:12:00.659Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:43:00 pm (UTC: 2025-06-25T04:43:00.719Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:13:00.720Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:43","service":"kine_milk_server","timestamp":"2025-06-25T10:13:00.986Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:43","service":"kine_milk_server","timestamp":"2025-06-25T10:13:01.040Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T10:13:42.862Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T10:13:42.883Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T10:13:42.932Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T10:13:42.957Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:44:00 pm (UTC: 2025-06-25T04:44:00.416Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:14:00.417Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:44:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:14:00.675Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:44:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:14:00.707Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:44","service":"kine_milk_server","timestamp":"2025-06-25T10:14:00.713Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:44:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:14:00.763Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:44","service":"kine_milk_server","timestamp":"2025-06-25T10:14:00.774Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:44:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:14:00.795Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:45:00 pm (UTC: 2025-06-25T04:45:00.865Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:15:00.865Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:45:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:15:01.058Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:45","service":"kine_milk_server","timestamp":"2025-06-25T10:15:01.078Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:45:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:15:01.088Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:45","service":"kine_milk_server","timestamp":"2025-06-25T10:15:01.135Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:45:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:15:01.151Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:45:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:15:01.186Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:46:00 pm (UTC: 2025-06-25T04:46:00.360Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:16:00.361Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:46","service":"kine_milk_server","timestamp":"2025-06-25T10:16:00.774Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:46:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:16:00.779Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:46:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:16:00.810Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:46","service":"kine_milk_server","timestamp":"2025-06-25T10:16:00.838Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:46:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:16:00.864Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:46:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:16:00.894Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:47:00 pm (UTC: 2025-06-25T04:47:00.823Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:17:00.824Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:47:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:17:01.090Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:47","service":"kine_milk_server","timestamp":"2025-06-25T10:17:01.094Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:47:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:17:01.127Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:47","service":"kine_milk_server","timestamp":"2025-06-25T10:17:01.153Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:47:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:17:01.189Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:47:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:17:01.223Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:48:00 pm (UTC: 2025-06-25T04:48:00.253Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:18:00.254Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:48:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:18:00.460Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:48","service":"kine_milk_server","timestamp":"2025-06-25T10:18:00.471Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:48:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:18:00.489Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:48","service":"kine_milk_server","timestamp":"2025-06-25T10:18:00.522Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:48:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:18:00.541Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:48:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:18:00.570Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:49:00 pm (UTC: 2025-06-25T04:49:00.705Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:19:00.706Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:49:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:19:00.935Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:49","service":"kine_milk_server","timestamp":"2025-06-25T10:19:00.939Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:49:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:19:00.966Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:49","service":"kine_milk_server","timestamp":"2025-06-25T10:19:00.988Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:49:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:19:01.024Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:49:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:19:01.057Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:50:00 pm (UTC: 2025-06-25T04:50:00.156Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:20:00.156Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:50","service":"kine_milk_server","timestamp":"2025-06-25T10:20:00.394Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:50:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:20:00.398Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:50:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:20:00.434Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:50","service":"kine_milk_server","timestamp":"2025-06-25T10:20:00.475Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:50:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:20:00.508Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:50:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:20:00.542Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:51:00 pm (UTC: 2025-06-25T04:51:00.636Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:21:00.638Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:51:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:21:00.875Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:51","service":"kine_milk_server","timestamp":"2025-06-25T10:21:00.906Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:51:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:21:00.931Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:52:00 pm (UTC: 2025-06-25T04:52:00.040Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:22:00.041Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:52:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:22:00.279Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:52","service":"kine_milk_server","timestamp":"2025-06-25T10:22:00.283Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:52:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:22:00.312Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:52","service":"kine_milk_server","timestamp":"2025-06-25T10:22:00.341Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:52:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:22:00.372Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:52:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:22:00.405Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:53:00 pm (UTC: 2025-06-25T04:53:00.450Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:23:00.451Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:53:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:23:00.694Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:53","service":"kine_milk_server","timestamp":"2025-06-25T10:23:00.700Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:53:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:23:00.721Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:53","service":"kine_milk_server","timestamp":"2025-06-25T10:23:00.754Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:53:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:23:00.770Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:53:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:23:00.800Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:54:00 pm (UTC: 2025-06-25T04:54:00.908Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:24:00.909Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:54:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:24:01.111Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:54","service":"kine_milk_server","timestamp":"2025-06-25T10:24:01.119Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:54:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:24:01.139Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:54","service":"kine_milk_server","timestamp":"2025-06-25T10:24:01.178Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:54:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:24:01.190Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:54:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:24:01.221Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:55:00 pm (UTC: 2025-06-25T04:55:00.344Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:25:00.345Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:55:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:25:00.560Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:55","service":"kine_milk_server","timestamp":"2025-06-25T10:25:00.571Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:55:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:25:00.593Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:55","service":"kine_milk_server","timestamp":"2025-06-25T10:25:00.627Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:55:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:25:00.645Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:55:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:25:00.675Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:56:00 pm (UTC: 2025-06-25T04:56:00.780Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:26:00.782Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:56","service":"kine_milk_server","timestamp":"2025-06-25T10:26:01.005Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:56:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:26:01.027Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:56","service":"kine_milk_server","timestamp":"2025-06-25T10:26:01.059Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:57:00 pm (UTC: 2025-06-25T04:57:00.206Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:27:00.207Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:57:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:27:00.489Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:57","service":"kine_milk_server","timestamp":"2025-06-25T10:27:00.494Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:57:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:27:00.524Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:57","service":"kine_milk_server","timestamp":"2025-06-25T10:27:00.546Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:57:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:27:00.576Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:57:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:27:00.605Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:58:00 pm (UTC: 2025-06-25T04:58:00.640Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:28:00.641Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:58:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:28:00.920Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:58","service":"kine_milk_server","timestamp":"2025-06-25T10:28:00.933Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:58:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:28:00.950Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:58","service":"kine_milk_server","timestamp":"2025-06-25T10:28:00.993Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:58:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:28:01.005Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:58:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:28:01.035Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 3:59:00 pm (UTC: 2025-06-25T04:59:00.087Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:29:00.090Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 3:59:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:29:00.374Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 3:59:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:29:00.473Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T15:59","service":"kine_milk_server","timestamp":"2025-06-25T10:29:00.480Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 3:59:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:29:00.521Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T15:59","service":"kine_milk_server","timestamp":"2025-06-25T10:29:00.528Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 3:59:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:29:00.551Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:00:00 pm (UTC: 2025-06-25T05:00:00.561Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:30:00.561Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:00","service":"kine_milk_server","timestamp":"2025-06-25T10:30:01.024Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:00:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:30:01.027Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:00:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:30:01.075Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:00","service":"kine_milk_server","timestamp":"2025-06-25T10:30:01.095Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:00:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:30:01.195Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:00:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:30:01.227Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:01","service":"kine_milk_server","timestamp":"2025-06-25T10:31:00.423Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:01","service":"kine_milk_server","timestamp":"2025-06-25T10:31:00.497Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:01:00 pm (UTC: 2025-06-25T05:01:00.973Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:31:00.973Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:01:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:31:01.055Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:01:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:31:01.088Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:01:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:31:01.156Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:01:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:31:01.188Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:02:00 pm (UTC: 2025-06-25T05:02:00.437Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:32:00.437Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:02:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:32:00.667Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:02","service":"kine_milk_server","timestamp":"2025-06-25T10:32:00.690Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:02:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:32:00.730Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:02:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:32:00.793Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:02","service":"kine_milk_server","timestamp":"2025-06-25T10:32:00.795Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:02:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:32:00.820Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:03:00 pm (UTC: 2025-06-25T05:03:00.808Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:33:00.809Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:03:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:33:00.943Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:03:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:33:00.999Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:03","service":"kine_milk_server","timestamp":"2025-06-25T10:33:01.060Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:03:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:33:01.085Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:03:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:33:01.119Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:03","service":"kine_milk_server","timestamp":"2025-06-25T10:33:01.123Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:04:00 pm (UTC: 2025-06-25T05:04:00.206Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:34:00.207Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:04:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:34:00.478Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:04","service":"kine_milk_server","timestamp":"2025-06-25T10:34:00.490Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:04:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:34:00.538Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:04","service":"kine_milk_server","timestamp":"2025-06-25T10:34:00.575Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:04:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:34:00.602Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:04:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:34:00.636Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:05:00 pm (UTC: 2025-06-25T05:05:00.676Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:35:00.677Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:05:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:35:00.886Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:05","service":"kine_milk_server","timestamp":"2025-06-25T10:35:00.890Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:05:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:35:00.922Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:05:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:35:00.980Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:06:00 pm (UTC: 2025-06-25T05:06:00.053Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:36:00.054Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:06:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:36:00.370Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:06","service":"kine_milk_server","timestamp":"2025-06-25T10:36:00.375Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:06:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:36:00.409Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:06","service":"kine_milk_server","timestamp":"2025-06-25T10:36:00.441Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:06:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:36:00.472Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:06:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:36:00.506Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:07:00 pm (UTC: 2025-06-25T05:07:00.470Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:37:00.471Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:07:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:37:00.675Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:07:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:37:00.762Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:07","service":"kine_milk_server","timestamp":"2025-06-25T10:37:00.793Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:07:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:37:00.821Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:07","service":"kine_milk_server","timestamp":"2025-06-25T10:37:00.845Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:07:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:37:00.853Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:08","service":"kine_milk_server","timestamp":"2025-06-25T10:38:00.238Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:08","service":"kine_milk_server","timestamp":"2025-06-25T10:38:00.304Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:08:00 pm (UTC: 2025-06-25T05:08:00.902Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:38:00.903Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:08:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:38:00.987Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:08:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:38:01.022Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:08:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:38:01.115Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:08:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:38:01.146Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:09:00 pm (UTC: 2025-06-25T05:09:00.299Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:39:00.301Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:09:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:39:00.558Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:09","service":"kine_milk_server","timestamp":"2025-06-25T10:39:00.562Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:09:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:39:00.590Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:09","service":"kine_milk_server","timestamp":"2025-06-25T10:39:00.625Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:09:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:39:00.649Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:09:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:39:00.682Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:10:00 pm (UTC: 2025-06-25T05:10:00.685Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:40:00.687Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:10","service":"kine_milk_server","timestamp":"2025-06-25T10:40:00.931Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:10","service":"kine_milk_server","timestamp":"2025-06-25T10:40:00.990Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:11:00 pm (UTC: 2025-06-25T05:11:00.070Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:41:00.071Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:11:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:41:00.331Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:11","service":"kine_milk_server","timestamp":"2025-06-25T10:41:00.344Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:11:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:41:00.360Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:11","service":"kine_milk_server","timestamp":"2025-06-25T10:41:00.395Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:11:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:41:00.410Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:11:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:41:00.440Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:12:00 pm (UTC: 2025-06-25T05:12:00.466Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:42:00.468Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:12:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:42:00.732Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:12","service":"kine_milk_server","timestamp":"2025-06-25T10:42:00.735Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:12:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:42:00.766Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:12","service":"kine_milk_server","timestamp":"2025-06-25T10:42:00.792Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:12:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:42:00.828Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:12:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:42:00.861Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:13","service":"kine_milk_server","timestamp":"2025-06-25T10:43:00.299Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:13","service":"kine_milk_server","timestamp":"2025-06-25T10:43:00.351Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:13:00 pm (UTC: 2025-06-25T05:13:00.948Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:43:00.949Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:13:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:43:01.027Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:13:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:43:01.055Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:13:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:43:01.108Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:13:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:43:01.136Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:14:00 pm (UTC: 2025-06-25T05:14:00.414Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:44:00.415Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:14:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:44:00.675Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:14","service":"kine_milk_server","timestamp":"2025-06-25T10:44:00.682Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:14:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:44:00.709Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:14","service":"kine_milk_server","timestamp":"2025-06-25T10:44:00.747Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:14:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:44:00.766Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:14:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:44:00.798Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:15","service":"kine_milk_server","timestamp":"2025-06-25T10:45:00.432Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:15","service":"kine_milk_server","timestamp":"2025-06-25T10:45:00.521Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:15:00 pm (UTC: 2025-06-25T05:15:00.921Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:45:00.923Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:15:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:45:01.112Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:15:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:45:01.143Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:15:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:45:01.216Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:15:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:45:01.250Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:16:00 pm (UTC: 2025-06-25T05:16:00.412Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:46:00.412Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:16:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:46:00.655Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:16","service":"kine_milk_server","timestamp":"2025-06-25T10:46:00.665Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:16:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:46:00.683Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:16","service":"kine_milk_server","timestamp":"2025-06-25T10:46:00.720Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:16:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:46:00.736Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:16:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:46:00.764Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:17:00 pm (UTC: 2025-06-25T05:17:00.929Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:47:00.930Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:17:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:47:01.017Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:17","service":"kine_milk_server","timestamp":"2025-06-25T10:47:01.046Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:17:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:47:01.049Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:17","service":"kine_milk_server","timestamp":"2025-06-25T10:47:01.095Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:17:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:47:01.108Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:17:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:47:01.139Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:18:00 pm (UTC: 2025-06-25T05:18:00.373Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:48:00.374Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:18:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:48:00.573Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:18","service":"kine_milk_server","timestamp":"2025-06-25T10:48:00.622Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:18:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:48:00.660Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:18","service":"kine_milk_server","timestamp":"2025-06-25T10:48:00.675Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:18:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:48:00.717Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:18:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:48:00.748Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:19:00 pm (UTC: 2025-06-25T05:19:00.897Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:49:00.898Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:19:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:49:01.096Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:20:00 pm (UTC: 2025-06-25T05:20:00.371Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:50:00.372Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:20:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:50:00.569Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:20","service":"kine_milk_server","timestamp":"2025-06-25T10:50:00.571Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:20:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:50:00.603Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:20","service":"kine_milk_server","timestamp":"2025-06-25T10:50:00.626Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:20:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:50:00.658Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:20:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:50:00.691Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:21:00 pm (UTC: 2025-06-25T05:21:00.799Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:51:00.800Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:21:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:51:01.002Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:21","service":"kine_milk_server","timestamp":"2025-06-25T10:51:01.006Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:21:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:51:01.030Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:21","service":"kine_milk_server","timestamp":"2025-06-25T10:51:01.055Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:21:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:51:01.092Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:21:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:51:01.122Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:22:00 pm (UTC: 2025-06-25T05:22:00.227Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:52:00.228Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:22:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:52:00.500Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:22","service":"kine_milk_server","timestamp":"2025-06-25T10:52:00.543Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:22:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:52:00.572Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:22","service":"kine_milk_server","timestamp":"2025-06-25T10:52:00.599Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:22:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:52:00.628Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:22:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:52:00.662Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:23:00 pm (UTC: 2025-06-25T05:23:00.700Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:53:00.702Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:23:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:53:00.942Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:23","service":"kine_milk_server","timestamp":"2025-06-25T10:53:00.944Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:23:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:53:00.969Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:23","service":"kine_milk_server","timestamp":"2025-06-25T10:53:00.999Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:23:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:53:01.018Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:23:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:53:01.045Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:24:00 pm (UTC: 2025-06-25T05:24:00.104Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:54:00.104Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:24:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:54:00.293Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:24","service":"kine_milk_server","timestamp":"2025-06-25T10:54:00.296Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:24:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:54:00.324Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:24","service":"kine_milk_server","timestamp":"2025-06-25T10:54:00.348Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:24:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:54:00.372Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:24:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:54:00.400Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:25:00 pm (UTC: 2025-06-25T05:25:00.546Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:55:00.547Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:25:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:55:00.743Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:25","service":"kine_milk_server","timestamp":"2025-06-25T10:55:00.761Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:25:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:55:00.780Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:25","service":"kine_milk_server","timestamp":"2025-06-25T10:55:00.815Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:25:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:55:00.828Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:25:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:55:00.855Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:26:00 pm (UTC: 2025-06-25T05:26:00.073Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:56:00.074Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:26:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:56:00.343Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:26","service":"kine_milk_server","timestamp":"2025-06-25T10:56:00.347Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:26:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:56:00.377Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:26","service":"kine_milk_server","timestamp":"2025-06-25T10:56:00.411Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:26:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:56:00.434Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:26:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:56:00.542Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:27:00 pm (UTC: 2025-06-25T05:27:00.730Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:57:00.731Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:27:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:57:00.950Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:27:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:57:00.981Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:28:00 pm (UTC: 2025-06-25T05:28:00.348Z)","service":"kine_milk_server","timestamp":"2025-06-25T10:58:00.349Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:28:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:58:00.543Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:28","service":"kine_milk_server","timestamp":"2025-06-25T10:58:00.545Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:28:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:58:00.572Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:28","service":"kine_milk_server","timestamp":"2025-06-25T10:58:00.595Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:28:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:58:00.630Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:28:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T10:58:00.658Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:30:00 pm (UTC: 2025-06-25T05:30:00.670Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:00:00.672Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:30:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:00:01.003Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:31:00 pm (UTC: 2025-06-25T05:31:00.259Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:01:00.259Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:31:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:01:00.489Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:31","service":"kine_milk_server","timestamp":"2025-06-25T11:01:00.493Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:31:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:01:00.520Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:31","service":"kine_milk_server","timestamp":"2025-06-25T11:01:00.543Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:31:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:01:00.574Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:31:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:01:00.602Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:32:00 pm (UTC: 2025-06-25T05:32:00.944Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:02:00.946Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:32:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:02:01.131Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:32","service":"kine_milk_server","timestamp":"2025-06-25T11:02:01.134Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:32:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:02:01.159Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:32","service":"kine_milk_server","timestamp":"2025-06-25T11:02:01.182Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:32:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:02:01.207Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:32:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:02:01.234Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:33:00 pm (UTC: 2025-06-25T05:33:00.597Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:03:00.598Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:33:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:03:00.818Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:33","service":"kine_milk_server","timestamp":"2025-06-25T11:03:00.830Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:33:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:03:00.847Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:33","service":"kine_milk_server","timestamp":"2025-06-25T11:03:00.888Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:33:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:03:00.900Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:33:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:03:00.927Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:34:00 pm (UTC: 2025-06-25T05:34:00.120Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:04:00.121Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:34:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:04:00.296Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:34","service":"kine_milk_server","timestamp":"2025-06-25T11:04:00.303Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:34:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:04:00.329Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:34","service":"kine_milk_server","timestamp":"2025-06-25T11:04:00.350Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:34:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:04:00.379Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:34:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:04:00.407Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:35:00 pm (UTC: 2025-06-25T05:35:00.722Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:05:00.722Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:35:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:05:00.890Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:35","service":"kine_milk_server","timestamp":"2025-06-25T11:05:00.897Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:35:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:05:00.923Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:35","service":"kine_milk_server","timestamp":"2025-06-25T11:05:00.955Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:35:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:05:00.976Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:35:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:05:01.005Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:36:00 pm (UTC: 2025-06-25T05:36:00.345Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:06:00.347Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:36:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:06:00.576Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:36","service":"kine_milk_server","timestamp":"2025-06-25T11:06:00.579Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:36:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:06:00.603Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:36","service":"kine_milk_server","timestamp":"2025-06-25T11:06:00.635Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:36:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:06:00.654Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:36:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:06:00.682Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:37:00 pm (UTC: 2025-06-25T05:37:00.979Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:07:00.980Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:37:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:07:01.154Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:37","service":"kine_milk_server","timestamp":"2025-06-25T11:07:01.157Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:37:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:07:01.184Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:37","service":"kine_milk_server","timestamp":"2025-06-25T11:07:01.207Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:37:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:07:01.239Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:37:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:07:01.269Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:38:00 pm (UTC: 2025-06-25T05:38:00.641Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:08:00.642Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:38:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:08:00.826Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:38","service":"kine_milk_server","timestamp":"2025-06-25T11:08:00.828Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:38:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:08:00.854Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:38","service":"kine_milk_server","timestamp":"2025-06-25T11:08:00.878Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:38:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:08:00.903Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:38:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:08:00.930Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:39:00 pm (UTC: 2025-06-25T05:39:00.288Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:09:00.288Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:39:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:09:00.482Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:39","service":"kine_milk_server","timestamp":"2025-06-25T11:09:00.486Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:39:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:09:00.513Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:39","service":"kine_milk_server","timestamp":"2025-06-25T11:09:00.535Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:39:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:09:00.571Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:39:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:09:00.601Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:40:00 pm (UTC: 2025-06-25T05:40:00.960Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:10:00.961Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:40:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:10:01.136Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:40","service":"kine_milk_server","timestamp":"2025-06-25T11:10:01.139Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:40:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:10:01.168Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:40","service":"kine_milk_server","timestamp":"2025-06-25T11:10:01.191Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:40:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:10:01.225Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:40:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:10:01.255Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:41:00 pm (UTC: 2025-06-25T05:41:00.631Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:11:00.632Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:41:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:11:00.825Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:41","service":"kine_milk_server","timestamp":"2025-06-25T11:11:00.834Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:41:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:11:00.854Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:41","service":"kine_milk_server","timestamp":"2025-06-25T11:11:00.882Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:41:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:11:00.903Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:41:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:11:00.934Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:42:00 pm (UTC: 2025-06-25T05:42:00.265Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:12:00.268Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:42","service":"kine_milk_server","timestamp":"2025-06-25T11:12:00.493Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:42:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:12:00.496Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:42:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:12:00.525Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:42","service":"kine_milk_server","timestamp":"2025-06-25T11:12:00.548Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:42:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:12:00.583Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:42:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:12:00.618Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:43:00 pm (UTC: 2025-06-25T05:43:00.904Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:13:00.905Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:43:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:13:01.108Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:43","service":"kine_milk_server","timestamp":"2025-06-25T11:13:01.112Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:43:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:13:01.142Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:43","service":"kine_milk_server","timestamp":"2025-06-25T11:13:01.171Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:43:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:13:01.199Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:43:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:13:01.230Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:44:00 pm (UTC: 2025-06-25T05:44:00.565Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:14:00.566Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:44:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:14:00.793Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:44","service":"kine_milk_server","timestamp":"2025-06-25T11:14:00.800Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:44:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:14:00.820Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:44","service":"kine_milk_server","timestamp":"2025-06-25T11:14:00.896Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:44:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:14:00.922Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:44:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:14:00.953Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:45:00 pm (UTC: 2025-06-25T05:45:00.199Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:15:00.201Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:45:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:15:00.500Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:45","service":"kine_milk_server","timestamp":"2025-06-25T11:15:00.507Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:45:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:15:00.549Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:45","service":"kine_milk_server","timestamp":"2025-06-25T11:15:00.586Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:45:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:15:00.626Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:45:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:15:00.676Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:46:00 pm (UTC: 2025-06-25T05:46:00.873Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:16:00.874Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:46:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:16:01.105Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:46","service":"kine_milk_server","timestamp":"2025-06-25T11:16:01.111Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:46:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:16:01.135Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:46","service":"kine_milk_server","timestamp":"2025-06-25T11:16:01.171Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:46:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:16:01.184Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:46:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:16:01.213Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:47:00 pm (UTC: 2025-06-25T05:47:00.529Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:17:00.530Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:47:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:17:00.748Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:47","service":"kine_milk_server","timestamp":"2025-06-25T11:17:00.759Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:47:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:17:00.779Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:47","service":"kine_milk_server","timestamp":"2025-06-25T11:17:00.839Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:47:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:17:00.841Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:47:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:17:00.869Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:48:00 pm (UTC: 2025-06-25T05:48:00.160Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:18:00.162Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:48:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:18:00.470Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:48","service":"kine_milk_server","timestamp":"2025-06-25T11:18:00.473Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:48:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:18:00.498Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:48","service":"kine_milk_server","timestamp":"2025-06-25T11:18:00.526Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:48:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:18:00.548Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:48:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:18:00.576Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:49:00 pm (UTC: 2025-06-25T05:49:00.827Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:19:00.829Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:49","service":"kine_milk_server","timestamp":"2025-06-25T11:19:01.089Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:49:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:19:01.093Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:49:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:19:01.123Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:49","service":"kine_milk_server","timestamp":"2025-06-25T11:19:01.144Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:49:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:19:01.180Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:49:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:19:01.215Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:50:00 pm (UTC: 2025-06-25T05:50:00.458Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:20:00.459Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:50:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:20:00.680Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:50","service":"kine_milk_server","timestamp":"2025-06-25T11:20:00.692Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:50:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:20:00.713Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:50","service":"kine_milk_server","timestamp":"2025-06-25T11:20:00.750Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:50:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:20:00.768Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:50:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:20:00.799Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:51:00 pm (UTC: 2025-06-25T05:51:00.089Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:21:00.090Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:51","service":"kine_milk_server","timestamp":"2025-06-25T11:21:00.314Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:51:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:21:00.322Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:51:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:21:00.351Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:51","service":"kine_milk_server","timestamp":"2025-06-25T11:21:00.362Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:51:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:21:00.411Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:51:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:21:00.445Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:52:00 pm (UTC: 2025-06-25T05:52:00.778Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:22:00.781Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:52:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:22:00.953Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:52","service":"kine_milk_server","timestamp":"2025-06-25T11:22:00.955Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:52:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:22:00.980Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:52","service":"kine_milk_server","timestamp":"2025-06-25T11:22:01.003Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:52:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:22:01.028Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:52:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:22:01.054Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:53:00 pm (UTC: 2025-06-25T05:53:00.431Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:23:00.432Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:53:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:23:00.631Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:53","service":"kine_milk_server","timestamp":"2025-06-25T11:23:00.639Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:53:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:23:00.671Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:53","service":"kine_milk_server","timestamp":"2025-06-25T11:23:00.701Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:53:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:23:00.732Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:53:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:23:00.763Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:54:00 pm (UTC: 2025-06-25T05:54:00.042Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:24:00.043Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:54:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:24:00.267Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:54","service":"kine_milk_server","timestamp":"2025-06-25T11:24:00.285Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:54:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:24:00.298Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:54","service":"kine_milk_server","timestamp":"2025-06-25T11:24:00.343Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:54:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:24:00.352Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:54:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:24:00.385Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:55:00 pm (UTC: 2025-06-25T05:55:00.695Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:25:00.696Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:55:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:25:00.879Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:55","service":"kine_milk_server","timestamp":"2025-06-25T11:25:00.900Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:55:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:25:00.911Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:55","service":"kine_milk_server","timestamp":"2025-06-25T11:25:00.964Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:55:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:25:00.968Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:55:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:25:00.999Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:56:00 pm (UTC: 2025-06-25T05:56:00.320Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:26:00.321Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:56:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:26:00.529Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:56","service":"kine_milk_server","timestamp":"2025-06-25T11:26:00.534Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:56:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:26:00.563Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:56","service":"kine_milk_server","timestamp":"2025-06-25T11:26:00.592Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:56:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:26:00.617Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:56:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:26:00.647Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:57:00 pm (UTC: 2025-06-25T05:57:00.963Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:27:00.965Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:57:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:27:01.189Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:57","service":"kine_milk_server","timestamp":"2025-06-25T11:27:01.196Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:57:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:27:01.217Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:57","service":"kine_milk_server","timestamp":"2025-06-25T11:27:01.251Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:57:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:27:01.266Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:57:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:27:01.294Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:58:00 pm (UTC: 2025-06-25T05:58:00.598Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:28:00.598Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:58:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:28:00.778Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:58","service":"kine_milk_server","timestamp":"2025-06-25T11:28:00.782Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:58:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:28:00.807Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:58","service":"kine_milk_server","timestamp":"2025-06-25T11:28:00.832Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:58:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:28:00.853Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:58:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:28:00.882Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 4:59:00 pm (UTC: 2025-06-25T05:59:00.231Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:29:00.232Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 4:59:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:29:00.410Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T16:59","service":"kine_milk_server","timestamp":"2025-06-25T11:29:00.413Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 4:59:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:29:00.437Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T16:59","service":"kine_milk_server","timestamp":"2025-06-25T11:29:00.461Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 4:59:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:29:00.486Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 4:59:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:29:00.515Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:07:00 pm (UTC: 2025-06-25T06:07:00.707Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:37:00.708Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:07:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:37:00.888Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:07","service":"kine_milk_server","timestamp":"2025-06-25T11:37:00.890Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:07:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:37:00.914Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:07","service":"kine_milk_server","timestamp":"2025-06-25T11:37:00.938Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:07:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:37:00.964Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:07:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:37:00.993Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:08:00 pm (UTC: 2025-06-25T06:08:00.311Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:38:00.311Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:08:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:38:00.505Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:08","service":"kine_milk_server","timestamp":"2025-06-25T11:38:00.507Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:08:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:38:00.535Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:08","service":"kine_milk_server","timestamp":"2025-06-25T11:38:00.569Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:08:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:38:00.596Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:08:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:38:00.633Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:09:00 pm (UTC: 2025-06-25T06:09:00.974Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:39:00.975Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:09:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:39:01.151Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:09","service":"kine_milk_server","timestamp":"2025-06-25T11:39:01.169Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:09:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:39:01.178Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:09","service":"kine_milk_server","timestamp":"2025-06-25T11:39:01.223Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:09:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:39:01.232Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:09:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:39:01.264Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:10:00 pm (UTC: 2025-06-25T06:10:00.608Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:40:00.609Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:10:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:40:00.795Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:10","service":"kine_milk_server","timestamp":"2025-06-25T11:40:00.802Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:10:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:40:00.826Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:10","service":"kine_milk_server","timestamp":"2025-06-25T11:40:00.849Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:10:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:40:00.882Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:10:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:40:00.912Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:11:00 pm (UTC: 2025-06-25T06:11:00.271Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:41:00.272Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:11:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:41:00.479Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:11","service":"kine_milk_server","timestamp":"2025-06-25T11:41:00.486Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:11:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:41:00.513Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:11","service":"kine_milk_server","timestamp":"2025-06-25T11:41:00.542Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:11:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:41:00.563Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:11:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:41:00.590Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:12:00 pm (UTC: 2025-06-25T06:12:00.923Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:42:00.924Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:12:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:42:01.158Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:12","service":"kine_milk_server","timestamp":"2025-06-25T11:42:01.164Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:12:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:42:01.209Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:12","service":"kine_milk_server","timestamp":"2025-06-25T11:42:01.213Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:12:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:42:01.239Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:13:00 pm (UTC: 2025-06-25T06:13:00.520Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:43:00.521Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:13:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:43:00.703Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:13","service":"kine_milk_server","timestamp":"2025-06-25T11:43:00.704Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:13:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:43:00.731Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:13","service":"kine_milk_server","timestamp":"2025-06-25T11:43:00.755Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:13:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:43:00.780Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:13:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:43:00.807Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:14:00 pm (UTC: 2025-06-25T06:14:00.970Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:44:00.970Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:14:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:44:01.134Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:14","service":"kine_milk_server","timestamp":"2025-06-25T11:44:01.155Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:14:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:44:01.164Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:14","service":"kine_milk_server","timestamp":"2025-06-25T11:44:01.214Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:14:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:44:01.216Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:14:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:44:01.246Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:15:00 pm (UTC: 2025-06-25T06:15:00.577Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:45:00.579Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:15:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:45:00.800Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:15","service":"kine_milk_server","timestamp":"2025-06-25T11:45:00.810Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:15:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:45:00.832Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:15","service":"kine_milk_server","timestamp":"2025-06-25T11:45:00.871Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:15:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:45:00.888Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:15:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:45:00.920Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:16:00 pm (UTC: 2025-06-25T06:16:00.133Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:46:00.134Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:16:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:46:00.330Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:16","service":"kine_milk_server","timestamp":"2025-06-25T11:46:00.338Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:16:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:46:00.356Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:16","service":"kine_milk_server","timestamp":"2025-06-25T11:46:00.393Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:16:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:46:00.405Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:16:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:46:00.431Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T11:47:54.469Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T11:47:54.514Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T11:47:54.593Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T11:47:54.629Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:18:00 pm (UTC: 2025-06-25T06:18:00.390Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:48:00.391Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:18:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:48:00.498Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:18","service":"kine_milk_server","timestamp":"2025-06-25T11:48:00.502Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:18:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:48:00.548Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:18","service":"kine_milk_server","timestamp":"2025-06-25T11:48:00.602Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:18:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:48:00.604Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:18:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:48:00.637Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:19:00 pm (UTC: 2025-06-25T06:19:00.700Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:49:00.701Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:19:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:49:00.883Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:19","service":"kine_milk_server","timestamp":"2025-06-25T11:49:00.889Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:19:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:49:00.933Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:19","service":"kine_milk_server","timestamp":"2025-06-25T11:49:00.938Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:20:00 pm (UTC: 2025-06-25T06:20:00.073Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:50:00.074Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:20:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:50:00.310Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:20","service":"kine_milk_server","timestamp":"2025-06-25T11:50:00.318Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:20:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:50:00.340Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:20","service":"kine_milk_server","timestamp":"2025-06-25T11:50:00.375Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:20:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:50:00.395Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:20:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:50:00.432Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:21:00 pm (UTC: 2025-06-25T06:21:00.463Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:51:00.464Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:21:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:51:00.705Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:21","service":"kine_milk_server","timestamp":"2025-06-25T11:51:00.708Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:21:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:51:00.735Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:21","service":"kine_milk_server","timestamp":"2025-06-25T11:51:00.767Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:21:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:51:00.794Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:21:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:51:00.824Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:22:00 pm (UTC: 2025-06-25T06:22:00.813Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:52:00.814Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:22:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:52:01.118Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:22","service":"kine_milk_server","timestamp":"2025-06-25T11:52:01.120Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:22:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:52:01.147Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:22","service":"kine_milk_server","timestamp":"2025-06-25T11:52:01.175Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:22:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:52:01.203Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:22:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:52:01.233Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:23:00 pm (UTC: 2025-06-25T06:23:00.219Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:53:00.221Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:23:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:53:00.462Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:23","service":"kine_milk_server","timestamp":"2025-06-25T11:53:00.478Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:23:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:53:00.487Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:23:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:53:00.544Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:23","service":"kine_milk_server","timestamp":"2025-06-25T11:53:00.546Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:23:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:53:00.570Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:24:00 pm (UTC: 2025-06-25T06:24:00.603Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:54:00.603Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:24","service":"kine_milk_server","timestamp":"2025-06-25T11:54:00.857Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:24:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:54:00.862Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:24:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:54:00.891Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:24","service":"kine_milk_server","timestamp":"2025-06-25T11:54:00.907Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:24:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:54:00.951Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:24:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:54:00.980Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T11:54:50.022Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T11:54:50.049Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T11:54:50.092Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T11:54:50.122Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:25:00 pm (UTC: 2025-06-25T06:25:00.874Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:55:00.875Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:25","service":"kine_milk_server","timestamp":"2025-06-25T11:55:01.011Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:25:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:55:01.017Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:25:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:55:01.052Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:25","service":"kine_milk_server","timestamp":"2025-06-25T11:55:01.071Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:25:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:55:01.112Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:25:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:55:01.146Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:26:00 pm (UTC: 2025-06-25T06:26:00.452Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:56:00.453Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:26:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:56:00.684Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:26","service":"kine_milk_server","timestamp":"2025-06-25T11:56:00.687Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:26:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:56:00.715Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:26","service":"kine_milk_server","timestamp":"2025-06-25T11:56:00.779Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:26:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:56:00.811Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:26:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:56:00.844Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:27:00 pm (UTC: 2025-06-25T06:27:00.987Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:57:00.987Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:27:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:57:01.179Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:27","service":"kine_milk_server","timestamp":"2025-06-25T11:57:01.182Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:27:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:57:01.215Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:27","service":"kine_milk_server","timestamp":"2025-06-25T11:57:01.241Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:27:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:57:01.276Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:28:00 pm (UTC: 2025-06-25T06:28:00.489Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:58:00.490Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:28:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:58:00.720Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:28","service":"kine_milk_server","timestamp":"2025-06-25T11:58:00.722Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:28:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:58:00.750Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:28","service":"kine_milk_server","timestamp":"2025-06-25T11:58:00.777Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:28:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:58:00.800Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:28:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:58:00.828Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:29:00 pm (UTC: 2025-06-25T06:29:00.958Z)","service":"kine_milk_server","timestamp":"2025-06-25T11:59:00.959Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:29:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:59:01.262Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:29","service":"kine_milk_server","timestamp":"2025-06-25T11:59:01.265Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:29:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:59:01.295Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:29","service":"kine_milk_server","timestamp":"2025-06-25T11:59:01.321Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:29:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:59:01.348Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:29:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T11:59:01.378Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:30:00 pm (UTC: 2025-06-25T06:30:00.323Z)","service":"kine_milk_server","timestamp":"2025-06-25T12:00:00.324Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:30:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T12:00:01.385Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:30","service":"kine_milk_server","timestamp":"2025-06-25T12:00:01.387Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:30:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T12:00:01.509Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:30:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T12:00:01.648Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:30","service":"kine_milk_server","timestamp":"2025-06-25T12:00:01.650Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:30:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T12:00:01.726Z"}
+{"level":"info","message":"Cron job running at 25/6/2025, 5:31:00 pm (UTC: 2025-06-25T06:31:00.755Z)","service":"kine_milk_server","timestamp":"2025-06-25T12:01:00.756Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 25/6/2025, 5:31:00 pm. startTime: 13/6/2025, 7:17:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T12:01:01.033Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-06-25T17:31","service":"kine_milk_server","timestamp":"2025-06-25T12:01:01.034Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 25/6/2025, 5:31:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T12:01:01.060Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-06-25T17:31","service":"kine_milk_server","timestamp":"2025-06-25T12:01:01.084Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 25/6/2025, 5:31:00 pm. endTime: 13/6/2025, 7:21:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T12:01:01.110Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 25/6/2025, 5:31:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-06-25T12:01:01.140Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T12:02:03.186Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T12:02:03.218Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T12:02:03.294Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T12:02:03.366Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T12:03:06.880Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T12:03:06.914Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T12:03:06.995Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-06-25T12:03:07.031Z"}

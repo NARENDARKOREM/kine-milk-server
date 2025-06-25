@@ -361,7 +361,6 @@ const instantOrder = async (req, res) => {
         }
 
         const weightOption = storeWeightOption.weightOption;
-        const itemPrice = weightOption.normal_price * item.quantity;
 
         const orderItem = await NormalOrderProduct.create(
           {
@@ -369,7 +368,7 @@ const instantOrder = async (req, res) => {
             oid: order.id,
             product_id: item.product_id,
             pquantity: item.quantity,
-            price: itemPrice,
+            price: item.price,
             store_weight_id: item.store_weight_id,
           },
           { transaction }
@@ -920,7 +919,7 @@ const instantOrderAgain = async (req, res) => {
               oid: order.id,
               product_id: item.product_id,
               pquantity: item.quantity,
-              price: itemPrice,
+              price: item.price,
               weight_id: item.weight_id,
             },
             { transaction }

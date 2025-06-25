@@ -53,6 +53,10 @@ const SubscribeOrderProduct = sequelize.define(
       allowNull: false,
       defaultValue: "Pending",
     },
+    item_price:{
+      type:DataTypes.FLOAT,
+      allowNull: true
+    },
     price: {
       type: DataTypes.FLOAT,
       allowNull: false,
