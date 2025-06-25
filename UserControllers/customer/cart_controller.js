@@ -237,7 +237,7 @@ const getCartByUser = async (req, res) => {
       include: [
         {
           model: Product,
-          attributes: ["id", "title", "img", "description"],
+          attributes: ["id", "title", "img", "description","discount"],
           as: "CartproductDetails",
           required: false,
         },
