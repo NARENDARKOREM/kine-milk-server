@@ -915,11 +915,14 @@ const getOfferProducts = async (req, res) => {
       ],
     });
 
+    const ads = await Ads.findAll({ where: { status: 1, screenName: "categories" } });
+
     return res.status(200).json({
       ResponseCode: "200",
       Result: "true",
       ResponseMsg: `${banner_percentage}% Discounted Products fetched successfully`,
-      data: productInventories
+      data: productInventories,
+      adds:ads
     });
   } catch (error) {
     console.error("Error in getOfferProducts:", error);
