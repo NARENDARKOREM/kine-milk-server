@@ -613,9 +613,9 @@ const homeProductsAPI = async (req, res) => {
 
 const getDiscountOfferProducts = async (req, res) => {
   const { pincode } = req.params;
-  const { latitude, longitude } = req.body;
+  const { latitude, longitude,discount } = req.body;
 
-  console.log('Request:', { pincode, latitude, longitude });
+  console.log('Request:', { pincode, latitude, longitude,discount });
 
   // Validate required fields
   if (!pincode || !latitude || !longitude) {
@@ -646,8 +646,11 @@ const getDiscountOfferProducts = async (req, res) => {
         ResponseMsg: 'No valid offers found with a discount percentage.',
       });
     }
+    console.log(offers,"offerrrrrrr")
 
     const couponPercentages = [...new Set(offers.map(o => o.couponPercentage))];
+    console.log('Coupon Percentages (with typeof):', couponPercentages.map(p => ({ val: p, type: typeof p })));
+
     console.log('Ad coupon percentages:', couponPercentages);
 
     // Fetch active coupons matching couponPercentages
@@ -671,7 +674,7 @@ const getDiscountOfferProducts = async (req, res) => {
         'subtitle',
       ],
     });
-
+    console.log(coupons,"vvvvvvvvvvvvvvvvvv")
     if (!coupons || coupons.length === 0) {
       console.log('No active coupons match ad coupon percentages.');
       return res.status(404).json({
@@ -732,6 +735,15 @@ const getDiscountOfferProducts = async (req, res) => {
       });
     }
 
+    let parsedDiscounts;
+if (Array.isArray(discount)) {
+  parsedDiscounts = discount.map(d => parseFloat(d)).filter(d => !isNaN(d));
+} else {
+  parsedDiscounts = [parseFloat(discount)].filter(d => !isNaN(d));
+}
+console.log('Parsed discounts:', parsedDiscounts);
+
+
     // Fetch product inventory
     const productInventory = await ProductInventory.findAll({
       where: {
@@ -744,7 +756,7 @@ const getDiscountOfferProducts = async (req, res) => {
           model: Product,
           as: 'inventoryProducts',
           attributes: ['id', 'cat_id', 'title', 'img', 'description', 'discount'],
-          where: { discount: { [Op.in]: validDiscounts } },
+          where: { discount: { [Op.in]: parsedDiscounts } },
           include: [
             {
               model: ProductImage,

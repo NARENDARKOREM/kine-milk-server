@@ -3,9 +3,9 @@ const { DataTypes } = require("sequelize");
 
 const NormalOrder = sequelize.define(
   "NormalOrder",
-  
+
   {
-   id: {
+    id: {
       type: DataTypes.UUID,
       allowNull: false,
       defaultValue: DataTypes.UUIDV4,
@@ -80,7 +80,7 @@ const NormalOrder = sequelize.define(
       type: DataTypes.FLOAT,
       allowNull: true,
     },
-    
+
     status: {
       type: DataTypes.ENUM(
         "Pending",
@@ -137,26 +137,29 @@ const NormalOrder = sequelize.define(
       type: DataTypes.JSON,
       defaultValue: null,
     },
-    feedback:{
-      type:DataTypes.TEXT,
-      allowNull:true
+    feedback: {
+      type: DataTypes.TEXT,
+      allowNull: true
     },
-    order_id:{
-      type:DataTypes.TEXT,
-      allowNull:true
+    order_id: {
+      type: DataTypes.TEXT,
+      allowNull: true
     },
-    is_paper_bag:{
-      type:DataTypes.BOOLEAN,
-      defaultValue:false,
+    is_paper_bag: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
-    delivery_tip:{
+    delivery_tip: {
       type: DataTypes.FLOAT,
       allowNull: true,
       defaultValue: 0,
     },
-    is_paper_bag_price:{
+    is_paper_bag_price: {
       type: DataTypes.FLOAT,
       allowNull: true,
+    },
+    payment_Status: {
+      type: DataTypes.ENUM("Paid", "Un Paid")
     }
   },
   { tableName: "tbl_normal_order", timestamps: true, paranoid: true }
