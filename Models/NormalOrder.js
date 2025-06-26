@@ -158,8 +158,10 @@ const NormalOrder = sequelize.define(
       type: DataTypes.FLOAT,
       allowNull: true,
     },
-    payment_Status: {
-      type: DataTypes.ENUM("Paid", "Un Paid")
+
+    payment_Status:{
+  type:DataTypes.ENUM("Paid", "Un Paid"),
+  allowNull: true,
     }
   },
   { tableName: "tbl_normal_order", timestamps: true, paranoid: true }

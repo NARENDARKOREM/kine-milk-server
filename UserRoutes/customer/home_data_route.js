@@ -13,7 +13,7 @@ const authMiddleware = require("../../middlewares/authMiddleware");
 const router = express.Router();
 
 router.post("/:pincode?", homeScreenAPIs.homeAPI);
-router.post("/discouted-products/:pincode", homeScreenAPIs.getDiscountOfferProducts);
+router.post("/discouted-products/list", homeScreenAPIs.getOfferProducts);
 router.get("/", homeScreenAPIs.HomeScreenAPI);
 router.post("/home-categories/:pincode", homeScreenAPIs.homeCategoriesAPI);
 router.post("/home-products/:pincode", homeScreenAPIs.homeProductsAPI);

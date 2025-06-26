@@ -290,7 +290,7 @@ const subscribeOrder = async (req, res) => {
               schedule,
               start_date: new Date(item.start_date),
               end_date: new Date(item.end_date),
-
+              item_price:item.item_price,
               repeat_day: days,
               status: "Pending",
               order_id: orderId,
@@ -650,12 +650,14 @@ const pauseSubscriptionOrder = async (req, res) => {
     const allPaused = allProducts.length > 0 && allProducts.every(p => p.status === "Paused")
     if (allPaused) {
       await SubscribeOrder.update(
+
         { status: "Paused" },
         {
           where: { id: orderId },
           transaction: t,
         }
       );
+
     }
     const user = await User.findByPk(uid, { transaction: t });
 
@@ -1217,7 +1219,7 @@ const getOrdersByStatus = async (req, res) => {
             {
               model: Product,
               as: "subscribeProduct",
-              attributes: ["id", "title", "img", "description"],
+              attributes: ["id", "title", "img", "description","discount"],
               include: [
                 {
                   model: ProductReview,
@@ -1370,7 +1372,7 @@ const getOrderDetails = async (req, res) => {
             {
               model: Product,
               as: "subscribeProduct",
-              attributes: ["id", "title", "img", "description"],
+              attributes: ["id", "title", "img", "description","discount"],
               include: [
                 {
                   model: ProductReview,

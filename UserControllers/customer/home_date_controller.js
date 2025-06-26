@@ -611,29 +611,282 @@ const homeProductsAPI = async (req, res) => {
   }
 };
 
+
 const getDiscountOfferProducts = async (req, res) => {
   const { pincode } = req.params;
   const { latitude, longitude,discount } = req.body;
 
   console.log('Request:', { pincode, latitude, longitude,discount });
 
-  // Validate required fields
-  if (!pincode || !latitude || !longitude) {
-    return res.status(400).json({
-      ResponseCode: '400',
-      Result: 'false',
-      ResponseMsg: 'Pincode, latitude, and longitude are required!',
-    });
-  }
+// const getDiscountOfferProducts = async (req, res) => {
+//   const { pincode } = req.params;
+//   const { latitude, longitude } = req.body;
+
+//   console.log('Request:', { pincode, latitude, longitude });
+
+//   // Validate required fields
+//   if (!pincode || !latitude || !longitude) {
+//     return res.status(400).json({
+//       ResponseCode: '400',
+//       Result: 'false',
+//       ResponseMsg: 'Pincode, latitude, and longitude are required!',
+//     });
+//   }
+
+//   try {
+//     // Fetch active ads with valid couponPercentage
+//     const offers = await Ads.findAll({
+//       where: {
+//         status: 1,
+//         screenName: 'categories',
+//         planType:{ [Op.in]: ['instant', 'subscribe'] },
+//         couponPercentage: { [Op.ne]: null, [Op.gt]: 0 },
+//       },
+//       attributes: ['id', 'img', 'couponPercentage', 'planType'],
+//     });
+
+//     if (!offers || offers.length === 0) {
+//       console.log('No active offers found.');
+//       return res.status(404).json({
+//         ResponseCode: '404',
+//         Result: 'false',
+//         ResponseMsg: 'No valid offers found with a discount percentage.',
+//       });
+//     }
+
+//     const couponPercentages = [...new Set(offers.map(o => o.couponPercentage))];
+//     console.log('Ad coupon percentages:', couponPercentages);
+
+//     // Fetch active coupons matching couponPercentages
+//     const currentDate = new Date();
+//     const coupons = await Coupon.findAll({
+//       where: {
+//         coupon_val: { [Op.in]: couponPercentages },
+//         status: 1,
+//         end_date: { [Op.gt]: currentDate },
+//       },
+//       attributes: [
+//         'id',
+//         'coupon_code',
+//         'coupon_title',
+//         'coupon_val',
+//         'min_amt',
+//         'description',
+//         'start_date',
+//         'end_date',
+//         'coupon_img',
+//         'subtitle',
+//       ],
+//     });
+
+//     if (!coupons || coupons.length === 0) {
+//       console.log('No active coupons match ad coupon percentages.');
+//       return res.status(404).json({
+//         ResponseCode: '404',
+//         Result: 'false',
+//         ResponseMsg: 'No active coupons found matching offer discount percentages.',
+//       });
+//     }
+
+//     const validDiscounts = [...new Set(coupons.map(c => parseFloat(c.coupon_val)))].filter(val =>
+//       couponPercentages.includes(val)
+//     );
+//     console.log('Valid discounts (matching Ads and Coupons):', validDiscounts);
+
+//     if (validDiscounts.length === 0) {
+//       console.log('No discounts match both Ads and Coupons.');
+//       return res.status(404).json({
+//         ResponseCode: '404',
+//         Result: 'false',
+//         ResponseMsg: 'No discounts found matching both offers and coupons.',
+//       });
+//     }
+
+//     // Fetch stores by pincode
+//     let stores = await Store.findAll({
+//       where: { status: 1, pincode },
+//       attributes: ['id', 'title', 'rimg', 'full_address', 'lats', 'longs'],
+//     });
+//     let fetchMethod = stores.length > 0 ? 'pincode' : '';
+
+//     if (stores.length === 0) {
+//       // Fallback to radius search
+//       console.log('No stores for pincode, using radius search.');
+//       const allStores = await Store.findAll({
+//         where: { status: 1 },
+//         attributes: ['id', 'title', 'rimg', 'full_address', 'lats', 'longs'],
+//       });
+//       stores = allStores.filter(s => {
+//         const storeLat = parseFloat(s.lats);
+//         const storeLon = parseFloat(s.longs);
+//         if (!storeLat || !storeLon) {
+//           console.log(`Store ${s.title} skipped: Invalid lat/lon (${s.lats}, ${s.longs})`);
+//           return false;
+//         }
+//         const distance = getDistance(parseFloat(latitude), parseFloat(longitude), storeLat, storeLon);
+//         console.log(`Store: ${s.title}, Distance: ${distance}km`);
+//         return distance <= 10; // 10km radius
+//       });
+//       fetchMethod = stores.length > 0 ? 'latitude/longitude' : '';
+//     }
+
+//     if (stores.length === 0) {
+//       console.log('No stores found.');
+//       return res.status(400).json({
+//         ResponseCode: '400',
+//         Result: 'false',
+//         ResponseMsg: 'No stores found for your pincode or within 10km!',
+//       });
+//     }
+
+//     // Fetch product inventory
+//     const productInventory = await ProductInventory.findAll({
+//       where: {
+//         status: 1,
+//         store_id: { [Op.in]: stores.map(s => s.id) },
+//       },
+//       attributes: ['id', 'product_id'],
+//       include: [
+//         {
+//           model: Product,
+//           as: 'inventoryProducts',
+//           attributes: ['id', 'cat_id', 'title', 'img', 'description', 'discount'],
+//           where: { discount: { [Op.in]: validDiscounts } },
+//           include: [
+//             {
+//               model: ProductImage,
+//               as: 'extraImages',
+//               attributes: ['id', 'product_id', 'img'],
+//             },
+//             {
+//               model: Category,
+//               as: 'category',
+//               attributes: ['id', 'title'],
+//             },
+//           ],
+//         },
+//         {
+//           model: StoreWeightOption,
+//           as: 'storeWeightOptions',
+//           include: [
+//             {
+//               model: WeightOption,
+//               as: 'weightOption',
+//               required: false,
+//               attributes: ['id', 'weight', 'normal_price', 'subscribe_price', 'mrp_price'],
+//             },
+//           ],
+//         },
+//       ],
+//       logging: console.log,
+//     });
+
+//     if (!productInventory || productInventory.length === 0) {
+//       console.log('No matching discounted products.');
+//       return res.status(400).json({
+//         ResponseCode: '400',
+//         Result: 'false',
+//         ResponseMsg: 'No products found with discounts matching offers and coupons.',
+//       });
+//     }
+
+//     // Transform inventory to parse extraImages.img and include coupon
+//     const transformedInventory = productInventory.map(item => {
+//       const inventoryData = item.toJSON();
+//       // Parse extraImages.img
+//       if (
+//         inventoryData.inventoryProducts &&
+//         inventoryData.inventoryProducts.extraImages &&
+//         inventoryData.inventoryProducts.extraImages.length > 0
+//       ) {
+//         inventoryData.inventoryProducts.extraImages = inventoryData.inventoryProducts.extraImages.map(image => {
+//           try {
+//             console.log(`Raw img for product ${inventoryData.product_id}:`, image.img);
+//             const parsedImg = typeof image.img === 'string' ? JSON.parse(image.img) : image.img;
+//             return {
+//               ...image,
+//               img: Array.isArray(parsedImg) ? parsedImg : [parsedImg],
+//             };
+//           } catch (e) {
+//             console.error(`Error parsing img for product ${inventoryData.product_id}:`, e);
+//             return { ...image, img: [] };
+//           }
+//         });
+//       }
+//       // Add matching coupon
+//       const productDiscount = inventoryData.inventoryProducts?.discount;
+//       const matchingCoupon = coupons.find(c => parseFloat(c.coupon_val) === parseFloat(productDiscount)) || null;
+//       inventoryData.coupon = matchingCoupon
+//         ? {
+//             id: matchingCoupon.id,
+//             coupon_code: matchingCoupon.coupon_code,
+//             coupon_title: matchingCoupon.coupon_title,
+//             coupon_val: parseFloat(matchingCoupon.coupon_val),
+//             min_amt: parseFloat(matchingCoupon.min_amt),
+//             description: matchingCoupon.description,
+//             start_date: matchingCoupon.start_date,
+//             end_date: matchingCoupon.end_date,
+//             coupon_img: matchingCoupon.coupon_img,
+//             subtitle: matchingCoupon.subtitle,
+//           }
+//         : null;
+//       return inventoryData;
+//     });
+
+//     // Structure response
+//     const categoryProducts = [
+//       {
+//         name: 'Discounted Products',
+//         items: transformedInventory,
+//       },
+//     ];
+
+//     console.log('Discounted products fetched successfully.');
+//     return res.status(200).json({
+//       ResponseCode: '200',
+//       Result: 'true',
+//       ResponseMsg: 'Discounted Products Data Fetched Successfully!',
+//       HomeData: {
+//         Ads: offers,
+//         store: stores[0], // First store
+//         CategoryProducts: categoryProducts,
+//         Coupons: coupons.map(c => ({
+//           id: c.id,
+//           coupon_code: c.coupon_code,
+//           coupon_title: c.coupon_title,
+//           coupon_val: parseFloat(c.coupon_val),
+//           min_amt: parseFloat(c.min_amt),
+//           description: c.description,
+//           start_date: c.start_date,
+//           end_date: c.end_date,
+//           coupon_img: c.coupon_img,
+//           subtitle: c.subtitle,
+//         })),
+//         currency: 'INR',
+//       },
+//     });
+//   } catch (error) {
+//     console.error('Error fetching discount products:', error);
+//     return res.status(500).json({
+//       ResponseCode: '500',
+//       Result: 'false',
+//       ResponseMsg: 'Internal Server Error',
+//       error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+//     });
+//   }
+// };
+
+}
+
+const getOfferProducts = async (req, res) => {
+  const { banner_percentage, store_id } = req.body;
 
   try {
-    // Fetch active ads with valid couponPercentage
-    const offers = await Ads.findAll({
+    const productInventories = await ProductInventory.findAll({
       where: {
-        status: 1,
-        screenName: 'categories',
-        planType:{ [Op.in]: ['instant', 'subscribe'] },
-        couponPercentage: { [Op.ne]: null, [Op.gt]: 0 },
+        store_id,
+        
+        "$inventoryProducts.discount$": banner_percentage
       },
       attributes: ['id', 'img', 'couponPercentage', 'planType'],
     });
@@ -760,125 +1013,49 @@ console.log('Parsed discounts:', parsedDiscounts);
           include: [
             {
               model: ProductImage,
-              as: 'extraImages',
-              attributes: ['id', 'product_id', 'img'],
+              as: "extraImages",
+              attributes: ["id", "product_id", "img"],
             },
             {
               model: Category,
-              as: 'category',
-              attributes: ['id', 'title'],
+              as: "category",
+              attributes: ["id", "title"],
             },
           ],
         },
         {
           model: StoreWeightOption,
-          as: 'storeWeightOptions',
+          as: "storeWeightOptions",
           include: [
             {
               model: WeightOption,
-              as: 'weightOption',
+              as: "weightOption",
               required: false,
-              attributes: ['id', 'weight', 'normal_price', 'subscribe_price', 'mrp_price'],
+              attributes: ["id", "weight", "normal_price", "subscribe_price", "mrp_price"],
             },
           ],
         },
       ],
-      logging: console.log,
     });
 
-    if (!productInventory || productInventory.length === 0) {
-      console.log('No matching discounted products.');
-      return res.status(400).json({
-        ResponseCode: '400',
-        Result: 'false',
-        ResponseMsg: 'No products found with discounts matching offers and coupons.',
-      });
-    }
+    const ads = await Ads.findAll({ where: { status: 1, screenName: "categories" } });
 
-    // Transform inventory to parse extraImages.img and include coupon
-    const transformedInventory = productInventory.map(item => {
-      const inventoryData = item.toJSON();
-      // Parse extraImages.img
-      if (
-        inventoryData.inventoryProducts &&
-        inventoryData.inventoryProducts.extraImages &&
-        inventoryData.inventoryProducts.extraImages.length > 0
-      ) {
-        inventoryData.inventoryProducts.extraImages = inventoryData.inventoryProducts.extraImages.map(image => {
-          try {
-            console.log(`Raw img for product ${inventoryData.product_id}:`, image.img);
-            const parsedImg = typeof image.img === 'string' ? JSON.parse(image.img) : image.img;
-            return {
-              ...image,
-              img: Array.isArray(parsedImg) ? parsedImg : [parsedImg],
-            };
-          } catch (e) {
-            console.error(`Error parsing img for product ${inventoryData.product_id}:`, e);
-            return { ...image, img: [] };
-          }
-        });
-      }
-      // Add matching coupon
-      const productDiscount = inventoryData.inventoryProducts?.discount;
-      const matchingCoupon = coupons.find(c => parseFloat(c.coupon_val) === parseFloat(productDiscount)) || null;
-      inventoryData.coupon = matchingCoupon
-        ? {
-            id: matchingCoupon.id,
-            coupon_code: matchingCoupon.coupon_code,
-            coupon_title: matchingCoupon.coupon_title,
-            coupon_val: parseFloat(matchingCoupon.coupon_val),
-            min_amt: parseFloat(matchingCoupon.min_amt),
-            description: matchingCoupon.description,
-            start_date: matchingCoupon.start_date,
-            end_date: matchingCoupon.end_date,
-            coupon_img: matchingCoupon.coupon_img,
-            subtitle: matchingCoupon.subtitle,
-          }
-        : null;
-      return inventoryData;
-    });
-
-    // Structure response
-    const categoryProducts = [
-      {
-        name: 'Discounted Products',
-        items: transformedInventory,
-      },
-    ];
-
-    console.log('Discounted products fetched successfully.');
     return res.status(200).json({
-      ResponseCode: '200',
-      Result: 'true',
-      ResponseMsg: 'Discounted Products Data Fetched Successfully!',
-      HomeData: {
-        Ads: offers,
-        store: stores[0], // First store
-        CategoryProducts: categoryProducts,
-        Coupons: coupons.map(c => ({
-          id: c.id,
-          coupon_code: c.coupon_code,
-          coupon_title: c.coupon_title,
-          coupon_val: parseFloat(c.coupon_val),
-          min_amt: parseFloat(c.min_amt),
-          description: c.description,
-          start_date: c.start_date,
-          end_date: c.end_date,
-          coupon_img: c.coupon_img,
-          subtitle: c.subtitle,
-        })),
-        currency: 'INR',
-      },
+      ResponseCode: "200",
+      Result: "true",
+      ResponseMsg: `${banner_percentage}% Discounted Products fetched successfully`,
+      data: productInventories,
+      adds:ads
     });
   } catch (error) {
-    console.error('Error fetching discount products:', error);
+    console.error("Error in getOfferProducts:", error);
     return res.status(500).json({
-      ResponseCode: '500',
-      Result: 'false',
-      ResponseMsg: 'Internal Server Error',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      ResponseCode: "500",
+      Result: "false",
+      ResponseMsg: "Something went wrong",
     });
   }
 };
 
-module.exports = {homeAPI,HomeScreenAPI,homeCategoriesAPI,homeProductsAPI,getDiscountOfferProducts};
+
+module.exports = {homeAPI,HomeScreenAPI,homeCategoriesAPI,homeProductsAPI,getOfferProducts};
