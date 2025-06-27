@@ -257,9 +257,9 @@ const instantOrder = async (req, res) => {
           throw new Error(`Product with ID ${item.product_id} does not exist`);
         }
 
-        if (product.out_of_stock === 1) {
-          throw new Error(`Product ${product.title} is out of stock`);
-        }
+        // if (product.out_of_stock === 1) {
+        //   throw new Error(`Product ${product.title} is out of stock`);
+        // }
 
         if (storeWeightOption.quantity < item.quantity) {
           throw new Error(
