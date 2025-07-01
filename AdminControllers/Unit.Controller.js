@@ -6,7 +6,6 @@ const { v4: uuidv4 } = require('uuid');
 const getAllUnits = async (req, res) => {
   try {
     const units = await Unit.findAll({
-      where: { status: 1 },
       attributes: ['id', 'name', 'unit', 'status'],
       order: [['name', 'ASC']],
     });
@@ -19,7 +18,7 @@ const getAllUnits = async (req, res) => {
 
 const upsertUnit = async (req, res) => {
   try {
-    const { id, name, unit, status = 1 } = req.body;
+    const { id, name, unit, status } = req.body;
     if (!name || !unit) {
       return res.status(400).json({ message: 'Weight/Volume and unit are required' });
     }
