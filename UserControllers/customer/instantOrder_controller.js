@@ -1897,14 +1897,14 @@ const getMostFrequentDeliveryTip = async(req,res)=>{
       limit: 1
     })
      if (tips.length === 0) {
-      return res.status(404).json({ message: "No tips found." });
+      return res.status(200).json([]);
     }
     res.status(200).json({
       ResponseCode: "200",
       Result: "true",
       ResponseMsg: "Most frequent delivery tip fetched successfully",
       mostFrequentTip: tips[0].delivery_tip,
-      count: tips[0].dataValues.tip_count
+      count: tips[0].dataValues.count
     })
   } catch (error) {
     console.error("Error fetching most frequent delivery tip:", error);

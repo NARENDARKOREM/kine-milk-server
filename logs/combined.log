@@ -1,0 +1,174 @@
+{"level":"info","message":"Cron job running at 2/7/2025, 2:31:00 pm (UTC: 2025-07-02T03:31:00.512Z)","service":"kine_milk_server","timestamp":"2025-07-02T09:01:00.514Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 published at 2/7/2025, 2:31:00 pm. startTime: 30/6/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:01:01.464Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec published at 2025-07-02T14:31","service":"kine_milk_server","timestamp":"2025-07-02T09:01:01.468Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 published at 2025-07-02T14:31","service":"kine_milk_server","timestamp":"2025-07-02T09:01:01.981Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-07-02T14:31","service":"kine_milk_server","timestamp":"2025-07-02T09:01:02.045Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 2/7/2025, 2:31:00 pm. startTime: 30/6/2025, 6:00:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:01:02.057Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 2/7/2025, 2:31:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:01:02.244Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec unpublished at 2025-07-02T14:31","service":"kine_milk_server","timestamp":"2025-07-02T09:01:02.283Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 unpublished at 2025-07-02T14:31","service":"kine_milk_server","timestamp":"2025-07-02T09:01:02.339Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 unpublished at 2/7/2025, 2:31:00 pm. endTime: 1/7/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:01:02.398Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-07-02T14:31","service":"kine_milk_server","timestamp":"2025-07-02T09:01:02.473Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 2/7/2025, 2:31:00 pm. endTime: 2/7/2025, 12:51:00 am","service":"kine_milk_server","timestamp":"2025-07-02T09:01:02.476Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 2/7/2025, 2:31:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:01:02.531Z"}
+{"level":"info","message":"Cron job running at 2/7/2025, 2:32:00 pm (UTC: 2025-07-02T03:32:00.881Z)","service":"kine_milk_server","timestamp":"2025-07-02T09:02:00.882Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 published at 2/7/2025, 2:32:00 pm. startTime: 30/6/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:02:01.604Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec published at 2025-07-02T14:32","service":"kine_milk_server","timestamp":"2025-07-02T09:02:01.663Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 2/7/2025, 2:32:00 pm. startTime: 30/6/2025, 6:00:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:02:01.795Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 published at 2025-07-02T14:32","service":"kine_milk_server","timestamp":"2025-07-02T09:02:01.804Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 2/7/2025, 2:32:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:02:01.926Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-07-02T14:32","service":"kine_milk_server","timestamp":"2025-07-02T09:02:01.947Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 unpublished at 2/7/2025, 2:32:00 pm. endTime: 1/7/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:02:02.062Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec unpublished at 2025-07-02T14:32","service":"kine_milk_server","timestamp":"2025-07-02T09:02:02.065Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 2/7/2025, 2:32:00 pm. endTime: 2/7/2025, 12:51:00 am","service":"kine_milk_server","timestamp":"2025-07-02T09:02:02.172Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 unpublished at 2025-07-02T14:32","service":"kine_milk_server","timestamp":"2025-07-02T09:02:02.217Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 2/7/2025, 2:32:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:02:02.295Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-07-02T14:32","service":"kine_milk_server","timestamp":"2025-07-02T09:02:02.493Z"}
+{"level":"info","message":"Cron job running at 2/7/2025, 2:33:00 pm (UTC: 2025-07-02T03:33:00.266Z)","service":"kine_milk_server","timestamp":"2025-07-02T09:03:00.268Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 published at 2/7/2025, 2:33:00 pm. startTime: 30/6/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:03:00.512Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec published at 2025-07-02T14:33","service":"kine_milk_server","timestamp":"2025-07-02T09:03:00.520Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 2/7/2025, 2:33:00 pm. startTime: 30/6/2025, 6:00:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:03:00.544Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 published at 2025-07-02T14:33","service":"kine_milk_server","timestamp":"2025-07-02T09:03:00.551Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 2/7/2025, 2:33:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:03:00.575Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-07-02T14:33","service":"kine_milk_server","timestamp":"2025-07-02T09:03:00.581Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 unpublished at 2/7/2025, 2:33:00 pm. endTime: 1/7/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:03:00.629Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec unpublished at 2025-07-02T14:33","service":"kine_milk_server","timestamp":"2025-07-02T09:03:00.635Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 2/7/2025, 2:33:00 pm. endTime: 2/7/2025, 12:51:00 am","service":"kine_milk_server","timestamp":"2025-07-02T09:03:00.658Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 unpublished at 2025-07-02T14:33","service":"kine_milk_server","timestamp":"2025-07-02T09:03:00.662Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 2/7/2025, 2:33:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:03:00.685Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-07-02T14:33","service":"kine_milk_server","timestamp":"2025-07-02T09:03:00.691Z"}
+{"level":"info","message":"Cron job running at 2/7/2025, 2:34:00 pm (UTC: 2025-07-02T03:34:00.727Z)","service":"kine_milk_server","timestamp":"2025-07-02T09:04:00.727Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 unpublished at 2/7/2025, 2:34:00 pm. endTime: 1/7/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:04:01.598Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec unpublished at 2025-07-02T14:34","service":"kine_milk_server","timestamp":"2025-07-02T09:04:01.612Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 2/7/2025, 2:34:00 pm. endTime: 2/7/2025, 12:51:00 am","service":"kine_milk_server","timestamp":"2025-07-02T09:04:01.692Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 unpublished at 2025-07-02T14:34","service":"kine_milk_server","timestamp":"2025-07-02T09:04:01.706Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 2/7/2025, 2:34:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:04:01.796Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-07-02T14:34","service":"kine_milk_server","timestamp":"2025-07-02T09:04:01.807Z"}
+{"level":"info","message":"Cron job running at 2/7/2025, 2:35:00 pm (UTC: 2025-07-02T03:35:00.258Z)","service":"kine_milk_server","timestamp":"2025-07-02T09:05:00.259Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 published at 2/7/2025, 2:35:00 pm. startTime: 30/6/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:05:00.557Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec published at 2025-07-02T14:35","service":"kine_milk_server","timestamp":"2025-07-02T09:05:00.562Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 2/7/2025, 2:35:00 pm. startTime: 30/6/2025, 6:00:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:05:00.586Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 published at 2025-07-02T14:35","service":"kine_milk_server","timestamp":"2025-07-02T09:05:00.589Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 2/7/2025, 2:35:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:05:00.614Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-07-02T14:35","service":"kine_milk_server","timestamp":"2025-07-02T09:05:00.619Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 unpublished at 2/7/2025, 2:35:00 pm. endTime: 1/7/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:05:00.668Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec unpublished at 2025-07-02T14:35","service":"kine_milk_server","timestamp":"2025-07-02T09:05:00.671Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 2/7/2025, 2:35:00 pm. endTime: 2/7/2025, 12:51:00 am","service":"kine_milk_server","timestamp":"2025-07-02T09:05:00.695Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 unpublished at 2025-07-02T14:35","service":"kine_milk_server","timestamp":"2025-07-02T09:05:00.698Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-07-02T14:35","service":"kine_milk_server","timestamp":"2025-07-02T09:05:00.730Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 2/7/2025, 2:35:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:05:00.732Z"}
+{"level":"info","message":"Cron job running at 2/7/2025, 2:36:00 pm (UTC: 2025-07-02T03:36:00.683Z)","service":"kine_milk_server","timestamp":"2025-07-02T09:06:00.685Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 published at 2/7/2025, 2:36:00 pm. startTime: 30/6/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:06:00.914Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec published at 2025-07-02T14:36","service":"kine_milk_server","timestamp":"2025-07-02T09:06:00.919Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 2/7/2025, 2:36:00 pm. startTime: 30/6/2025, 6:00:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:06:00.942Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 published at 2025-07-02T14:36","service":"kine_milk_server","timestamp":"2025-07-02T09:06:00.946Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 2/7/2025, 2:36:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:06:00.971Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-07-02T14:36","service":"kine_milk_server","timestamp":"2025-07-02T09:06:00.975Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 unpublished at 2/7/2025, 2:36:00 pm. endTime: 1/7/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:06:01.028Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec unpublished at 2025-07-02T14:36","service":"kine_milk_server","timestamp":"2025-07-02T09:06:01.032Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 2/7/2025, 2:36:00 pm. endTime: 2/7/2025, 12:51:00 am","service":"kine_milk_server","timestamp":"2025-07-02T09:06:01.057Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 unpublished at 2025-07-02T14:36","service":"kine_milk_server","timestamp":"2025-07-02T09:06:01.061Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 2/7/2025, 2:36:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:06:01.085Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-07-02T14:36","service":"kine_milk_server","timestamp":"2025-07-02T09:06:01.088Z"}
+{"level":"info","message":"Cron job running at 2/7/2025, 2:37:00 pm (UTC: 2025-07-02T03:37:00.069Z)","service":"kine_milk_server","timestamp":"2025-07-02T09:07:00.070Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 published at 2/7/2025, 2:37:00 pm. startTime: 30/6/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:07:00.669Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec published at 2025-07-02T14:37","service":"kine_milk_server","timestamp":"2025-07-02T09:07:00.674Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 2/7/2025, 2:37:00 pm. startTime: 30/6/2025, 6:00:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:07:00.748Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 published at 2025-07-02T14:37","service":"kine_milk_server","timestamp":"2025-07-02T09:07:00.751Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 2/7/2025, 2:37:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:07:00.832Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-07-02T14:37","service":"kine_milk_server","timestamp":"2025-07-02T09:07:00.837Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 unpublished at 2/7/2025, 2:37:00 pm. endTime: 1/7/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:07:01.003Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec unpublished at 2025-07-02T14:37","service":"kine_milk_server","timestamp":"2025-07-02T09:07:01.008Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 2/7/2025, 2:37:00 pm. endTime: 2/7/2025, 12:51:00 am","service":"kine_milk_server","timestamp":"2025-07-02T09:07:01.091Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 unpublished at 2025-07-02T14:37","service":"kine_milk_server","timestamp":"2025-07-02T09:07:01.100Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 2/7/2025, 2:37:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:07:01.173Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-07-02T14:37","service":"kine_milk_server","timestamp":"2025-07-02T09:07:01.178Z"}
+{"level":"info","message":"Cron job running at 2/7/2025, 2:38:00 pm (UTC: 2025-07-02T03:38:00.450Z)","service":"kine_milk_server","timestamp":"2025-07-02T09:08:00.451Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 published at 2/7/2025, 2:38:00 pm. startTime: 30/6/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:08:01.851Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec published at 2025-07-02T14:38","service":"kine_milk_server","timestamp":"2025-07-02T09:08:01.856Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 2/7/2025, 2:38:00 pm. startTime: 30/6/2025, 6:00:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:08:01.921Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 published at 2025-07-02T14:38","service":"kine_milk_server","timestamp":"2025-07-02T09:08:02.001Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 2/7/2025, 2:38:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:08:02.005Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-07-02T14:38","service":"kine_milk_server","timestamp":"2025-07-02T09:08:02.126Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 unpublished at 2/7/2025, 2:38:00 pm. endTime: 1/7/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:08:02.195Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 2/7/2025, 2:38:00 pm. endTime: 2/7/2025, 12:51:00 am","service":"kine_milk_server","timestamp":"2025-07-02T09:08:02.290Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec unpublished at 2025-07-02T14:38","service":"kine_milk_server","timestamp":"2025-07-02T09:08:02.293Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 2/7/2025, 2:38:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:08:02.388Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 unpublished at 2025-07-02T14:38","service":"kine_milk_server","timestamp":"2025-07-02T09:08:02.392Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-07-02T14:38","service":"kine_milk_server","timestamp":"2025-07-02T09:08:02.500Z"}
+{"level":"info","message":"Cron job running at 2/7/2025, 2:39:00 pm (UTC: 2025-07-02T03:39:00.890Z)","service":"kine_milk_server","timestamp":"2025-07-02T09:09:00.891Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 published at 2/7/2025, 2:39:00 pm. startTime: 30/6/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:09:01.649Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 2/7/2025, 2:39:00 pm. startTime: 30/6/2025, 6:00:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:09:01.831Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 2/7/2025, 2:39:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:09:01.891Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 unpublished at 2/7/2025, 2:39:00 pm. endTime: 1/7/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:09:02.011Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 2/7/2025, 2:39:00 pm. endTime: 2/7/2025, 12:51:00 am","service":"kine_milk_server","timestamp":"2025-07-02T09:09:02.099Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 2/7/2025, 2:39:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:09:02.156Z"}
+{"level":"info","message":"Cron job running at 2/7/2025, 2:40:00 pm (UTC: 2025-07-02T03:40:00.277Z)","service":"kine_milk_server","timestamp":"2025-07-02T09:10:00.278Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec published at 2025-07-02T14:40","service":"kine_milk_server","timestamp":"2025-07-02T09:10:01.488Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 published at 2/7/2025, 2:40:00 pm. startTime: 30/6/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:10:01.493Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 published at 2025-07-02T14:40","service":"kine_milk_server","timestamp":"2025-07-02T09:10:01.616Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 2/7/2025, 2:40:00 pm. startTime: 30/6/2025, 6:00:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:10:01.619Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-07-02T14:40","service":"kine_milk_server","timestamp":"2025-07-02T09:10:01.690Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 2/7/2025, 2:40:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:10:01.698Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec unpublished at 2025-07-02T14:40","service":"kine_milk_server","timestamp":"2025-07-02T09:10:01.946Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 unpublished at 2/7/2025, 2:40:00 pm. endTime: 1/7/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:10:01.963Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 unpublished at 2025-07-02T14:40","service":"kine_milk_server","timestamp":"2025-07-02T09:10:02.037Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 2/7/2025, 2:40:00 pm. endTime: 2/7/2025, 12:51:00 am","service":"kine_milk_server","timestamp":"2025-07-02T09:10:02.045Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-07-02T14:40","service":"kine_milk_server","timestamp":"2025-07-02T09:10:02.072Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 2/7/2025, 2:40:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:10:02.088Z"}
+{"level":"info","message":"Cron job running at 2/7/2025, 2:41:00 pm (UTC: 2025-07-02T03:41:00.721Z)","service":"kine_milk_server","timestamp":"2025-07-02T09:11:00.722Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 published at 2/7/2025, 2:41:00 pm. startTime: 30/6/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:11:01.006Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec published at 2025-07-02T14:41","service":"kine_milk_server","timestamp":"2025-07-02T09:11:01.011Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 2/7/2025, 2:41:00 pm. startTime: 30/6/2025, 6:00:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:11:01.035Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 published at 2025-07-02T14:41","service":"kine_milk_server","timestamp":"2025-07-02T09:11:01.039Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 2/7/2025, 2:41:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:11:01.065Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-07-02T14:41","service":"kine_milk_server","timestamp":"2025-07-02T09:11:01.070Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 unpublished at 2/7/2025, 2:41:00 pm. endTime: 1/7/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:11:01.125Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec unpublished at 2025-07-02T14:41","service":"kine_milk_server","timestamp":"2025-07-02T09:11:01.129Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 2/7/2025, 2:41:00 pm. endTime: 2/7/2025, 12:51:00 am","service":"kine_milk_server","timestamp":"2025-07-02T09:11:01.214Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 unpublished at 2025-07-02T14:41","service":"kine_milk_server","timestamp":"2025-07-02T09:11:01.218Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 2/7/2025, 2:41:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:11:01.255Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-07-02T14:41","service":"kine_milk_server","timestamp":"2025-07-02T09:11:01.257Z"}
+{"level":"info","message":"Cron job running at 2/7/2025, 2:42:00 pm (UTC: 2025-07-02T03:42:00.117Z)","service":"kine_milk_server","timestamp":"2025-07-02T09:12:00.118Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 published at 2/7/2025, 2:42:00 pm. startTime: 30/6/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:12:00.474Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec published at 2025-07-02T14:42","service":"kine_milk_server","timestamp":"2025-07-02T09:12:00.485Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 2/7/2025, 2:42:00 pm. startTime: 30/6/2025, 6:00:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:12:00.523Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 published at 2025-07-02T14:42","service":"kine_milk_server","timestamp":"2025-07-02T09:12:00.534Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 2/7/2025, 2:42:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:12:00.573Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-07-02T14:42","service":"kine_milk_server","timestamp":"2025-07-02T09:12:00.583Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 unpublished at 2/7/2025, 2:42:00 pm. endTime: 1/7/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:12:00.677Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec unpublished at 2025-07-02T14:42","service":"kine_milk_server","timestamp":"2025-07-02T09:12:00.686Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 2/7/2025, 2:42:00 pm. endTime: 2/7/2025, 12:51:00 am","service":"kine_milk_server","timestamp":"2025-07-02T09:12:00.725Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 unpublished at 2025-07-02T14:42","service":"kine_milk_server","timestamp":"2025-07-02T09:12:00.729Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 2/7/2025, 2:42:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:12:00.768Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-07-02T14:42","service":"kine_milk_server","timestamp":"2025-07-02T09:12:00.772Z"}
+{"level":"info","message":"Cron job running at 2/7/2025, 2:43:00 pm (UTC: 2025-07-02T03:43:00.582Z)","service":"kine_milk_server","timestamp":"2025-07-02T09:13:00.583Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 published at 2/7/2025, 2:43:00 pm. startTime: 30/6/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:13:00.931Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec published at 2025-07-02T14:43","service":"kine_milk_server","timestamp":"2025-07-02T09:13:00.935Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 2/7/2025, 2:43:00 pm. startTime: 30/6/2025, 6:00:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:13:00.961Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 published at 2025-07-02T14:43","service":"kine_milk_server","timestamp":"2025-07-02T09:13:00.964Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 2/7/2025, 2:43:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:13:00.991Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-07-02T14:43","service":"kine_milk_server","timestamp":"2025-07-02T09:13:00.994Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 unpublished at 2/7/2025, 2:43:00 pm. endTime: 1/7/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:13:01.069Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec unpublished at 2025-07-02T14:43","service":"kine_milk_server","timestamp":"2025-07-02T09:13:01.186Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 2/7/2025, 2:43:00 pm. endTime: 2/7/2025, 12:51:00 am","service":"kine_milk_server","timestamp":"2025-07-02T09:13:01.198Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 unpublished at 2025-07-02T14:43","service":"kine_milk_server","timestamp":"2025-07-02T09:13:01.276Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 2/7/2025, 2:43:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:13:01.281Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-07-02T14:43","service":"kine_milk_server","timestamp":"2025-07-02T09:13:01.319Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec published at 2025-07-02T14:44","service":"kine_milk_server","timestamp":"2025-07-02T09:14:00.398Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 published at 2025-07-02T14:44","service":"kine_milk_server","timestamp":"2025-07-02T09:14:00.432Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 published at 2025-07-02T14:44","service":"kine_milk_server","timestamp":"2025-07-02T09:14:00.460Z"}
+{"level":"info","message":"Ad ID 24483d52-1d89-48cb-b632-cc4304bd10ec unpublished at 2025-07-02T14:44","service":"kine_milk_server","timestamp":"2025-07-02T09:14:00.516Z"}
+{"level":"info","message":"Ad ID 2482fd6f-8887-4f8b-b251-6d4ff642e601 unpublished at 2025-07-02T14:44","service":"kine_milk_server","timestamp":"2025-07-02T09:14:00.542Z"}
+{"level":"info","message":"Ad ID ab1edc14-bacd-47b3-98f0-9364d4e53964 unpublished at 2025-07-02T14:44","service":"kine_milk_server","timestamp":"2025-07-02T09:14:00.571Z"}
+{"level":"info","message":"Cron job running at 2/7/2025, 2:44:00 pm (UTC: 2025-07-02T03:44:00.981Z)","service":"kine_milk_server","timestamp":"2025-07-02T09:14:00.982Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 published at 2/7/2025, 2:44:00 pm. startTime: 30/6/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:14:01.102Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b published at 2/7/2025, 2:44:00 pm. startTime: 30/6/2025, 6:00:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:14:01.156Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 published at 2/7/2025, 2:44:00 pm. startTime: 16/6/2025, 10:15:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:14:01.192Z"}
+{"level":"info","message":"Illustration ID 09189c48-0d23-42ff-9a2e-3719a62855c7 unpublished at 2/7/2025, 2:44:00 pm. endTime: 1/7/2025, 5:53:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:14:01.256Z"}
+{"level":"info","message":"Illustration ID 48748905-0eea-4c09-bc32-5d2fedff1a1b unpublished at 2/7/2025, 2:44:00 pm. endTime: 2/7/2025, 12:51:00 am","service":"kine_milk_server","timestamp":"2025-07-02T09:14:01.288Z"}
+{"level":"info","message":"Illustration ID 8f40db76-96a6-4166-88f2-85c7c498fe29 unpublished at 2/7/2025, 2:44:00 pm. endTime: 16/6/2025, 10:16:00 pm","service":"kine_milk_server","timestamp":"2025-07-02T09:14:01.320Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-07-02T09:14:44.466Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-07-02T09:14:44.501Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-07-02T09:14:44.547Z"}
+{"level":"info","message":"Server timezone: Asia/Calcutta","service":"kine_milk_server","timestamp":"2025-07-02T09:14:44.564Z"}
