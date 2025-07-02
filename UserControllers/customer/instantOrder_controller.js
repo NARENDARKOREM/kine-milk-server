@@ -368,7 +368,7 @@ const instantOrder = async (req, res) => {
             oid: order.id,
             product_id: item.product_id,
             pquantity: item.quantity,
-            price: item.price,
+            price: item.price || weightOption.normal_price,
             store_weight_id: item.store_weight_id,
           },
           { transaction }
